@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->enum("activation", ["active", "deactive"])->default("active");
+        Schema::create('color_product', function (Blueprint $table) {
+            $table->foreignId('product_id')->constrained('products');
+            $table->foreignId('color_id')->constrained('colors');
+            $table->integer("price")->default(0);
+            $table->primary(["color_id", "product_id"]);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('color_product');
     }
 };

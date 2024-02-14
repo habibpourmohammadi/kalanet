@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("category_id")->constrained("categories");
             $table->foreignId("brand_id")->constrained("brands");
+            $table->foreignId("seller_id")->constrained("users");
             $table->string("name");
             $table->text("description");
             $table->text("Introduction_video_path")->nullable();

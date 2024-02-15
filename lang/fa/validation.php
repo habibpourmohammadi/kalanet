@@ -189,6 +189,8 @@ return [
         'password' => 'کلمه عبور',
         'password_confirmation' => 'تاییدیه رمز عبور',
         'description' => 'توضیحات',
+        'original_name' => 'نام اورجینال برند',
+        'persian_name' => 'نام فارسی برند',
     ],
 
 ];

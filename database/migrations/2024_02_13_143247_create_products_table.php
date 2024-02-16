@@ -21,8 +21,8 @@ return new class extends Migration
             $table->text("Introduction_video_path")->nullable();
             $table->string('slug')->unique();
             $table->bigInteger("price");
-            $table->tinyInteger('sold_number')->default(0);
-            $table->tinyInteger('marketable_number')->default(0);
+            $table->integer('sold_number')->default(0);
+            $table->integer('marketable_number')->default(0);
             $table->enum("marketable", ["true", "false"])->default("true");
             $table->enum("status", ["true", "false"])->default("true");
             $table->timestamps();

@@ -191,6 +191,10 @@ return [
         'description' => 'توضیحات',
         'original_name' => 'نام اورجینال برند',
         'persian_name' => 'نام فارسی برند',
+        'category_id' => 'دسته بندی',
+        'brand_id' => 'برند',
+        'price' => 'قیمت',
+        'Introduction_video_path' => 'ویدیو معرفی',
     ],
 
 ];

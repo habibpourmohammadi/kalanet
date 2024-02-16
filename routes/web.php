@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\Product\BrandController;
 use App\Http\Controllers\Admin\Product\CategoryController;
 use App\Http\Controllers\Admin\Product\ColorController;
 use App\Http\Controllers\Admin\Product\GuaranteeController;
+use App\Http\Controllers\Admin\Product\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -63,6 +64,16 @@ Route::prefix("admin")->group(function () {
             Route::get("/{guarantee}", "edit")->name("admin.product.guarantee.edit");
             Route::put("/{guarantee}", "update")->name("admin.product.guarantee.update");
             Route::delete("/{guarantee}", "destroy")->name("admin.product.guarantee.delete");
+        });
+
+        // Product
+        Route::controller(ProductController::class)->group(function () {
+            Route::get("/", "index")->name("admin.product.index");
+            Route::get("/create", "create")->name("admin.product.create");
+            Route::post("/", "store")->name("admin.product.store");
+            Route::get("/{product}", "edit")->name("admin.product.edit");
+            Route::put("/{product}", "update")->name("admin.product.update");
+            Route::delete("/{product}", "destroy")->name("admin.product.delete");
         });
     });
 });

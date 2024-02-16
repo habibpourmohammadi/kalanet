@@ -18,7 +18,14 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brands = Brand::all();
+        $search = request()->search;
+
+        $brands = Brand::query()->when($search, function ($brands) use ($search) {
+            return $brands->where("original_name", "like", "%$search%")->orWhere("persian_name", "like", "%$search%")->orWhere("description", "like", "%$search%")->orWhere("slug", "like", "%$search%")->get();
+        }, function ($brands) {
+            return $brands->get();
+        });
+
         return view("admin.product.brand.index", compact("brands"));
     }
 

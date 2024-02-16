@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Product\BrandController;
 use App\Http\Controllers\Admin\Product\CategoryController;
+use App\Http\Controllers\Admin\Product\ColorController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,6 +41,17 @@ Route::prefix("admin")->group(function () {
             Route::get("/{brand}", "edit")->name("admin.product.brand.edit");
             Route::put("/{brand}", "update")->name("admin.product.brand.update");
             Route::delete("/{brand}", "destroy")->name("admin.product.brand.delete");
+        });
+
+
+        // Color
+        Route::controller(ColorController::class)->prefix("color")->group(function () {
+            Route::get("/", "index")->name("admin.product.color.index");
+            Route::get("/create", "create")->name("admin.product.color.create");
+            Route::post("/", "store")->name("admin.product.color.store");
+            Route::get("/{color}", "edit")->name("admin.product.color.edit");
+            Route::put("/{color}", "update")->name("admin.product.color.update");
+            Route::delete("/{color}", "destroy")->name("admin.product.color.delete");
         });
     });
 });

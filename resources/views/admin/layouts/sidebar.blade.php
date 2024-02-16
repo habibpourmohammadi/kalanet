@@ -18,6 +18,7 @@
                 <section class="sidebar-dropdown">
                     <a href="{{ route('admin.product.category.index') }}">دسته بندی ها</a>
                     <a href="{{ route('admin.product.brand.index') }}">برند ها</a>
+                    <a href="{{ route('admin.product.color.index') }}">رنگ ها</a>
                 </section>
             </section>
 

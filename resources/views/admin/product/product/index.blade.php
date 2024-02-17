@@ -142,22 +142,22 @@
                                     <td class="text-{{ $product->marketable == 'true' ? 'success' : 'danger' }}">
                                         {{ $product->marketable == 'true' ? 'مجاز' : 'غیر مجاز' }}</td>
                                     <td class="text-{{ $product->status == 'true' ? 'success' : 'danger' }}">
-                                        {{ $product->marketable == 'true' ? 'فعال' : 'غیر فعال' }}</td>
+                                        {{ $product->status == 'true' ? 'فعال' : 'غیر فعال' }}</td>
                                     <td
                                         class="text-{{ $product->Introduction_video_path == null ? 'danger' : 'success' }}">
                                         {{ $product->Introduction_video_path == null ? 'ندارد' : 'دارد' }}</td>
                                     <td>{{ Str::limit($product->description, 20, '...') }}</td>
                                     <td class="width-16-rem text-left">
+                                        <a href="{{ route('admin.product.show', $product) }}"
+                                            class="btn btn-sm btn-info"><i class="fa fa-eye"></i></a>
                                         <a href="{{ route('admin.product.edit', $product) }}"
-                                            class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>
-                                            ویرایش</a>
+                                            class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
                                         <form class="d-inline" action="{{ route('admin.product.delete', $product) }}"
                                             method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-sm delete"><i
                                                     class="fa fa-trash-alt"></i>
-                                                حذف
                                             </button>
                                         </form>
                                     </td>

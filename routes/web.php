@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Product\BrandController;
 use App\Http\Controllers\Admin\Product\CategoryController;
 use App\Http\Controllers\Admin\Product\ColorController;
+use App\Http\Controllers\Admin\Product\CommentController;
 use App\Http\Controllers\Admin\Product\GuaranteeController;
 use App\Http\Controllers\Admin\Product\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -75,6 +76,14 @@ Route::prefix("admin")->group(function () {
             Route::get("/{product}", "edit")->name("admin.product.edit");
             Route::put("/{product}", "update")->name("admin.product.update");
             Route::delete("/{product}", "destroy")->name("admin.product.delete");
+        });
+
+        Route::controller(CommentController::class)->prefix("comment")->group(function () {
+            Route::get("/{product}", "index")->name("admin.product.comment.index");
+            Route::get("/show/{product}/{comment}", "show")->name("admin.product.comment.show")->scopeBindings();
+            Route::get("/change-status/{product}/{comment}", "changeStatus")->name("admin.product.comment.changeStatus")->scopeBindings();
+            Route::get("/change-seen-status/{product}/{comment}", "changeSeenStatus")->name("admin.product.comment.changeSeenStatus")->scopeBindings();
+            Route::delete("/delete/{product}/{comment}", "destroy")->name("admin.product.comment.delete")->scopeBindings();
         });
     });
 });

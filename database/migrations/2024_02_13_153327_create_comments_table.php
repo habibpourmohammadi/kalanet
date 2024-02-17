@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId("parent_id")->nullable()->constrained("comments");
             $table->foreignId("product_id")->nullable()->constrained("products");
             $table->foreignId("user_id")->nullable()->constrained("users");
-            $table->string("comment");
+            $table->text("comment");
             $table->enum("status", ["true", "false"])->default("false");
             $table->enum("seen", ["true", "false"])->default("false");
             $table->timestamps();

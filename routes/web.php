@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Product\CategoryController;
 use App\Http\Controllers\Admin\Product\ColorController;
 use App\Http\Controllers\Admin\Product\CommentController;
 use App\Http\Controllers\Admin\Product\GuaranteeController;
+use App\Http\Controllers\Admin\Product\OptionProductController;
 use App\Http\Controllers\Admin\Product\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -78,12 +79,24 @@ Route::prefix("admin")->group(function () {
             Route::delete("/{product}", "destroy")->name("admin.product.delete");
         });
 
+        // Product comments
         Route::controller(CommentController::class)->prefix("comment")->group(function () {
             Route::get("/{product}", "index")->name("admin.product.comment.index");
             Route::get("/show/{product}/{comment}", "show")->name("admin.product.comment.show")->scopeBindings();
             Route::get("/change-status/{product}/{comment}", "changeStatus")->name("admin.product.comment.changeStatus")->scopeBindings();
             Route::get("/change-seen-status/{product}/{comment}", "changeSeenStatus")->name("admin.product.comment.changeSeenStatus")->scopeBindings();
             Route::delete("/delete/{product}/{comment}", "destroy")->name("admin.product.comment.delete")->scopeBindings();
+        });
+
+        // Product options
+        Route::controller(OptionProductController::class)->prefix("option")->group(function () {
+            Route::get("/{product}", "index")->name("admin.product.option.index");
+            Route::get("/create/{product}", "create")->name("admin.product.option.create");
+            Route::post("/store/{product}", "store")->name("admin.product.option.store");
+            Route::get("/show/{product}/{option}", "show")->name("admin.product.option.show")->scopeBindings();
+            Route::get("/edit/{product}/{option}", "edit")->name("admin.product.option.edit")->scopeBindings();
+            Route::put("/update/{product}/{option}", "update")->name("admin.product.option.update")->scopeBindings();
+            Route::delete("/delete/{product}/{option}", "destroy")->name("admin.product.option.delete")->scopeBindings();
         });
     });
 });

@@ -162,7 +162,7 @@
                                                 </li>
                                                 <li class="my-1">
                                                     <a class="dropdown-item bg-success text-light text-center"
-                                                        href="{{ route('admin.product.show', $product) }}"><small><i
+                                                        href="{{ route('admin.product.option.index', ['product' => $product]) }}"><small><i
                                                                 class="fa fa-chart-area"></i> ویژگی ها</small></a>
                                                 </li>
                                                 <li class="my-1">

@@ -172,7 +172,7 @@
                                                 </li>
                                                 <li class="my-1">
                                                     <a class="dropdown-item bg-secondary text-light text-center"
-                                                        href="{{ route('admin.product.show', $product) }}"><small><i
+                                                        href="{{ route('admin.product.product-guarantees.index', $product) }}"><small><i
                                                                 class="fa fa-shield-alt"></i> گارانتی ها</small></a>
                                                 </li>
                                                 <li class="my-1">

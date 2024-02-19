@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Product\GuaranteeController;
 use App\Http\Controllers\Admin\Product\ImageProductController;
 use App\Http\Controllers\Admin\Product\OptionProductController;
 use App\Http\Controllers\Admin\Product\ProductController;
+use App\Http\Controllers\Admin\Product\ProductGuaranteeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -108,6 +109,16 @@ Route::prefix("admin")->group(function () {
             Route::get("/edit/{product}/{image}", "edit")->name("admin.product.image.edit")->scopeBindings();
             Route::put("/update/{product}/{image}", "update")->name("admin.product.image.update")->scopeBindings();
             Route::delete("/delete/{product}/{image}", "destroy")->name("admin.product.image.delete")->scopeBindings();
+        });
+
+        // Product guarantees
+        Route::controller(ProductGuaranteeController::class)->prefix("product-guarantees")->group(function () {
+            Route::get("/{product}", "index")->name("admin.product.product-guarantees.index");
+            Route::get("/create/{product}", "create")->name("admin.product.product-guarantees.create");
+            Route::post("/store/{product}", "store")->name("admin.product.product-guarantees.store");
+            Route::get("/edit/{product}/{guarantee}", "edit")->name("admin.product.product-guarantees.edit")->scopeBindings();
+            Route::put("/update/{product}/{guarantee}", "update")->name("admin.product.product-guarantees.update")->scopeBindings();
+            Route::delete("/delete/{product}/{guarantee}", "destroy")->name("admin.product.product-guarantees.delete")->scopeBindings();
         });
     });
 });

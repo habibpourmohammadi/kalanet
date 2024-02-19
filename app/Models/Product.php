@@ -59,7 +59,7 @@ class Product extends Model
 
     public function guarantees()
     {
-        return $this->belongsToMany(Guarantee::class);
+        return $this->belongsToMany(Guarantee::class)->withPivot("price");
     }
 
     public function options()

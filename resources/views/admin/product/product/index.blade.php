@@ -167,7 +167,7 @@
                                                 </li>
                                                 <li class="my-1">
                                                     <a class="dropdown-item bg-info text-light text-center"
-                                                        href="{{ route('admin.product.show', $product) }}"><small><i
+                                                        href="{{ route('admin.product.image.index', $product) }}"><small><i
                                                                 class="fa fa-photo-video"></i> عکس ها</small></a>
                                                 </li>
                                                 <li class="my-1">

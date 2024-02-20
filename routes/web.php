@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\Product\CommentController;
 use App\Http\Controllers\Admin\Product\GuaranteeController;
 use App\Http\Controllers\Admin\Product\ImageProductController;
 use App\Http\Controllers\Admin\Product\OptionProductController;
+use App\Http\Controllers\Admin\Product\ProductColorController;
 use App\Http\Controllers\Admin\Product\ProductController;
 use App\Http\Controllers\Admin\Product\ProductGuaranteeController;
 use Illuminate\Support\Facades\Route;
@@ -119,6 +120,16 @@ Route::prefix("admin")->group(function () {
             Route::get("/edit/{product}/{guarantee}", "edit")->name("admin.product.product-guarantees.edit")->scopeBindings();
             Route::put("/update/{product}/{guarantee}", "update")->name("admin.product.product-guarantees.update")->scopeBindings();
             Route::delete("/delete/{product}/{guarantee}", "destroy")->name("admin.product.product-guarantees.delete")->scopeBindings();
+        });
+
+        // Product colors
+        Route::controller(ProductColorController::class)->prefix("product-color")->group(function () {
+            Route::get("/{product}", "index")->name("admin.product.product-color.index");
+            Route::get("/create/{product}", "create")->name("admin.product.product-color.create");
+            Route::post("/store/{product}", "store")->name("admin.product.product-color.store");
+            Route::get("/edit/{product}/{color}", "edit")->name("admin.product.product-color.edit")->scopeBindings();
+            Route::put("/update/{product}/{color}", "update")->name("admin.product.product-color.update")->scopeBindings();
+            Route::delete("/delete/{product}/{color}", "destroy")->name("admin.product.product-color.delete")->scopeBindings();
         });
     });
 });

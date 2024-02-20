@@ -177,7 +177,7 @@
                                                 </li>
                                                 <li class="my-1">
                                                     <a class="dropdown-item bg-primary text-light text-center"
-                                                        href="{{ route('admin.product.show', $product) }}"><small><i
+                                                        href="{{ route('admin.product.product-color.index', $product) }}"><small><i
                                                                 class="fa fa-paint-brush"></i> رنگ ها</small></a>
                                                 </li>
                                                 <li class="my-1">

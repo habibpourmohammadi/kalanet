@@ -24,10 +24,10 @@
                 </section>
             </section>
 
-            <section class="sidebar-part-title">تست</section>
-            <a href="" class="sidebar-link">
+            <section class="sidebar-part-title">کاربران</section>
+            <a href="{{ route('admin.user.index') }}" class="sidebar-link">
                 <i class="fas fa-bars"></i>
-                <span>تست</span>
+                <span>کاربران</span>
             </a>
         </section>
     </section>

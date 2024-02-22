@@ -29,6 +29,12 @@
                 <i class="fas fa-bars"></i>
                 <span>کاربران</span>
             </a>
+
+            <section class="sidebar-part-title">ظاهر وب سایت</section>
+            <a href="{{ route('admin.appearance.slider.index') }}" class="sidebar-link">
+                <i class="fas fa-bars"></i>
+                <span>اسلایدر</span>
+            </a>
         </section>
     </section>
 </aside>

@@ -195,6 +195,8 @@ return [
         'brand_id' => 'برند',
         'price' => 'قیمت',
         'Introduction_video_path' => 'ویدیو معرفی',
+        'title' => 'عنوان',
+        'slider_path' => 'اسلایدر',
     ],
 
 ];

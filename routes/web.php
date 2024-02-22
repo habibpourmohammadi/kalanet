@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\Appearance\SliderController;
 use App\Http\Controllers\Admin\Product\BrandController;
 use App\Http\Controllers\Admin\Product\CategoryController;
 use App\Http\Controllers\Admin\Product\ColorController;
@@ -139,6 +140,19 @@ Route::prefix("admin")->group(function () {
         Route::controller(UserController::class)->group(function () {
             Route::get("/", "index")->name("admin.user.index");
             Route::get("/change-status/{user}", "changeStatus")->name("admin.user.changeStatus");
+        });
+    });
+
+    // appearance
+    Route::prefix("appearance")->group(function () {
+        Route::controller(SliderController::class)->prefix("slider")->group(function () {
+            Route::get("/", "index")->name("admin.appearance.slider.index");
+            Route::get("/create", "create")->name("admin.appearance.slider.create");
+            Route::post("/store", "store")->name("admin.appearance.slider.store");
+            Route::get("/edit/{slider}", "edit")->name("admin.appearance.slider.edit");
+            Route::put("/update/{slider}", "update")->name("admin.appearance.slider.update");
+            Route::get("/change-status/{slider}", "changeStatus")->name("admin.appearance.slider.changeStatus");
+            Route::delete("/delete/{slider}", "destroy")->name("admin.appearance.slider.delete");
         });
     });
 });

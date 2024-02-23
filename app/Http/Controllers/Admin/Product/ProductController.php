@@ -186,4 +186,38 @@ class ProductController extends Controller
         });
         return to_route("admin.product.index")->with("swal-success", "محصول مورد نظر با موفقیت حذف شد");
     }
+
+    public function changeStatus(Product $product)
+    {
+        if ($product->status == "false") {
+            $product->update([
+                "status" => "true"
+            ]);
+
+            return back()->with("swal-success", "وضعیت محصول مورد نظر با موفقیت به (فعال) تغییر یافت");
+        } else {
+            $product->update([
+                "status" => "false"
+            ]);
+
+            return back()->with("swal-success", "وضعیت محصول مورد نظر با موفقیت به (غیر فعال) تغییر یافت");
+        }
+    }
+
+    public function changeSaleStatus(Product $product)
+    {
+        if ($product->marketable == "false") {
+            $product->update([
+                "marketable" => "true"
+            ]);
+
+            return back()->with("swal-success", "وضعیت فروش محصول مورد نظر با موفقیت به (مجاز) تغییر یافت");
+        } else {
+            $product->update([
+                "marketable" => "false"
+            ]);
+
+            return back()->with("swal-success", "وضعیت فروش محصول مورد نظر با موفقیت به (غیر مجاز) تغییر یافت");
+        }
+    }
 }

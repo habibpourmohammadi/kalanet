@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\Product\ProductColorController;
 use App\Http\Controllers\Admin\Product\ProductController;
 use App\Http\Controllers\Admin\Product\ProductGuaranteeController;
 use App\Http\Controllers\Admin\User\UserController;
+use App\Http\Controllers\Home\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +29,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Home routes
+Route::get('/', [HomeController::class, "index"])->name("home.index");
+
+
+// Admin routes
 Route::prefix("admin")->group(function () {
     Route::get("/", [AdminController::class, "index"])->name("admin.index");
 
@@ -84,6 +90,8 @@ Route::prefix("admin")->group(function () {
             Route::get("/{product}", "edit")->name("admin.product.edit");
             Route::put("/{product}", "update")->name("admin.product.update");
             Route::delete("/{product}", "destroy")->name("admin.product.delete");
+            Route::get("/change-status/{product}", "changeStatus")->name("admin.product.changeStatus");
+            Route::get("/change-sale-status/{product}", "changeSaleStatus")->name("admin.product.changeSaleStatus");
         });
 
         // Product comments

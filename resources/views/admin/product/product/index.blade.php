@@ -182,12 +182,12 @@
                                                 </li>
                                                 <li class="my-1">
                                                     <a class="dropdown-item bg-warning text-dark text-center"
-                                                        href="{{ route('admin.product.show', $product) }}"><small><i
+                                                        href="{{ route('admin.product.changeStatus', $product) }}"><small><i
                                                                 class="fa fa-check"></i> تغییر وضعیت محصول</small></a>
                                                 </li>
                                                 <li class="my-1">
                                                     <a class="dropdown-item bg-warning text-dark text-center"
-                                                        href="{{ route('admin.product.show', $product) }}"><small><i
+                                                        href="{{ route('admin.product.changeSaleStatus', $product) }}"><small><i
                                                                 class="fa fa-check"></i> تغییر وضعیت فروش</small></a>
                                                 </li>
                                                 <li class="my-1">

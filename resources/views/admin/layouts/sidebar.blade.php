@@ -31,10 +31,18 @@
             </a>
 
             <section class="sidebar-part-title">ظاهر وب سایت</section>
-            <a href="{{ route('admin.appearance.slider.index') }}" class="sidebar-link">
-                <i class="fas fa-bars"></i>
-                <span>اسلایدر</span>
-            </a>
+
+            <section class="sidebar-group-link">
+                <section class="sidebar-dropdown-toggle">
+                    <i class="fas fa-chart-bar icon"></i>
+                    <span>ظاهر وب سایت</span>
+                    <i class="fas fa-angle-left angle"></i>
+                </section>
+                <section class="sidebar-dropdown">
+                    <a href="{{ route('admin.appearance.slider.index') }}">اسلایدر ها</a>
+                    <a href="{{ route('admin.appearance.banner.index') }}">بنر ها</a>
+                </section>
+            </section>
         </section>
     </section>
 </aside>

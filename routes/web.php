@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\Appearance\BannerController;
 use App\Http\Controllers\Admin\Appearance\SliderController;
 use App\Http\Controllers\Admin\Product\BrandController;
 use App\Http\Controllers\Admin\Product\CategoryController;
@@ -145,6 +146,7 @@ Route::prefix("admin")->group(function () {
 
     // appearance
     Route::prefix("appearance")->group(function () {
+        // sliders
         Route::controller(SliderController::class)->prefix("slider")->group(function () {
             Route::get("/", "index")->name("admin.appearance.slider.index");
             Route::get("/create", "create")->name("admin.appearance.slider.create");
@@ -153,6 +155,17 @@ Route::prefix("admin")->group(function () {
             Route::put("/update/{slider}", "update")->name("admin.appearance.slider.update");
             Route::get("/change-status/{slider}", "changeStatus")->name("admin.appearance.slider.changeStatus");
             Route::delete("/delete/{slider}", "destroy")->name("admin.appearance.slider.delete");
+        });
+
+        // banners
+        Route::controller(BannerController::class)->prefix("banner")->group(function () {
+            Route::get("/", "index")->name("admin.appearance.banner.index");
+            Route::get("/create", "create")->name("admin.appearance.banner.create");
+            Route::post("/store", "store")->name("admin.appearance.banner.store");
+            Route::get("/edit/{banner}", "edit")->name("admin.appearance.banner.edit");
+            Route::put("/update/{banner}", "update")->name("admin.appearance.banner.update");
+            Route::get("/change-status/{banner}", "changeStatus")->name("admin.appearance.banner.changeStatus");
+            Route::delete("/delete/{banner}", "destroy")->name("admin.appearance.banner.delete");
         });
     });
 });

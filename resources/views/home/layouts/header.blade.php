@@ -64,11 +64,12 @@
                                 <section>
                                     <hr class="dropdown-divider">
                                 </section>
-                                <section><a class="dropdown-item" href="#"><i class="fa fa-sign-out-alt"></i>خروج</a>
+                                <section><a class="dropdown-item" href="{{ route('home.auth.logout') }}"><i
+                                            class="fa fa-sign-out-alt"></i>خروج</a>
                                 </section>
                             @endauth
                             @guest
-                                <section><a class="dropdown-item text-center" href="my-profile.html">
+                                <section><a class="dropdown-item text-center" href="{{ route('home.auth.login.page') }}">
                                         <i class="fa fa-lock"></i>ورود / ثبت نام</a></section>
                             @endguest
                         </section>

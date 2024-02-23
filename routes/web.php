@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Appearance\BannerController;
 use App\Http\Controllers\Admin\Appearance\SliderController;
+use App\Http\Controllers\Admin\Order\DeliveryController;
 use App\Http\Controllers\Admin\Product\BrandController;
 use App\Http\Controllers\Admin\Product\CategoryController;
 use App\Http\Controllers\Admin\Product\ColorController;
@@ -166,6 +167,21 @@ Route::prefix("admin")->group(function () {
             Route::put("/update/{banner}", "update")->name("admin.appearance.banner.update");
             Route::get("/change-status/{banner}", "changeStatus")->name("admin.appearance.banner.changeStatus");
             Route::delete("/delete/{banner}", "destroy")->name("admin.appearance.banner.delete");
+        });
+    });
+
+    // orders
+    Route::prefix("order")->group(function () {
+
+        // Delivery
+        Route::controller(DeliveryController::class)->prefix("delivery")->group(function () {
+            Route::get("/", "index")->name("admin.order.delivery.index");
+            Route::get("/create", "create")->name("admin.order.delivery.create");
+            Route::post("/store", "store")->name("admin.order.delivery.store");
+            Route::get("/edit/{delivery}", "edit")->name("admin.order.delivery.edit");
+            Route::put("/update/{delivery}", "update")->name("admin.order.delivery.update");
+            Route::get("/change-status/{delivery}", "changeStatus")->name("admin.order.delivery.changeStatus");
+            Route::delete("/delete/{delivery}", "destroy")->name("admin.order.delivery.delete");
         });
     });
 });

@@ -24,6 +24,12 @@
                 </section>
             </section>
 
+            <section class="sidebar-part-title">سفارشات</section>
+            <a href="{{ route('admin.order.delivery.index') }}" class="sidebar-link">
+                <i class="fas fa-bars"></i>
+                <span>حمل و نقل</span>
+            </a>
+
             <section class="sidebar-part-title">کاربران</section>
             <a href="{{ route('admin.user.index') }}" class="sidebar-link">
                 <i class="fas fa-bars"></i>

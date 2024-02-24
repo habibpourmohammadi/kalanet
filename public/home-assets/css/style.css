@@ -31,6 +31,9 @@ body {
 	cursor: pointer;
 }
 
+.z-99{
+    z-index: 9999;
+}
 
 
 /*

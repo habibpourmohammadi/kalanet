@@ -178,7 +178,7 @@
                     aria-labelledby="offcanvasExampleLabel" style="z-index: 9999999;">
                     <section class="offcanvas-header">
                         <h5 class="offcanvas-title" id="offcanvasExampleLabel"><a class="text-decoration-none"
-                                href="index.html"><img src="assets/images/logo/8.png" alt="logo"></a></h5>
+                                href="index.html"><img src="{{ asset("home-assets/images/logo/8.png") }}" alt="logo"></a></h5>
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                             aria-label="Close"></button>
                     </section>

@@ -58,10 +58,23 @@
                                                         data-bs-toggle="tooltip" data-bs-placement="left"
                                                         title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a>
                                                 </section>
-                                                <section class="product-add-to-favorite"><a href="#"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        title="افزودن به علاقه مندی"><i class="fa fa-heart"></i></a>
-                                                </section>
+                                                @if (auth()->user()->bookmarks()->where('product_id', $bestSellingProduct->id)->first())
+                                                    <section class="product-add-to-favorite">
+                                                        <a href="javascript:void(0)" data-bs-toggle="tooltip"
+                                                            data-product-slug="{{ route('home.addToBookmark', $bestSellingProduct->slug) }}"
+                                                            data-bs-placement="left" title="حذف از علاقه مندی"
+                                                            class="add-to-bookmark">
+                                                            <i class="fa fa-heart text-danger"></i></a>
+                                                    </section>
+                                                @else
+                                                    <section class="product-add-to-favorite">
+                                                        <a href="javascript:void(0)" data-bs-toggle="tooltip"
+                                                            data-product-slug="{{ route('home.addToBookmark', $bestSellingProduct->slug) }}"
+                                                            data-bs-placement="left" title="افزودن به علاقه مندی"
+                                                            class="add-to-bookmark">
+                                                            <i class="fa fa-heart"></i></a>
+                                                    </section>
+                                                @endif
                                                 <a class="product-link" href="#">
                                                     <section class="product-image">
                                                         <img class=""
@@ -147,10 +160,23 @@
                                                         data-bs-toggle="tooltip" data-bs-placement="left"
                                                         title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a>
                                                 </section>
-                                                <section class="product-add-to-favorite"><a href="#"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        title="افزودن به علاقه مندی"><i class="fa fa-heart"></i></a>
-                                                </section>
+                                                @if (auth()->user()->bookmarks()->where('product_id', $recommendedProduct->id)->first())
+                                                    <section class="product-add-to-favorite">
+                                                        <a href="javascript:void(0)" data-bs-toggle="tooltip"
+                                                            data-product-slug="{{ route('home.addToBookmark', $recommendedProduct->slug) }}"
+                                                            data-bs-placement="left" title="حذف از علاقه مندی"
+                                                            class="add-to-bookmark">
+                                                            <i class="fa fa-heart text-danger"></i></a>
+                                                    </section>
+                                                @else
+                                                    <section class="product-add-to-favorite">
+                                                        <a href="javascript:void(0)" data-bs-toggle="tooltip"
+                                                            data-product-slug="{{ route('home.addToBookmark', $recommendedProduct->slug) }}"
+                                                            data-bs-placement="left" title="افزودن به علاقه مندی"
+                                                            class="add-to-bookmark">
+                                                            <i class="fa fa-heart"></i></a>
+                                                    </section>
+                                                @endif
                                                 <a class="product-link" href="#">
                                                     <section class="product-image">
                                                         <img class=""
@@ -235,5 +261,25 @@
             </section>
         </section>
     </section>
+
+    {{-- toast start --}}
+    <div class="toast-container position-fixed top-0 start-0 p-3 z-99">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <img src="{{ asset('home-assets/images/logo/shopping-icon.png') }}" width="20" class="rounded me-2"
+                    alt="">
+                <strong class="me-auto">فروشگاه</strong>
+                <small>همین الان</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body bg-success text-light">
+            </div>
+        </div>
+    </div>
+    {{-- toast end --}}
+
     <!-- end brand part-->
+@endsection
+@section('script')
+    <script src="{{ asset('home-assets/js/home/add-to-bookmark.js') }}"></script>
 @endsection

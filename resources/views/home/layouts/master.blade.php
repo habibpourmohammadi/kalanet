@@ -32,6 +32,7 @@
     @include('home.layouts.footer')
 
     @include('home.layouts.script-tag')
+    @yield('script')
 </body>
 
 </html>

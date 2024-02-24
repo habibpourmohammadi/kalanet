@@ -43,6 +43,8 @@ Route::prefix("/")->group(function () {
     Route::post("/verify-email/{token}", [AuthController::class, "verifyEmail"])->name("home.auth.verifyEmail")->middleware("guest");
     Route::get("/logout", [AuthController::class, "logout"])->name("home.auth.logout")->middleware("auth");
 
+    // add to bookmarks
+    Route::get("/add-to-bookmark/{product:slug}", [HomeController::class, "addToBookmark"])->name("home.addToBookmark")->middleware("auth");
 
     // Profile
     Route::middleware("auth")->controller(AccountController::class)->prefix("profile")->group(function () {

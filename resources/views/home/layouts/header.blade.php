@@ -59,7 +59,8 @@
                                             class="fa fa-user-circle"></i>پروفایل کاربری</a></section>
                                 <section><a class="dropdown-item" href="my-orders.html"><i
                                             class="fa fa-newspaper"></i>سفارشات</a></section>
-                                <section><a class="dropdown-item" href="my-favorites.html"><i class="fa fa-heart"></i>لیست
+                                <section><a class="dropdown-item" href="{{ route('home.profile.myBookmarks.index') }}"><i
+                                            class="fa fa-heart"></i>لیست
                                         علاقه مندی</a></section>
                                 <section>
                                     <hr class="dropdown-divider">
@@ -178,7 +179,8 @@
                     aria-labelledby="offcanvasExampleLabel" style="z-index: 9999999;">
                     <section class="offcanvas-header">
                         <h5 class="offcanvas-title" id="offcanvasExampleLabel"><a class="text-decoration-none"
-                                href="index.html"><img src="{{ asset("home-assets/images/logo/8.png") }}" alt="logo"></a></h5>
+                                href="index.html"><img src="{{ asset('home-assets/images/logo/8.png') }}"
+                                    alt="logo"></a></h5>
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                             aria-label="Close"></button>
                     </section>

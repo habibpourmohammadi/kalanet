@@ -10,38 +10,8 @@
             <section class="row">
                 <aside id="sidebar" class="sidebar col-md-3">
 
-                    @if (session()->has('success'))
-                        <div class="alert alert-success text-center" role="alert">
-                            <small>{{ session('success') }}</small>
-                        </div>
-                    @endif
-                    <section class="content-wrapper bg-white p-3 rounded-2 mb-3">
-                        <!-- start sidebar nav-->
-                        <section class="sidebar-nav">
-                            <section class="sidebar-nav-item">
-                                <span class="sidebar-nav-item-title"><a class="p-3" href="my-orders.html">سفارش های
-                                        من</a></span>
-                            </section>
-                            <section class="sidebar-nav-item">
-                                <span class="sidebar-nav-item-title"><a class="p-3" href="my-addresses.html">آدرس های
-                                        من</a></span>
-                            </section>
-                            <section class="sidebar-nav-item">
-                                <span class="sidebar-nav-item-title"><a class="p-3" href="my-favorites.html">لیست علاقه
-                                        مندی</a></span>
-                            </section>
-                            <section class="sidebar-nav-item">
-                                <span class="sidebar-nav-item-title"><a class="p-3" href="my-profile.html">ویرایش
-                                        حساب</a></span>
-                            </section>
-                            <section class="sidebar-nav-item">
-                                <span class="sidebar-nav-item-title"><a class="p-3" href="#">خروج از حساب
-                                        کاربری</a></span>
-                            </section>
+                    @include('home.account.layouts.sidebar')
 
-                        </section>
-                        <!--end sidebar nav-->
-                    </section>
 
                 </aside>
                 <main id="main-body" class="main-body col-md-9">

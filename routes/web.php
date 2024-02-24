@@ -50,6 +50,8 @@ Route::prefix("/")->group(function () {
     Route::middleware("auth")->controller(AccountController::class)->prefix("profile")->group(function () {
         Route::get("/", "myProfile")->name("home.profile.myProfile.index");
         Route::put("/update-profile", "updateProfile")->name("home.profile.myProfile.updateProfile");
+        Route::get("/my-bookmarks", "myBookmarks")->name("home.profile.myBookmarks.index");
+        Route::post("/remove-bookmark/{bookmark}", "removeBookmark")->name("home.profile.myBookmarks.removeBookmark");
     });
 });
 

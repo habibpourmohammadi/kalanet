@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\Product\ProductColorController;
 use App\Http\Controllers\Admin\Product\ProductController;
 use App\Http\Controllers\Admin\Product\ProductGuaranteeController;
 use App\Http\Controllers\Admin\User\UserController;
+use App\Http\Controllers\Home\Account\AccountController;
 use App\Http\Controllers\Home\Auth\AuthController;
 use App\Http\Controllers\Home\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,13 @@ Route::prefix("/")->group(function () {
     Route::get("/verify-email/{token}", [AuthController::class, "verifyEmailPage"])->name("home.auth.verifyEmail.page")->middleware("guest");
     Route::post("/verify-email/{token}", [AuthController::class, "verifyEmail"])->name("home.auth.verifyEmail")->middleware("guest");
     Route::get("/logout", [AuthController::class, "logout"])->name("home.auth.logout")->middleware("auth");
+
+
+    // Profile
+    Route::middleware("auth")->controller(AccountController::class)->prefix("profile")->group(function () {
+        Route::get("/", "myProfile")->name("home.profile.myProfile.index");
+        Route::put("/update-profile", "updateProfile")->name("home.profile.myProfile.updateProfile");
+    });
 });
 
 

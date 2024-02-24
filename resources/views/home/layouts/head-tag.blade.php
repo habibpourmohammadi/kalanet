@@ -16,3 +16,4 @@
 <link rel="stylesheet" href="{{ asset('home-assets/css/product.css') }}">
 <link rel="stylesheet" href="{{ asset('home-assets/css/profile.css') }}">
 <link rel="stylesheet" href="{{ asset('home-assets/css/login.css') }}">
+<link rel="icon" type="image/x-icon" href="{{ asset('home-assets/images/logo/shopping-icon.png') }}">

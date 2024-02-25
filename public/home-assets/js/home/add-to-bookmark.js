@@ -31,3 +31,36 @@ $('.add-to-bookmark').on('click', function () {
         }
     });
 });
+
+$('.add-product-to-bookmark').on('click', function () {
+    var add_product_to_bookmark_url = $(this).data('product-slug');
+    var productEl = $(this)
+
+    const toastLiveExample = document.getElementById('liveToast')
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+
+    $.ajax({
+        url: add_product_to_bookmark_url,
+        type: 'GET',
+        success: function (response) {
+            if (response.success) {
+                if (response.status == "added") {
+                    productEl.children("span").html("حذف از علاقه مندی")
+                    productEl.children("i").addClass("text-danger")
+                } else {
+                    productEl.children("span").html("افزودن به علاقه مندی")
+                    productEl.children("i").removeClass("text-danger")
+                }
+                toastBootstrap.show();
+                $('.toast-body').html(response.message);
+            } else {
+                $('.toast-body').html(response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            $('.toast-body').html("خطا در ارتباط با سرور");
+            console.error(xhr.responseText);
+        }
+    });
+});
+

@@ -45,7 +45,7 @@
                             <section class="col-6 border-bottom mb-2 py-2">
                                 <section class="field-title">نام و نام خانوادگی</section>
                                 <section class="field-value overflow-auto">
-                                    {{ auth()->user()->name ?? 'لطفا اسم خود را وارد کنید' }}</section>
+                                    {{ auth()->user()->name ?? 'لطفا نام و نام خانوادگی خود را وارد کنید' }}</section>
                             </section>
 
 

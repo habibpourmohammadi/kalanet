@@ -1,0 +1,573 @@
+@extends('home.layouts.master')
+@section('title')
+    <title>فروشگاه - {{ $product->name }}</title>
+@endsection
+@section('content')
+
+    {{-- alerts start --}}
+    @if (session()->has('success'))
+        <div class="alert alert-success text-center mx-5 my-3" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if (session()->has('error'))
+        <div class="alert alert-danger text-center mx-5 my-3" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
+    {{-- alerts end --}}
+
+    <!-- start cart -->
+    <form class="mb-4" action="{{ route('home.product.addToCart', $product) }}" method="POST">
+        @csrf
+        <section class="container-xxl">
+            <section class="row">
+                <section class="col">
+                    <!-- start vontent header -->
+                    <section class="content-header">
+                        <section class="d-flex justify-content-between align-items-center">
+                            <h2 class="content-header-title">
+                                <span>{{ $product->name }}</span>
+                            </h2>
+                            <section class="content-header-link">
+                                <!--<a href="#">مشاهده همه</a>-->
+                            </section>
+                        </section>
+                    </section>
+
+                    <section class="row mt-4">
+                        <!-- start image gallery -->
+                        <section class="col-md-4">
+                            <section class="content-wrapper bg-white p-3 rounded-2 mb-4">
+                                <section class="product-gallery">
+                                    <section class="product-gallery-selected-image mb-3">
+                                        <img src="{{ asset($product->images()->first()->image_path) }}" alt="">
+                                    </section>
+                                    <section class="product-gallery-thumbs">
+                                        @foreach ($product->images as $image)
+                                            <img class="product-gallery-thumb" src="{{ asset($image->image_path) }}"
+                                                alt="" data-input="{{ asset($image->image_path) }}">
+                                        @endforeach
+                                    </section>
+                                </section>
+                            </section>
+                        </section>
+                        <!-- end image gallery -->
+
+                        <!-- start product info -->
+                        <section class="col-md-5">
+
+                            <section class="content-wrapper bg-white p-3 rounded-2 mb-4">
+
+                                <!-- start vontent header -->
+                                <section class="content-header mb-3">
+                                    <section class="d-flex justify-content-between align-items-center">
+                                        <h2 class="content-header-title content-header-title-small">
+                                            {{ $product->name }}
+                                        </h2>
+                                        <section class="content-header-link">
+                                            <!--<a href="#">مشاهده همه</a>-->
+                                        </section>
+                                    </section>
+                                </section>
+                                <section class="product-info">
+                                    @if ($product->colors->count() > 0)
+                                        <p><span>رنگ : <span
+                                                    id="colorName">{{ $product->colors->first()->name }}</span></span>
+                                        </p>
+                                        <p>
+                                            @foreach ($product->colors as $color)
+                                                <label for="color-{{ $color->id }}"
+                                                    style="background-color: {{ $color->hex_code }};"
+                                                    class="product-info-colors me-1" data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom" title="{{ $color->name }}"></label>
+                                                <input class="productColorRadio d-none" @checked($color->id == $product->colors->first()->id) type="radio"
+                                                    name="colors" id="color-{{ $color->id }}"
+                                                    data-color-name="{{ $color->name }}"
+                                                    data-color-id="{{ $color->id }}"
+                                                    data-color-price="{{ $color->pivot->price }}">
+                                            @endforeach
+                                            <input type="number" name="color_id" id="colorId" class="d-none">
+                                        </p>
+                                    @endif
+                                    @if ($product->guarantees->count() > 0)
+                                        <p><i class="fa fa-shield-alt cart-product-selected-warranty me-1"></i>
+                                            <strong class="me-2">گارانتی </strong>
+                                            <select name="guarantee_id" id="productGuarantee"
+                                                class="form-control form-control-sm w-25 d-inline">
+                                                @foreach ($product->guarantees as $guarantee)
+                                                    <option data-guarantee-price="{{ $guarantee->pivot->price }}"
+                                                        value="{{ $guarantee->id }}" @selected($guarantee->id == old('guarantee_id'))>
+                                                        {{ $guarantee->persian_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </p>
+                                    @endif
+                                    @if ($product->marketable == 'false' || $product->marketable_number <= 0)
+                                        <p>
+                                            <i class="fa fa-store-alt cart-product-selected-store me-1"></i>
+                                            <span>کالا ناموجود در انبار</span>
+                                        </p>
+                                    @else
+                                        <p>
+                                            <i class="fa fa-store-alt cart-product-selected-store me-1"></i>
+                                            <span>کالا موجود در انبار</span>
+                                        </p>
+                                    @endif
+                                    @auth
+                                        @if (auth()->user()->bookmarks()->where('product_id', $product->id)->first())
+                                            <p>
+                                                <a class="btn btn-light add-product-to-bookmark btn-sm text-decoration-none"
+                                                    href="javascript:void(0)"
+                                                    data-product-slug="{{ route('home.addToBookmark', $product->slug) }}">
+                                                    <i class="fa fa-heart text-danger"></i>
+                                                    <span>حذف از علاقه مندی</span>
+                                                </a>
+                                            </p>
+                                        @else
+                                            <p>
+                                                <a class="btn btn-light add-product-to-bookmark btn-sm text-decoration-none"
+                                                    href="javascript:void(0)"
+                                                    data-product-slug="{{ route('home.addToBookmark', $product->slug) }}">
+                                                    <i class="fa fa-heart"></i>
+                                                    <span>افزودن به علاقه مندی</span>
+                                                </a>
+                                            </p>
+                                        @endif
+                                    @endauth
+                                    @guest
+                                        <p>
+                                            <a class="btn btn-light btn-sm text-decoration-none"
+                                                href="{{ route('home.addToBookmark', $product->slug) }}">
+                                                <i class="fa fa-heart"></i>
+                                                افزودن به علاقه مندی
+                                            </a>
+                                        </p>
+                                    @endguest
+                                    <section>
+                                        <section class="cart-product-number d-inline-block ">
+                                            <button class="cart-number-down productNumber" type="button">-</button>
+                                            <input id="productNumber" class="productNumber" type="number" min="1" max="5"
+                                                step="1" value="1" readonly="readonly" name="number">
+                                            <button class="cart-number-up productNumber" type="button">+</button>
+                                        </section>
+                                    </section>
+                                    <p class="mb-3 mt-5">
+                                        <i class="fa fa-info-circle me-1"></i>کاربر گرامی خرید شما هنوز نهایی نشده است. برای
+                                        ثبت سفارش و تکمیل خرید باید ابتدا آدرس خود را انتخاب کنید و سپس نحوه ارسال را انتخاب
+                                        کنید. نحوه ارسال انتخابی شما محاسبه و به این مبلغ اضافه شده خواهد شد. و در نهایت
+                                        پرداخت این سفارش صورت میگیرد. پس از ثبت سفارش کالا بر اساس نحوه ارسال که شما انتخاب
+                                        کرده اید کالا برای شما در مدت زمان مذکور ارسال می گردد.
+                                    </p>
+                                </section>
+                            </section>
+
+                        </section>
+                        <!-- end product info -->
+
+                        <section class="col-md-3">
+                            <section class="content-wrapper bg-white p-3 rounded-2 cart-total-price">
+                                <section class="d-flex justify-content-between align-items-center">
+                                    <p class="text-muted">قیمت کالا</p>
+                                    <p class="text-muted">{{ priceFormat($product->price) }}<span
+                                            class="small">تومان</span></p>
+                                </section>
+                                @if ($product->colors->count() > 0)
+                                    <section class="d-flex justify-content-between align-items-center">
+                                        <p class="text-muted">قیمت رنگ کالا</p>
+                                        <p class="text-muted">
+                                            <span id="finalColorPrice"></span>
+                                            <span class="small">تومان</span>
+                                        </p>
+                                    </section>
+                                @endif
+                                @if ($product->guarantees->count() > 0)
+                                    <section class="d-flex justify-content-between align-items-center">
+                                        <p class="text-muted">قیمت گارانتی کالا</p>
+                                        <p class="text-muted">
+                                            <span id="finalGuaranteePrice"></span>
+                                            <span class="small">تومان</span>
+                                        </p>
+                                    </section>
+                                @endif
+
+                                {{-- <section class="d-flex justify-content-between align-items-center">
+                                    <p class="text-muted">تخفیف کالا</p>
+                                    <p class="text-danger fw-bolder">260,000 <span class="small">تومان</span></p>
+                                </section> --}}
+
+                                <section class="border-bottom mb-3"></section>
+
+                                <section class="d-flex justify-content-between align-items-center">
+                                    <p class="text-muted">قیمت نهایی</p>
+                                    <p class="fw-bolder"><span id="finalPrice">{{ priceFormat($product->price) }}</span><span
+                                            class="small">تومان</span>
+                                    </p>
+                                </section>
+                                <p class="d-none" id="productPrice" data-product-price="{{ $product->price }}"></p>
+                                <section class="">
+                                    @if ($product->marketable == 'false' || $product->marketable_number <= 0)
+                                        <button type="button" id="next-level"
+                                            class="btn btn-warning d-block w-100 disabled">
+                                            کالا موجود نیست
+                                        </button>
+                                    @else
+                                        <button type="submit" id="next-level" class="btn btn-danger d-block w-100">
+                                            افزودن به سبد خرید
+                                        </button>
+                                    @endif
+                                </section>
+
+                            </section>
+                        </section>
+                    </section>
+                </section>
+            </section>
+
+        </section>
+    </form>
+    <!-- end cart -->
+
+
+
+    <!-- start product lazy load -->
+    <section class="mb-4">
+        <section class="container-xxl">
+            <section class="row">
+                <section class="col">
+                    <section class="content-wrapper bg-white p-3 rounded-2">
+                        <!-- start vontent header -->
+                        <section class="content-header">
+                            <section class="d-flex justify-content-between align-items-center">
+                                <h2 class="content-header-title">
+                                    <span>کالاهای مرتبط</span>
+                                </h2>
+                                <section class="content-header-link">
+                                    <!--<a href="#">مشاهده همه</a>-->
+                                </section>
+                            </section>
+                        </section>
+                        <!-- start vontent header -->
+                        <section class="lazyload-wrapper">
+                            <section class="lazyload light-owl-nav owl-carousel owl-theme">
+
+                                @foreach ($product->category->products()->where('status', 'true')->get() as $productCategory)
+                                    <section class="item">
+                                        <section class="lazyload-item-wrapper">
+                                            <section class="product">
+                                                <section class="product-add-to-cart"><a href="#"
+                                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                                        title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a>
+                                                </section>
+                                                @auth
+                                                    @if (auth()->user()->bookmarks()->where('product_id', $productCategory->id)->first())
+                                                        <section class="product-add-to-favorite">
+                                                            <a href="javascript:void(0)" data-bs-toggle="tooltip"
+                                                                data-product-slug="{{ route('home.addToBookmark', $productCategory->slug) }}"
+                                                                data-bs-placement="left" title="حذف از علاقه مندی"
+                                                                class="add-to-bookmark">
+                                                                <i class="fa fa-heart text-danger"></i></a>
+                                                        </section>
+                                                    @else
+                                                        <section class="product-add-to-favorite">
+                                                            <a href="javascript:void(0)" data-bs-toggle="tooltip"
+                                                                data-product-slug="{{ route('home.addToBookmark', $productCategory->slug) }}"
+                                                                data-bs-placement="left" title="افزودن به علاقه مندی"
+                                                                class="add-to-bookmark">
+                                                                <i class="fa fa-heart"></i></a>
+                                                        </section>
+                                                    @endif
+                                                @endauth
+                                                @guest
+                                                    <section class="product-add-to-favorite">
+                                                        <a href="{{ route('home.addToBookmark', $productCategory->slug) }}"
+                                                            data-bs-toggle="tooltip"
+                                                            data-product-slug="{{ route('home.addToBookmark', $productCategory->slug) }}"
+                                                            data-bs-placement="left" title="افزودن به علاقه مندی"
+                                                            class="add-to-bookmark">
+                                                            <i class="fa fa-heart"></i></a>
+                                                    </section>
+                                                @endguest
+                                                <a class="product-link"
+                                                    href="{{ route('home.product.show', $productCategory) }}">
+                                                    <section class="product-image">
+                                                        <img class=""
+                                                            src="{{ asset($productCategory->images()->first()->image_path) }}"
+                                                            alt="">
+                                                    </section>
+                                                    <section class="product-name">
+                                                        <h3>{{ Str::limit($productCategory->name, 45, '...') }}</h3>
+                                                    </section>
+                                                    <section class="product-price-wrapper">
+                                                        <section class="product-price">
+                                                            {{ priceFormat($productCategory->price) }} تومان</section>
+                                                    </section>
+                                                    <section class="product-colors">
+                                                        @foreach ($productCategory->colors as $color)
+                                                            <section class="product-colors-item"
+                                                                style="background-color: {{ $color->hex_code }};">
+                                                            </section>
+                                                        @endforeach
+                                                    </section>
+                                                </a>
+                                            </section>
+                                        </section>
+                                    </section>
+                                @endforeach
+
+                            </section>
+                        </section>
+                    </section>
+                </section>
+            </section>
+        </section>
+    </section>
+    <!-- end product lazy load -->
+
+    <!-- start description, features and comments -->
+    <section class="mb-4">
+        <section class="container-xxl">
+            <section class="row">
+                <section class="col">
+                    <section class="content-wrapper bg-white p-3 rounded-2">
+                        <!-- start content header -->
+                        <section id="introduction-features-comments" class="introduction-features-comments">
+                            <section class="content-header">
+                                <section class="d-flex justify-content-between align-items-center">
+                                    <h2 class="content-header-title">
+                                        <span class="me-2"><a class="text-decoration-none text-dark"
+                                                href="#introduction">معرفی</a></span>
+                                        <span class="me-2"><a class="text-decoration-none text-dark"
+                                                href="#features">ویژگی ها</a></span>
+                                        <span class="me-2"><a class="text-decoration-none text-dark"
+                                                href="#comments">دیدگاه ها</a></span>
+                                    </h2>
+                                    <section class="content-header-link">
+                                        <!--<a href="#">مشاهده همه</a>-->
+                                    </section>
+                                </section>
+                            </section>
+                        </section>
+                        <!-- start content header -->
+
+                        <section class="py-4">
+
+                            <!-- start vontent header -->
+                            <section id="introduction" class="content-header mt-2 mb-4">
+                                <section class="d-flex justify-content-between align-items-center">
+                                    <h2 class="content-header-title content-header-title-small">
+                                        معرفی
+                                    </h2>
+                                    <section class="content-header-link">
+                                        <!--<a href="#">مشاهده همه</a>-->
+                                    </section>
+                                </section>
+                            </section>
+                            <section class="product-introduction mb-4">
+                                {!! $product->description !!}
+                            </section>
+
+                            <!-- start vontent header -->
+                            <section id="features" class="content-header mt-2 mb-4">
+                                <section class="d-flex justify-content-between align-items-center">
+                                    <h2 class="content-header-title content-header-title-small">
+                                        ویژگی ها
+                                    </h2>
+                                    <section class="content-header-link">
+                                        <!--<a href="#">مشاهده همه</a>-->
+                                    </section>
+                                </section>
+                            </section>
+                            <section class="product-features mb-4 table-responsive">
+                                <table class="table table-bordered border-white">
+                                    @foreach ($product->options as $option)
+                                        <tr>
+                                            <td>{{ $option->title }}</td>
+                                            <td>{{ $option->option }}</td>
+                                        </tr>
+                                    @endforeach
+                                </table>
+                            </section>
+
+                            <!-- start vontent header -->
+                            <section id="comments" class="content-header mt-2 mb-4">
+                                <section class="d-flex justify-content-between align-items-center">
+                                    <h2 class="content-header-title content-header-title-small">
+                                        دیدگاه ها
+                                    </h2>
+                                    <section class="content-header-link">
+                                        <!--<a href="#">مشاهده همه</a>-->
+                                    </section>
+                                </section>
+                            </section>
+                            <section class="product-comments mb-4">
+
+                                <section class="comment-add-wrapper">
+                                    @auth
+                                        <button class="comment-add-button" type="button" data-bs-toggle="modal"
+                                            data-bs-target="#add-comment"><i class="fa fa-plus"></i> افزودن دیدگاه</button>
+                                    @endauth
+                                    @guest
+                                        <div class="alert alert-warning text-center" role="alert">
+                                            برای ثبت نظر باید وارد حساب کاربری خود شوید - <a
+                                                href="{{ route('home.auth.login.page') }}" class="text-decoration-none">ورود
+                                                به حساب کاربری</a>
+                                        </div>
+                                    @endguest
+                                    <!-- start add comment Modal -->
+                                    <section class="modal fade" id="add-comment" tabindex="-1"
+                                        aria-labelledby="add-comment-label" aria-hidden="true">
+                                        <form class="modal-dialog"
+                                            action="{{ route('home.product.createComment', $product) }}"
+                                            onsubmit="return createCommentCreate()" method="POST">
+                                            @csrf
+                                            <section class="modal-content">
+                                                <section class="modal-header">
+                                                    <h5 class="modal-title" id="add-comment-label"><i
+                                                            class="fa fa-plus"></i> افزودن دیدگاه</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </section>
+                                                <section class="modal-body">
+                                                    <div class="row">
+                                                        <section class="col-12 mb-2">
+                                                            <label for="comment-text" class="form-label mb-1">دیدگاه
+                                                                شما</label>
+                                                            <textarea class="form-control form-control-sm" id="comment-text" placeholder="دیدگاه شما ..." rows="4"
+                                                                name="comment"></textarea>
+                                                            <p class="text-danger ms-1 mt-2">
+                                                                <strong id="error-comment-create"></strong>
+                                                            </p>
+                                                        </section>
+
+                                                    </div>
+                                                </section>
+                                                <section class="modal-footer justify-content-start py-1">
+                                                    <button type="submit" class="btn btn-sm btn-primary">ثبت
+                                                        دیدگاه</button>
+                                                    <button type="button" class="btn btn-sm btn-danger"
+                                                        data-bs-dismiss="modal">بستن</button>
+                                                </section>
+                                            </section>
+                                        </form>
+                                    </section>
+                                </section>
+
+                                {{-- Answer Modal - Start --}}
+                                <form action="{{ route('home.product.submitComment', $product) }}" method="POST"
+                                    onsubmit="return submitAnswer()" class="modal fade mt-4" id="answerModal"
+                                    tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    @csrf
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">پاسخ به نظر
+                                                </h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div>
+                                                    <div class="mb-3 d-none">
+                                                        <input type="text" class="form-control" id="recipient-name"
+                                                            name="parent_id">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="answer-text" class="col-form-label">پاسخ شما
+                                                            :</label>
+                                                        <textarea class="form-control" id="answer-text" name="comment"></textarea>
+                                                    </div>
+                                                    <small class="text-danger">
+                                                        <strong id="error-text"></strong></small>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer justify-content-start">
+                                                <button type="submit" class="btn btn-primary">ثبت نظر</button>
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">انصراف</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                {{-- Answer Modal - End --}}
+
+                                @forelse ($product->comments()->where('parent_id', null)->where("status","true")->get() as $comment)
+                                    <section class="product-comment">
+                                        <section class="product-comment-header d-flex justify-content-start">
+                                            <section class="product-comment-date">{{ jalaliDate($comment->created_at) }}
+                                            </section>
+                                            <section class="product-comment-title">{{ $comment->author->name }}</section>
+                                        </section>
+                                        <section class="product-comment-body">
+                                            {{ $comment->comment }}
+                                            <div class="d-flex justify-content-end">
+                                                @auth
+                                                    <button type="button" class="btn-small me-2" data-bs-toggle="modal"
+                                                        data-bs-target="#answerModal"
+                                                        data-bs-whatever="{{ $comment->id }}"><small>پاسخ
+                                                            دادن</small></button>
+                                                @endauth
+                                            </div>
+                                        </section>
+                                        @foreach ($comment->children()->where('status', 'true')->get() as $child)
+                                            <section class="product-comment ms-5 border-bottom-0">
+                                                <section class="product-comment-header d-flex justify-content-start">
+                                                    <section class="product-comment-date">
+                                                        {{ jalaliDate($child->created_at) }}</section>
+                                                    <section class="product-comment-title">{{ $child->author->name }}
+                                                    </section>
+                                                </section>
+                                                <section class="product-comment-body">
+                                                    {{ $child->comment }}
+                                                    <div class="d-flex justify-content-end">
+                                                        @auth
+                                                            <button type="button" class="btn-small me-4"
+                                                                data-bs-toggle="modal" data-bs-target="#answerModal"
+                                                                data-bs-whatever="{{ $child->id }}"><small>پاسخ
+                                                                    دادن</small></button>
+                                                        @endauth
+                                                    </div>
+                                                </section>
+                                            </section>
+                                            @include('home.components.show-comments', [
+                                                'comment' => $child,
+                                            ])
+                                        @endforeach
+                                    </section>
+                                @empty
+                                    <div class="alert alert-danger text-center mx-5 my-3" role="alert">
+                                        <small>دیدگاهی ثبت نشده!</small>
+                                    </div>
+                                @endforelse
+                            </section>
+                        </section>
+
+                    </section>
+                </section>
+            </section>
+        </section>
+    </section>
+    <!-- end description, features and comments -->
+
+    {{-- toast start --}}
+    <div class="toast-container position-fixed top-0 start-0 p-3 z-99">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <img src="{{ asset('home-assets/images/logo/shopping-icon.png') }}" width="20" class="rounded me-2"
+                    alt="">
+                <strong class="me-auto">فروشگاه</strong>
+                <small>همین الان</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body bg-success text-light">
+            </div>
+        </div>
+    </div>
+    {{-- toast end --}}
+@endsection
+@section('script')
+    <script src="{{ asset('home-assets/js/home/answer-comment.js') }}"></script>
+    <script src="{{ asset('home-assets/js/home/add-to-bookmark.js') }}"></script>
+    <script src="{{ asset('home-assets/js/home/calc-data.js') }}"></script>
+@endsection

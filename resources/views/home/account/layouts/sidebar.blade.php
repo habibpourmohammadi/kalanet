@@ -1,3 +1,8 @@
+@if (session()->has('error'))
+    <div class="alert alert-danger text-center" role="alert">
+        <small>{{ session('error') }}</small>
+    </div>
+@endif
 @if (session()->has('success'))
     <div class="alert alert-success text-center" role="alert">
         <small>{{ session('success') }}</small>

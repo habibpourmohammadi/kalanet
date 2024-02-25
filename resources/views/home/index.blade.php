@@ -87,7 +87,8 @@
                                                             <i class="fa fa-heart"></i></a>
                                                     </section>
                                                 @endguest
-                                                <a class="product-link" href="#">
+                                                <a class="product-link"
+                                                    href="{{ route('home.product.show', $bestSellingProduct->slug) }}">
                                                     <section class="product-image">
                                                         <img class=""
                                                             src="{{ asset($bestSellingProduct->images->first()->image_path ?? '') }}"
@@ -201,7 +202,8 @@
                                                             <i class="fa fa-heart"></i></a>
                                                     </section>
                                                 @endguest
-                                                <a class="product-link" href="#">
+                                                <a class="product-link"
+                                                    href="{{ route('home.product.show', $recommendedProduct->slug) }}">
                                                     <section class="product-image">
                                                         <img class=""
                                                             src="{{ asset($recommendedProduct->images->first()->image_path ?? '') }}"

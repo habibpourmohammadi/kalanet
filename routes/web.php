@@ -19,6 +19,7 @@ use App\Http\Controllers\Home\Account\AccountController;
 use App\Http\Controllers\Home\Auth\AuthController;
 use App\Http\Controllers\Home\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Home\ProductController as HomeProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,16 @@ Route::prefix("/")->group(function () {
         Route::get("/my-bookmarks", "myBookmarks")->name("home.profile.myBookmarks.index");
         Route::post("/remove-bookmark/{bookmark}", "removeBookmark")->name("home.profile.myBookmarks.removeBookmark");
     });
+
+    // Product
+    Route::get("/product/{product:slug}", [HomeProductController::class, "show"])->name("home.product.show");
+
+    // add to cart
+    Route::post("/add-to-cart/{product:slug}", [HomeProductController::class, "addToCart"])->name("home.product.addToCart");
+
+    // submit comment
+    Route::post("/product/comment/{product:slug}", [HomeProductController::class, "submitComment"])->name("home.product.submitComment")->middleware("auth");
+    Route::post("/product/create-comment/{product:slug}", [HomeProductController::class, "createComment"])->name("home.product.createComment")->middleware("auth");
 });
 
 

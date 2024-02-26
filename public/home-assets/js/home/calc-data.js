@@ -92,6 +92,9 @@ $(".productNumber").mouseleave(function () {
 
 // calc final price
 $(document).ready(function () {
+    if (guaranteePrice == undefined) {
+        guaranteePrice = 0;
+    }
     finalProductPrice = (Number(productPrice) + (Number(colorPrice) + Number(guaranteePrice))) * Number(productNumber.val())
     finalPriceTag.html(convertToPersianNumber(String(finalProductPrice)))
 });

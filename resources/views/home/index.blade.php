@@ -98,10 +98,19 @@
                                                     <section class="product-name">
                                                         <h3>{{ Str::limit($bestSellingProduct->name, 50, '...') }}</h3>
                                                     </section>
-                                                    <section class="product-price-wrapper">
-                                                        <section class="product-price">
-                                                            {{ priceFormat($bestSellingProduct->price) }} تومان</section>
-                                                    </section>
+                                                    @if ($bestSellingProduct->marketable_number <= 0 || $bestSellingProduct->marketable != 'true')
+                                                        <section class="product-price-wrapper">
+                                                            <section class="product-price text-danger">
+                                                                <strong>ناموجود</strong>
+                                                            </section>
+                                                        </section>
+                                                    @else
+                                                        <section class="product-price-wrapper">
+                                                            <section class="product-price">
+                                                                {{ priceFormat($bestSellingProduct->price) }} تومان
+                                                            </section>
+                                                        </section>
+                                                    @endif
                                                     <section class="product-colors">
                                                         @foreach ($bestSellingProduct->colors as $color)
                                                             <section class="product-colors-item"
@@ -212,10 +221,19 @@
                                                     <section class="product-name">
                                                         <h3>{{ Str::limit($recommendedProduct->name, 50, '...') }}</h3>
                                                     </section>
-                                                    <section class="product-price-wrapper">
-                                                        <section class="product-price">
-                                                            {{ priceFormat($recommendedProduct->price) }} تومان</section>
-                                                    </section>
+                                                    @if ($recommendedProduct->marketable_number <= 0 || $recommendedProduct->marketable != 'true')
+                                                        <section class="product-price-wrapper">
+                                                            <section class="product-price text-danger">
+                                                                <strong>ناموجود</strong>
+                                                            </section>
+                                                        </section>
+                                                    @else
+                                                        <section class="product-price-wrapper">
+                                                            <section class="product-price">
+                                                                {{ priceFormat($recommendedProduct->price) }} تومان
+                                                            </section>
+                                                        </section>
+                                                    @endif
                                                     <section class="product-colors">
                                                         @foreach ($recommendedProduct->colors as $color)
                                                             <section class="product-colors-item"
@@ -289,7 +307,7 @@
     </section>
 
     {{-- toast start --}}
-    <div class="toast-container position-fixed top-0 start-0 p-3 z-99">
+    <div class="toast-container position-fixed bottom-0 start-0 p-3 z-99">
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
                 <img src="{{ asset('home-assets/images/logo/shopping-icon.png') }}" width="20" class="rounded me-2"

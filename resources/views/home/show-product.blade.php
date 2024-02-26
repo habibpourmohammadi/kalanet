@@ -81,8 +81,8 @@
                                                     style="background-color: {{ $color->hex_code }};"
                                                     class="product-info-colors me-1" data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom" title="{{ $color->name }}"></label>
-                                                <input class="productColorRadio d-none" @checked($color->id == $product->colors->first()->id) type="radio"
-                                                    name="colors" id="color-{{ $color->id }}"
+                                                <input class="productColorRadio d-none" @checked($color->id == $product->colors->first()->id)
+                                                    type="radio" name="colors" id="color-{{ $color->id }}"
                                                     data-color-name="{{ $color->name }}"
                                                     data-color-id="{{ $color->id }}"
                                                     data-color-price="{{ $color->pivot->price }}">
@@ -148,8 +148,9 @@
                                     <section>
                                         <section class="cart-product-number d-inline-block ">
                                             <button class="cart-number-down productNumber" type="button">-</button>
-                                            <input id="productNumber" class="productNumber" type="number" min="1" max="5"
-                                                step="1" value="1" readonly="readonly" name="number">
+                                            <input id="productNumber" class="productNumber" type="number" min="1"
+                                                max="5" step="1" value="1" readonly="readonly"
+                                                name="number">
                                             <button class="cart-number-up productNumber" type="button">+</button>
                                         </section>
                                     </section>
@@ -201,7 +202,8 @@
 
                                 <section class="d-flex justify-content-between align-items-center">
                                     <p class="text-muted">قیمت نهایی</p>
-                                    <p class="fw-bolder"><span id="finalPrice">{{ priceFormat($product->price) }}</span><span
+                                    <p class="fw-bolder"><span
+                                            id="finalPrice">{{ priceFormat($product->price) }}</span><span
                                             class="small">تومان</span>
                                     </p>
                                 </section>
@@ -230,100 +232,109 @@
     <!-- end cart -->
 
 
-
-    <!-- start product lazy load -->
-    <section class="mb-4">
-        <section class="container-xxl">
-            <section class="row">
-                <section class="col">
-                    <section class="content-wrapper bg-white p-3 rounded-2">
-                        <!-- start vontent header -->
-                        <section class="content-header">
-                            <section class="d-flex justify-content-between align-items-center">
-                                <h2 class="content-header-title">
-                                    <span>کالاهای مرتبط</span>
-                                </h2>
-                                <section class="content-header-link">
-                                    <!--<a href="#">مشاهده همه</a>-->
+    @if ($categoryProducts->count() != 0)
+        <!-- start product lazy load -->
+        <section class="mb-4">
+            <section class="container-xxl">
+                <section class="row">
+                    <section class="col">
+                        <section class="content-wrapper bg-white p-3 rounded-2">
+                            <!-- start vontent header -->
+                            <section class="content-header">
+                                <section class="d-flex justify-content-between align-items-center">
+                                    <h2 class="content-header-title">
+                                        <span>کالاهای مرتبط</span>
+                                    </h2>
+                                    <section class="content-header-link">
+                                        <!--<a href="#">مشاهده همه</a>-->
+                                    </section>
                                 </section>
                             </section>
-                        </section>
-                        <!-- start vontent header -->
-                        <section class="lazyload-wrapper">
-                            <section class="lazyload light-owl-nav owl-carousel owl-theme">
+                            <!-- start vontent header -->
+                            <section class="lazyload-wrapper">
+                                <section class="lazyload light-owl-nav owl-carousel owl-theme">
 
-                                @foreach ($product->category->products()->where('status', 'true')->get() as $productCategory)
-                                    <section class="item">
-                                        <section class="lazyload-item-wrapper">
-                                            <section class="product">
-                                                <section class="product-add-to-cart"><a href="#"
-                                                        data-bs-toggle="tooltip" data-bs-placement="left"
-                                                        title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a>
-                                                </section>
-                                                @auth
-                                                    @if (auth()->user()->bookmarks()->where('product_id', $productCategory->id)->first())
+                                    @foreach ($categoryProducts as $categoryProduct)
+                                        <section class="item">
+                                            <section class="lazyload-item-wrapper">
+                                                <section class="product">
+                                                    <section class="product-add-to-cart"><a href="#"
+                                                            data-bs-toggle="tooltip" data-bs-placement="left"
+                                                            title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a>
+                                                    </section>
+                                                    @auth
+                                                        @if (auth()->user()->bookmarks()->where('product_id', $categoryProduct->id)->first())
+                                                            <section class="product-add-to-favorite">
+                                                                <a href="javascript:void(0)" data-bs-toggle="tooltip"
+                                                                    data-product-slug="{{ route('home.addToBookmark', $categoryProduct->slug) }}"
+                                                                    data-bs-placement="left" title="حذف از علاقه مندی"
+                                                                    class="add-to-bookmark">
+                                                                    <i class="fa fa-heart text-danger"></i></a>
+                                                            </section>
+                                                        @else
+                                                            <section class="product-add-to-favorite">
+                                                                <a href="javascript:void(0)" data-bs-toggle="tooltip"
+                                                                    data-product-slug="{{ route('home.addToBookmark', $categoryProduct->slug) }}"
+                                                                    data-bs-placement="left" title="افزودن به علاقه مندی"
+                                                                    class="add-to-bookmark">
+                                                                    <i class="fa fa-heart"></i></a>
+                                                            </section>
+                                                        @endif
+                                                    @endauth
+                                                    @guest
                                                         <section class="product-add-to-favorite">
-                                                            <a href="javascript:void(0)" data-bs-toggle="tooltip"
-                                                                data-product-slug="{{ route('home.addToBookmark', $productCategory->slug) }}"
-                                                                data-bs-placement="left" title="حذف از علاقه مندی"
-                                                                class="add-to-bookmark">
-                                                                <i class="fa fa-heart text-danger"></i></a>
-                                                        </section>
-                                                    @else
-                                                        <section class="product-add-to-favorite">
-                                                            <a href="javascript:void(0)" data-bs-toggle="tooltip"
-                                                                data-product-slug="{{ route('home.addToBookmark', $productCategory->slug) }}"
+                                                            <a href="{{ route('home.addToBookmark', $categoryProduct->slug) }}"
+                                                                data-bs-toggle="tooltip"
+                                                                data-product-slug="{{ route('home.addToBookmark', $categoryProduct->slug) }}"
                                                                 data-bs-placement="left" title="افزودن به علاقه مندی"
                                                                 class="add-to-bookmark">
                                                                 <i class="fa fa-heart"></i></a>
                                                         </section>
-                                                    @endif
-                                                @endauth
-                                                @guest
-                                                    <section class="product-add-to-favorite">
-                                                        <a href="{{ route('home.addToBookmark', $productCategory->slug) }}"
-                                                            data-bs-toggle="tooltip"
-                                                            data-product-slug="{{ route('home.addToBookmark', $productCategory->slug) }}"
-                                                            data-bs-placement="left" title="افزودن به علاقه مندی"
-                                                            class="add-to-bookmark">
-                                                            <i class="fa fa-heart"></i></a>
-                                                    </section>
-                                                @endguest
-                                                <a class="product-link"
-                                                    href="{{ route('home.product.show', $productCategory) }}">
-                                                    <section class="product-image">
-                                                        <img class=""
-                                                            src="{{ asset($productCategory->images()->first()->image_path) }}"
-                                                            alt="">
-                                                    </section>
-                                                    <section class="product-name">
-                                                        <h3>{{ Str::limit($productCategory->name, 45, '...') }}</h3>
-                                                    </section>
-                                                    <section class="product-price-wrapper">
-                                                        <section class="product-price">
-                                                            {{ priceFormat($productCategory->price) }} تومان</section>
-                                                    </section>
-                                                    <section class="product-colors">
-                                                        @foreach ($productCategory->colors as $color)
-                                                            <section class="product-colors-item"
-                                                                style="background-color: {{ $color->hex_code }};">
+                                                    @endguest
+                                                    <a class="product-link"
+                                                        href="{{ route('home.product.show', $categoryProduct) }}">
+                                                        <section class="product-image">
+                                                            <img class=""
+                                                                src="{{ asset($categoryProduct->images()->first()->image_path) }}"
+                                                                alt="">
+                                                        </section>
+                                                        <section class="product-name">
+                                                            <h3>{{ Str::limit($categoryProduct->name, 45, '...') }}</h3>
+                                                        </section>
+                                                        @if ($categoryProduct->marketable_number <= 0 || $categoryProduct->marketable != 'true')
+                                                            <section class="product-price-wrapper">
+                                                                <section class="product-price text-danger">
+                                                                    <strong>ناموجود</strong>
+                                                                </section>
                                                             </section>
-                                                        @endforeach
-                                                    </section>
-                                                </a>
+                                                        @else
+                                                            <section class="product-price-wrapper">
+                                                                <section class="product-price">
+                                                                    {{ priceFormat($categoryProduct->price) }} تومان
+                                                                </section>
+                                                            </section>
+                                                        @endif
+                                                        <section class="product-colors">
+                                                            @foreach ($categoryProduct->colors as $color)
+                                                                <section class="product-colors-item"
+                                                                    style="background-color: {{ $color->hex_code }};">
+                                                                </section>
+                                                            @endforeach
+                                                        </section>
+                                                    </a>
+                                                </section>
                                             </section>
                                         </section>
-                                    </section>
-                                @endforeach
-
+                                    @endforeach
+                                </section>
                             </section>
                         </section>
                     </section>
                 </section>
             </section>
         </section>
-    </section>
-    <!-- end product lazy load -->
+        <!-- end product lazy load -->
+    @endif
 
     <!-- start description, features and comments -->
     <section class="mb-4">
@@ -338,8 +349,10 @@
                                     <h2 class="content-header-title">
                                         <span class="me-2"><a class="text-decoration-none text-dark"
                                                 href="#introduction">معرفی</a></span>
-                                        <span class="me-2"><a class="text-decoration-none text-dark"
-                                                href="#features">ویژگی ها</a></span>
+                                        @if ($product->options->count() > 0)
+                                            <span class="me-2"><a class="text-decoration-none text-dark"
+                                                    href="#features">ویژگی ها</a></span>
+                                        @endif
                                         <span class="me-2"><a class="text-decoration-none text-dark"
                                                 href="#comments">دیدگاه ها</a></span>
                                     </h2>
@@ -367,28 +380,33 @@
                             <section class="product-introduction mb-4">
                                 {!! $product->description !!}
                             </section>
-
-                            <!-- start vontent header -->
-                            <section id="features" class="content-header mt-2 mb-4">
-                                <section class="d-flex justify-content-between align-items-center">
-                                    <h2 class="content-header-title content-header-title-small">
-                                        ویژگی ها
-                                    </h2>
-                                    <section class="content-header-link">
-                                        <!--<a href="#">مشاهده همه</a>-->
+                            {{-- Introduction video --}}
+                            <video class="w-25" controls>
+                                <source src="{{ asset($product->Introduction_video_path) }}" type="video/mp4">
+                            </video>
+                            @if ($product->options->count() > 0)
+                                <!-- start vontent header -->
+                                <section id="features" class="content-header mt-2 mb-4">
+                                    <section class="d-flex justify-content-between align-items-center">
+                                        <h2 class="content-header-title content-header-title-small">
+                                            ویژگی ها
+                                        </h2>
+                                        <section class="content-header-link">
+                                            <!--<a href="#">مشاهده همه</a>-->
+                                        </section>
                                     </section>
                                 </section>
-                            </section>
-                            <section class="product-features mb-4 table-responsive">
-                                <table class="table table-bordered border-white">
-                                    @foreach ($product->options as $option)
-                                        <tr>
-                                            <td>{{ $option->title }}</td>
-                                            <td>{{ $option->option }}</td>
-                                        </tr>
-                                    @endforeach
-                                </table>
-                            </section>
+                                <section class="product-features mb-4 table-responsive">
+                                    <table class="table table-bordered border-white">
+                                        @foreach ($product->options as $option)
+                                            <tr>
+                                                <td>{{ $option->title }}</td>
+                                                <td>{{ $option->option }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </table>
+                                </section>
+                            @endif
 
                             <!-- start vontent header -->
                             <section id="comments" class="content-header mt-2 mb-4">
@@ -551,7 +569,7 @@
     <!-- end description, features and comments -->
 
     {{-- toast start --}}
-    <div class="toast-container position-fixed top-0 start-0 p-3 z-99">
+    <div class="toast-container position-fixed bottom-0 start-0 p-3 z-99 mt-5">
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
                 <img src="{{ asset('home-assets/images/logo/shopping-icon.png') }}" width="20" class="rounded me-2"

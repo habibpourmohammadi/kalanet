@@ -24,11 +24,11 @@ class HomeController extends Controller
         $bottomBanner = Banner::where("banner_position", "bottom")->where("status", "true")->first();
 
         // products
-        $bestSellingProducts = Product::where("status", "true")->orderBy("sold_number", "DESC")->take(11)->with("images", "colors")->get();
-        $recommendedProducts = Product::take(11)->with("images", "colors")->get();
+        $bestSellingProducts = Product::where("status", "true")->has("images")->orderBy("sold_number", "DESC")->take(11)->with("images", "colors")->get();
+        $recommendedProducts = Product::where("status", "true")->has("images")->take(11)->with("images", "colors")->get();
 
         // brands
-        $brands = Brand::all();
+        $brands = Brand::where("logo_path", '!=', null)->get();
 
         return view("home.index", compact("sliders", "topLeftBanners", "bestSellingProducts", "middleBanners", "recommendedProducts", "bottomBanner", "brands"));
     }

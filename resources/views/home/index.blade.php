@@ -54,7 +54,8 @@
                                     <section class="item">
                                         <section class="lazyload-item-wrapper">
                                             <section class="product">
-                                                <section class="product-add-to-cart"><a href="#"
+                                                <section class="product-add-to-cart"><a
+                                                        href="{{ route('home.product.show', $bestSellingProduct) }}"
                                                         data-bs-toggle="tooltip" data-bs-placement="left"
                                                         title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a>
                                                 </section>
@@ -178,7 +179,8 @@
                                     <section class="item">
                                         <section class="lazyload-item-wrapper">
                                             <section class="product">
-                                                <section class="product-add-to-cart"><a href="#"
+                                                <section class="product-add-to-cart"><a
+                                                        href="{{ route('home.product.show', $recommendedProduct) }}"
                                                         data-bs-toggle="tooltip" data-bs-placement="left"
                                                         title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a>
                                                 </section>

@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Models\Comment;
 use App\Models\Product;
 use App\Models\Bookmark;
+use App\Models\CartItem;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -61,5 +62,10 @@ class User extends Authenticatable
     public function bookmarks()
     {
         return $this->hasMany(Bookmark::class);
+    }
+
+    public function cartItems()
+    {
+        return $this->hasMany(CartItem::class);
     }
 }

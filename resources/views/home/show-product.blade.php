@@ -7,12 +7,12 @@
     {{-- alerts start --}}
     @if (session()->has('success'))
         <div class="alert alert-success text-center mx-5 my-3" role="alert">
-            {{ session('success') }}
+            <strong>{{ session('success') }}</strong>
         </div>
     @endif
     @if (session()->has('error'))
         <div class="alert alert-danger text-center mx-5 my-3" role="alert">
-            {{ session('error') }}
+            <strong>{{ session('error') }}</strong>
         </div>
     @endif
     {{-- alerts end --}}
@@ -258,7 +258,8 @@
                                         <section class="item">
                                             <section class="lazyload-item-wrapper">
                                                 <section class="product">
-                                                    <section class="product-add-to-cart"><a href="#"
+                                                    <section class="product-add-to-cart"><a
+                                                            href="{{ route('home.product.show', $categoryProduct) }}"
                                                             data-bs-toggle="tooltip" data-bs-placement="left"
                                                             title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a>
                                                     </section>

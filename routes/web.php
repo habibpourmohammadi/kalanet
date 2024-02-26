@@ -59,7 +59,8 @@ Route::prefix("/")->group(function () {
     Route::get("/product/{product:slug}", [HomeProductController::class, "show"])->name("home.product.show");
 
     // add to cart
-    Route::post("/add-to-cart/{product:slug}", [HomeProductController::class, "addToCart"])->name("home.product.addToCart");
+    Route::post("/add-to-cart/{product:slug}", [HomeProductController::class, "addToCart"])->name("home.product.addToCart")->middleware("auth");
+    Route::delete("/delete-from-cart/{cartItem}", [HomeProductController::class, "deleteFromCart"])->name("home.product.deleteFromCart")->middleware("auth");
 
     // submit comment
     Route::post("/product/comment/{product:slug}", [HomeProductController::class, "submitComment"])->name("home.product.submitComment")->middleware("auth");

@@ -75,50 +75,64 @@
                             @endguest
                         </section>
                     </section>
-                    <section class="header-cart d-inline ps-3 border-start position-relative">
-                        <a class="btn btn-link position-relative text-dark header-cart-link" href="javascript:void(0)">
-                            <i class="fa fa-shopping-cart"></i> <span style="top: 80%;"
-                                class="position-absolute start-0 translate-middle badge rounded-pill bg-danger">2</span>
-                        </a>
-                        <section class="header-cart-dropdown">
-                            <section class="border-bottom d-flex justify-content-between p-2">
-                                <span class="text-muted">2 کالا</span>
-                                <a class="text-decoration-none text-info" href="cart.html">مشاهده سبد خرید </a>
-                            </section>
-                            <section class="header-cart-dropdown-body">
+                    @auth
+                        <section class="header-cart d-inline ps-3 border-start position-relative">
+                            <a class="btn btn-link position-relative text-dark header-cart-link" href="javascript:void(0)">
+                                <i class="fa fa-shopping-cart"></i> <span style="top: 80%;"
+                                    class="position-absolute start-0 translate-middle badge rounded-pill bg-danger">{{ auth()->user()->cartItems->count() }}</span>
+                            </a>
+                            <section class="header-cart-dropdown">
+                                <section class="border-bottom d-flex justify-content-between p-2">
+                                    <span class="text-muted">{{ auth()->user()->cartItems->count() }} کالا</span>
+                                    <a class="text-decoration-none text-info" href="">مشاهده سبد خرید </a>
+                                </section>
+                                <section class="header-cart-dropdown-body">
+                                    @php
+                                        $totalPrice = 0;
+                                    @endphp
+                                    @forelse (auth()->user()->cartItems as $cartItem)
+                                        <section
+                                            class="header-cart-dropdown-body-item d-flex justify-content-start align-items-center">
+                                            <img class="flex-shrink-1"
+                                                src="{{ asset($cartItem->product->images()->first()->image_path ?? '') }}"
+                                                alt="">
+                                            <section class="w-100 text-truncate"><a class="text-decoration-none text-dark"
+                                                    href="{{ route('home.product.show', $cartItem->product) }}">{{ Str::limit($cartItem->product->name, 20, '...') }}</a>
+                                            </section>
+                                            <form action="{{ route('home.product.deleteFromCart', $cartItem) }}"
+                                                method="POST" class="flex-shrink-1">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-muted btn btn-sm p-1">
+                                                    <i class="fa fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </section>
+                                        @php
+                                            $totalPrice += $cartItem->totalPrice();
+                                        @endphp
+                                    @empty
+                                        <strong class="text-center d-block text-danger">سبد خرید شما خالی است</strong>
+                                    @endforelse
 
+                                </section>
                                 <section
-                                    class="header-cart-dropdown-body-item d-flex justify-content-start align-items-center">
-                                    <img class="flex-shrink-1" src="{{ asset('home-assets/images/products/1.jpg') }}"
-                                        alt="">
-                                    <section class="w-100 text-truncate"><a class="text-decoration-none text-dark"
-                                            href="#">کتاب اثر مرکب اثر دارن هاردی انتشارات معیار علم</a></section>
-                                    <section class="flex-shrink-1"><a class="text-muted text-decoration-none p-1"
-                                            href="#"><i class="fa fa-trash-alt"></i></a></section>
+                                    class="header-cart-dropdown-footer border-top d-flex justify-content-between align-items-center p-2">
+                                    @if (auth()->user()->cartItems->count() > 0)
+                                        <section class="">
+                                            <section>مبلغ قابل پرداخت</section>
+                                            <section> {{ priceFormat($totalPrice) }} تومان</section>
+                                        </section>
+                                    @else
+                                        <section class="">
+                                        </section>
+                                    @endif
+                                    <section class=""><a class="btn btn-danger btn-sm d-block" href="">ثبت
+                                            سفارش</a></section>
                                 </section>
-
-                                <section
-                                    class="header-cart-dropdown-body-item d-flex justify-content-start align-items-center">
-                                    <img class="flex-shrink-1" src="{{ asset('home-assets/images/products/2.jpg') }}"
-                                        alt="">
-                                    <section class="w-100 text-truncate"><a class="text-decoration-none text-dark"
-                                            href="#">دستگاه آبمیوه گیری دنویر با کد 1016</a></section>
-                                    <section class="flex-shrink-1"><a class="text-muted text-decoration-none p-1"
-                                            href="#"><i class="fa fa-trash-alt"></i></a></section>
-                                </section>
-
-                            </section>
-                            <section
-                                class="header-cart-dropdown-footer border-top d-flex justify-content-between align-items-center p-2">
-                                <section class="">
-                                    <section>مبلغ قابل پرداخت</section>
-                                    <section> 1,326,000 تومان</section>
-                                </section>
-                                <section class=""><a class="btn btn-danger btn-sm d-block" href="cart.html">ثبت
-                                        سفارش</a></section>
                             </section>
                         </section>
-                    </section>
+                    @endauth
                 </section>
             </section>
         </section>

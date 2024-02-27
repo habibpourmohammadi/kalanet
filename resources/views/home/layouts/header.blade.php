@@ -84,7 +84,8 @@
                             <section class="header-cart-dropdown">
                                 <section class="border-bottom d-flex justify-content-between p-2">
                                     <span class="text-muted">{{ auth()->user()->cartItems->count() }} کالا</span>
-                                    <a class="text-decoration-none text-info" href="">مشاهده سبد خرید </a>
+                                    <a class="text-decoration-none text-info"
+                                        href="{{ route('home.salesProcess.myCart') }}">مشاهده سبد خرید </a>
                                 </section>
                                 <section class="header-cart-dropdown-body">
                                     @php

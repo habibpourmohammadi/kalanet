@@ -20,6 +20,7 @@ use App\Http\Controllers\Home\Auth\AuthController;
 use App\Http\Controllers\Home\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Home\ProductController as HomeProductController;
+use App\Http\Controllers\Home\SalesProcess\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +66,9 @@ Route::prefix("/")->group(function () {
     // submit comment
     Route::post("/product/comment/{product:slug}", [HomeProductController::class, "submitComment"])->name("home.product.submitComment")->middleware("auth");
     Route::post("/product/create-comment/{product:slug}", [HomeProductController::class, "createComment"])->name("home.product.createComment")->middleware("auth");
+
+    // Sales Process
+    Route::get("/my-cart", [CartController::class, "index"])->name("home.salesProcess.myCart")->middleware("auth");
 });
 
 

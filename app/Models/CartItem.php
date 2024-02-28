@@ -41,6 +41,20 @@ class CartItem extends Model
         $guaranteePrice = 0;
         $productPrice = $this->product->price;
 
+        if ($this->product->status != 'true') {
+            $this->delete();
+        }
+
+        if ($this->color_id != null && $this->product->colors->where("id", $this->color->id)->first() == null) {
+            $this->delete();
+            return false;
+        }
+
+        if ($this->guarantee_id != null && $this->product->guarantees->where("id", $this->guarantee->id)->first() == null) {
+            $this->delete();
+            return false;
+        }
+
         if ($this->color != null) {
             $colorPrice = $this->product->colors->where("id", $this->color->id)->first()->pivot->price;
         }

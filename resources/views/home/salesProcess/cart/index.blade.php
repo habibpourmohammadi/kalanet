@@ -29,9 +29,6 @@
                                 @forelse ($cartItems as $cartItem)
                                     @php
                                         $totalPrice += $cartItem->totalPrice();
-                                        if ($cartItem->product->status != 'true') {
-                                            $cartItem->delete();
-                                        }
                                     @endphp
                                     <section class="cart-item d-md-flex py-3">
                                         <section class="cart-img align-self-start flex-shrink-1"><img
@@ -226,7 +223,7 @@
             </section>
         </section>
     @endif
-    
+
     {{-- toast start --}}
     <div class="toast-container position-fixed bottom-0 start-0 p-3 z-99 mt-5">
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">

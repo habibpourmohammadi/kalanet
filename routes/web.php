@@ -35,6 +35,8 @@ use App\Http\Controllers\Home\SalesProcess\CartController;
 
 // Home routes
 Route::get('/', [HomeController::class, "index"])->name("home.index");
+// search
+Route::get("/search/{category:slug?}", [HomeController::class, "search"])->name("home.search");
 
 Route::prefix("/")->group(function () {
 

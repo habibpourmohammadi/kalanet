@@ -296,7 +296,8 @@
                             @foreach ($brands as $brand)
                                 <section class="item">
                                     <section class="brand-item">
-                                        <a href="#"><img class="rounded-2" src="{{ $brand->logo_path }}"
+                                        <a href="{{ route('home.search', ['brand' => $brand->slug]) }}"><img
+                                                class="rounded-2" src="{{ $brand->logo_path }}"
                                                 alt="{{ $brand->persian_name }}"></a>
                                     </section>
                                 </section>

@@ -9,6 +9,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Bookmark;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -46,5 +47,67 @@ class HomeController extends Controller
             ]);
             return response()->json(['success' => true, "message" => "محصول با موفقیت به لیست علاقه مندی شما اضافه شد", "status" => "added"]);
         }
+    }
+
+    // Search
+    public function search(Request $request, Category $category = null)
+    {
+        $brands = Brand::all();
+
+        if ($category) {
+            $categoryFilter = $category;
+            $productModel = $category->products();
+        } else {
+            $categoryFilter = null;
+            $productModel = new Product();
+        }
+
+        $categories = Category::whereNull("parent_id")->get();
+
+        switch ($request->sort) {
+            case '1':
+                $colum = "created_at";
+                $dirication = "DESC";
+                break;
+            case '2':
+                $colum = "price";
+                $dirication = "DESC";
+                break;
+            case '3':
+                $colum = "price";
+                $dirication = "ASC";
+                break;
+            case '4':
+                $colum = "sold_number";
+                $dirication = "DESC";
+                break;
+
+            default:
+                $colum = "created_at";
+                $dirication = "ASC";
+        }
+
+        if ($request->search) {
+            $query = $productModel->where('name', "LIKE", "%" . $request->search . "%")->orderBy($colum, $dirication);
+        } else {
+            $query =  $productModel->orderBy($colum, $dirication);
+        }
+
+        $products = $request->max_price && $request->min_price ? $query->whereBetween("price", [$request->min_price, $request->max_price]) : $query->when($request->min_price, function ($query) use ($request) {
+            $query->where('price', ">=", $request->min_price)->get();
+        })->when($request->max_price, function ($query) use ($request) {
+            $query->where('price', "<=", $request->max_price)->get();
+        })->when(!($request->max_price && $request->min_price), function ($query) {
+            $query->get();
+        });
+        $products = $products->when($request->brands, function () use ($request, $products) {
+            $products->WhereHas("brand", function ($query) use ($request) {
+                $query->whereIn("persian_name", $request->brands);
+            })->with("brand");
+        });
+
+        $products = $products->paginate(15);
+        $products->appends($request->query());
+        return view("home.search", compact("categories", "brands", "products", "categoryFilter"));
     }
 }

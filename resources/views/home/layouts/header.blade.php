@@ -16,14 +16,34 @@
                     </button>
                 </section>
 
-                <section class="mt-3 mt-md-auto search-wrapper">
+                <form
+                    action="{{ route('home.search', ['category' => request()->category, 'brands' => request()->brands, 'max_price' => request()->max_price, 'min_price' => request()->min_price]) }}"
+                    method="GET" class="mt-3 mt-md-auto search-wrapper">
                     <section class="search-box">
                         <section class="search-textbox">
                             <span><i class="fa fa-search"></i></span>
-                            <input id="search" type="text" class="" placeholder="جستجو ..."
-                                autocomplete="off">
+                            <input id="search" type="text" name="search" class="" placeholder="جستجو ..."
+                                autocomplete="off" value="{{ request()->search }}">
+                            @if (request()->sort)
+                                <input type="text" name="sort" value="{{ request()->sort }}" class="d-none">
+                            @endif
+                            @if (request()->min_price)
+                                <input type="text" name="min_price" value="{{ request()->min_price }}"
+                                    class="d-none">
+                            @endif
+                            @if (request()->max_price)
+                                <input type="text" name="max_price" value="{{ request()->max_price }}"
+                                    class="d-none">
+                            @endif
+                            @if (request()->brands)
+                                @foreach (request()->brands as $brand)
+                                    <input class="d-none" type="checkbox" value="{{ $brand }}" name="brands[]"
+                                        @checked(in_array($brand, request()->brands ?? [''])) id="{{ $brand }}">
+                                @endforeach
+                            @endif
+                            <button type="submit" class="d-none"></button>
                         </section>
-                        <section class="search-result visually-hidden">
+                        {{-- <section class="search-result visually-hidden">
                             <section class="search-result-title">نتایج جستجو برای <span class="search-words">"موبایل
                                     شیا"</span><span class="search-result-type">در دسته بندی ها</span></section>
                             <section class="search-result-item"><a class="text-decoration-none" href="#"><i
@@ -42,9 +62,9 @@
                                     شیا"</span><span class="search-result-type">در کالاها</span></section>
                             <section class="search-result-item"><span class="search-no-result">موردی یافت نشد</span>
                             </section>
-                        </section>
+                        </section> --}}
                     </section>
-                </section>
+                </form>
 
                 <section class="mt-3 mt-md-auto text-end">
                     <section class="d-inline px-md-3">

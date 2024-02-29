@@ -160,12 +160,39 @@
                             @forelse ($products as $product)
                                 <section class="col-md-3 p-0">
                                     <section class="product">
-                                        <section class="product-add-to-cart"><a href="#" data-bs-toggle="tooltip"
+                                        <section class="product-add-to-cart"><a
+                                                href="{{ route('home.product.show', $product) }}" data-bs-toggle="tooltip"
                                                 data-bs-placement="left" title="افزودن به سبد خرید"><i
                                                     class="fa fa-cart-plus"></i></a></section>
-                                        <section class="product-add-to-favorite"><a href="#" data-bs-toggle="tooltip"
-                                                data-bs-placement="left" title="افزودن به علاقه مندی"><i
-                                                    class="fa fa-heart"></i></a></section>
+                                        @auth
+                                            @if (auth()->user()->bookmarks()->where('product_id', $product->id)->first())
+                                                <section class="product-add-to-favorite">
+                                                    <a href="javascript:void(0)" data-bs-toggle="tooltip"
+                                                        data-product-slug="{{ route('home.addToBookmark', $product->slug) }}"
+                                                        data-bs-placement="left" title="حذف از علاقه مندی"
+                                                        class="add-to-bookmark">
+                                                        <i class="fa fa-heart text-danger"></i></a>
+                                                </section>
+                                            @else
+                                                <section class="product-add-to-favorite">
+                                                    <a href="javascript:void(0)" data-bs-toggle="tooltip"
+                                                        data-product-slug="{{ route('home.addToBookmark', $product->slug) }}"
+                                                        data-bs-placement="left" title="افزودن به علاقه مندی"
+                                                        class="add-to-bookmark">
+                                                        <i class="fa fa-heart"></i></a>
+                                                </section>
+                                            @endif
+                                        @endauth
+                                        @guest
+                                            <section class="product-add-to-favorite">
+                                                <a href="{{ route('home.addToBookmark', $product->slug) }}"
+                                                    data-bs-toggle="tooltip"
+                                                    data-product-slug="{{ route('home.addToBookmark', $product->slug) }}"
+                                                    data-bs-placement="left" title="افزودن به علاقه مندی"
+                                                    class="add-to-bookmark">
+                                                    <i class="fa fa-heart"></i></a>
+                                            </section>
+                                        @endguest
                                         <a class="product-link" href="{{ route('home.product.show', $product) }}">
                                             <section class="product-image">
                                                 <img class=""
@@ -237,4 +264,22 @@
         </section>
     </section>
     <!-- end body -->
+    {{-- toast start --}}
+    <div class="toast-container position-fixed bottom-0 start-0 p-3 z-99 mt-5">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <img src="{{ asset('home-assets/images/logo/shopping-icon.png') }}" width="20" class="rounded me-2"
+                    alt="">
+                <strong class="me-auto">فروشگاه</strong>
+                <small>همین الان</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body bg-success text-light">
+            </div>
+        </div>
+    </div>
+    {{-- toast end --}}
+@endsection
+@section('script')
+    <script src="{{ asset('home-assets/js/home/add-to-bookmark.js') }}"></script>
 @endsection

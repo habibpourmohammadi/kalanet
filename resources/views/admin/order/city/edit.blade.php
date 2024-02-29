@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('head-tag')
-    <title>ویرایش استان</title>
+    <title>ویرایش شهر</title>
 @endsection
 
 @section('content')
@@ -9,10 +9,10 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item font-size-12"> <a href="{{ route('admin.index') }}">خانه</a></li>
             <li class="breadcrumb-item font-size-12"> <a href="">بخش سفارشات</a></li>
-            <li class="breadcrumb-item font-size-12"><a href="{{ route('admin.order.province.index') }}">استان ها</a>
+            <li class="breadcrumb-item font-size-12"><a href="{{ route('admin.order.city.index') }}">شهر ها</a>
             </li>
             </li>
-            <li class="breadcrumb-item font-size-12 active" aria-current="page">ویرایش استان</li>
+            <li class="breadcrumb-item font-size-12 active" aria-current="page">ویرایش شهر</li>
         </ol>
     </nav>
     <section class="row">
@@ -20,24 +20,42 @@
             <section class="main-body-container">
                 <section class="main-body-container-header">
                     <h5>
-                        ویرایش استان
+                        ویرایش شهر
                     </h5>
                 </section>
                 <section class="d-flex justify-content-between align-items-center mt-4 mb-3 border-bottom pb-2">
-                    <a href="{{ route('admin.order.province.index') }}" class="btn btn-info btn-sm">بازگشت</a>
+                    <a href="{{ route('admin.order.city.index') }}" class="btn btn-info btn-sm">بازگشت</a>
                 </section>
                 <section>
-                    <form action="{{ route('admin.order.province.update', $province) }}" method="POST" id="form">
+                    <form action="{{ route('admin.order.city.update', $city) }}" method="POST" id="form">
                         @csrf
                         @method('PUT')
                         <section class="row">
-                            <section class="col-12 col-md-12">
+                            <section class="col-12 col-md-6">
                                 <div class="form-group">
-                                    <label for="name">نام استان</label>
+                                    <label for="name">نام شهر</label>
                                     <input type="text" class="form-control form-control-sm" name="name"
-                                        value="{{ old('name', $province->name) }}" id="name">
+                                        value="{{ old('name', $city->name) }}" id="name">
                                 </div>
                                 @error('name')
+                                    <span class="alert-danger" role="alert">
+                                        <strong>
+                                            {{ $message }}
+                                        </strong>
+                                    </span>
+                                @enderror
+                            </section>
+                            <section class="col-12 col-md-6">
+                                <div class="form-group">
+                                    <label for="province">استان</label>
+                                    <select name="province_id" id="province" class="form-control">
+                                        @foreach ($provinces as $province)
+                                            <option @selected(old('province_id', $city->province_id) == $province->id) value="{{ $province->id }}">
+                                                {{ $province->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('province_id')
                                     <span class="alert-danger" role="alert">
                                         <strong>
                                             {{ $message }}

@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Province extends Model
+class City extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $guarded = ["id"];
 
-    protected $table = "provinces";
+    protected $table = "cities";
 
-    public function cities()
+    public function province()
     {
-        return $this->hasMany(City::class);
+        return $this->belongsTo(Province::class);
     }
 }

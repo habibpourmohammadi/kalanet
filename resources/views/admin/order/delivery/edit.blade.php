@@ -8,7 +8,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item font-size-12"> <a href="{{ route('admin.index') }}">خانه</a></li>
-            <li class="breadcrumb-item font-size-12"> <a href="">بخش طاهر وبسایت</a></li>
+            <li class="breadcrumb-item font-size-12"> <a href="">بخش سفارشات</a></li>
             <li class="breadcrumb-item font-size-12"><a href="{{ route('admin.order.delivery.index') }}">حمل و نقل ها</a>
             </li>
             </li>

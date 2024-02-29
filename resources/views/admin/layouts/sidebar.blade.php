@@ -31,7 +31,11 @@
             </a>
             <a href="{{ route('admin.order.province.index') }}" class="sidebar-link">
                 <i class="fas fa-bars"></i>
-                <span>استان</span>
+                <span>استان ها</span>
+            </a>
+            <a href="{{ route('admin.order.city.index') }}" class="sidebar-link">
+                <i class="fas fa-bars"></i>
+                <span>شهر ها</span>
             </a>
 
             <section class="sidebar-part-title">کاربران</section>

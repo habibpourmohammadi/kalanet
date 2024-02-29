@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Appearance\BannerController;
 use App\Http\Controllers\Admin\Appearance\SliderController;
+use App\Http\Controllers\Admin\Order\CityController;
 use App\Http\Controllers\Admin\Order\DeliveryController;
 use App\Http\Controllers\Admin\Order\ProvinceController;
 use App\Http\Controllers\Admin\Product\BrandController;
@@ -246,6 +247,17 @@ Route::prefix("admin")->group(function () {
             Route::put("/update/{province}", "update")->name("admin.order.province.update");
             Route::get("/change-status/{province}", "changeStatus")->name("admin.order.province.changeStatus");
             Route::delete("/delete/{province}", "destroy")->name("admin.order.province.delete");
+        });
+
+        // City
+        Route::controller(CityController::class)->prefix("city")->group(function () {
+            Route::get("/", "index")->name("admin.order.city.index");
+            Route::get("/create", "create")->name("admin.order.city.create");
+            Route::post("/store", "store")->name("admin.order.city.store");
+            Route::get("/edit/{city}", "edit")->name("admin.order.city.edit");
+            Route::put("/update/{city}", "update")->name("admin.order.city.update");
+            Route::get("/change-status/{city}", "changeStatus")->name("admin.order.city.changeStatus");
+            Route::delete("/delete/{city}", "destroy")->name("admin.order.city.delete");
         });
     });
 });

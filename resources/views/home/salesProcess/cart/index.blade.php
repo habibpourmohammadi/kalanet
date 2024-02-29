@@ -49,10 +49,13 @@
                                                     <span>گارانتی {{ $cartItem->guarantee->persian_name }}</span>
                                                 </p>
                                             @endif
-                                            @if ($cartItem->product->marketable != 'true' || $cartItem->product->marketable_number <= 0)
+                                            @if (
+                                                $cartItem->product->marketable != 'true' ||
+                                                    $cartItem->product->marketable_number <= 0 ||
+                                                    $cartItem->product->marketable_number < $cartItem->number)
                                                 <p>
                                                     <i class="fa fa-store-alt-slash cart-product-selected-store me-1"></i>
-                                                    <span>کالا ناموجود در انبار</span>
+                                                    <span class="text-danger"><strong>کالا ناموجود در انبار</strong></span>
                                                 </p>
                                             @else
                                                 <p>
@@ -62,10 +65,12 @@
                                             @endif
                                             <section>
                                                 <section class="cart-product-number d-inline-block ">
-                                                    <button class="cart-number-down" type="button">-</button>
+                                                    <button class="btn btn-sm btn-primary disabled"
+                                                        type="button">-</button>
                                                     <input class="" type="number" min="1" max="5"
                                                         step="1" value="{{ $cartItem->number }}" readonly="readonly">
-                                                    <button class="cart-number-up" type="button">+</button>
+                                                    <button class="btn btn-sm btn-primary disabled"
+                                                        type="button">+</button>
                                                 </section>
                                                 <form action="{{ route('home.product.deleteFromCart', $cartItem) }}"
                                                     method="POST" class="d-inline">

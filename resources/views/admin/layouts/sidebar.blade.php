@@ -29,6 +29,10 @@
                 <i class="fas fa-bars"></i>
                 <span>حمل و نقل</span>
             </a>
+            <a href="{{ route('admin.order.province.index') }}" class="sidebar-link">
+                <i class="fas fa-bars"></i>
+                <span>استان</span>
+            </a>
 
             <section class="sidebar-part-title">کاربران</section>
             <a href="{{ route('admin.user.index') }}" class="sidebar-link">

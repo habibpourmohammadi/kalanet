@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Appearance\BannerController;
 use App\Http\Controllers\Admin\Appearance\SliderController;
 use App\Http\Controllers\Admin\Order\DeliveryController;
+use App\Http\Controllers\Admin\Order\ProvinceController;
 use App\Http\Controllers\Admin\Product\BrandController;
 use App\Http\Controllers\Admin\Product\CategoryController;
 use App\Http\Controllers\Admin\Product\ColorController;
@@ -234,6 +235,17 @@ Route::prefix("admin")->group(function () {
             Route::put("/update/{delivery}", "update")->name("admin.order.delivery.update");
             Route::get("/change-status/{delivery}", "changeStatus")->name("admin.order.delivery.changeStatus");
             Route::delete("/delete/{delivery}", "destroy")->name("admin.order.delivery.delete");
+        });
+
+        // Province
+        Route::controller(ProvinceController::class)->prefix("province")->group(function () {
+            Route::get("/", "index")->name("admin.order.province.index");
+            Route::get("/create", "create")->name("admin.order.province.create");
+            Route::post("/store", "store")->name("admin.order.province.store");
+            Route::get("/edit/{province}", "edit")->name("admin.order.province.edit");
+            Route::put("/update/{province}", "update")->name("admin.order.province.update");
+            Route::get("/change-status/{province}", "changeStatus")->name("admin.order.province.changeStatus");
+            Route::delete("/delete/{province}", "destroy")->name("admin.order.province.delete");
         });
     });
 });

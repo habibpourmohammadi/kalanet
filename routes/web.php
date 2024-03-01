@@ -58,6 +58,10 @@ Route::prefix("/")->group(function () {
         Route::put("/update-profile", "updateProfile")->name("home.profile.myProfile.updateProfile");
         Route::get("/my-bookmarks", "myBookmarks")->name("home.profile.myBookmarks.index");
         Route::post("/remove-bookmark/{bookmark}", "removeBookmark")->name("home.profile.myBookmarks.removeBookmark");
+        Route::get("my-addresses", "myAddresses")->name("home.profile.myAddresses.index");
+        Route::post("my-addresses", "storeMyAddress")->name("home.profile.myAddresses.store");
+        Route::get("my-addresses/edit/{address}", "editmyAddresses")->name("home.profile.myAddresses.edit");
+        Route::put("my-addresses/update/{address}", "updateMyAddress")->name("home.profile.myAddresses.update");
     });
 
     // Product

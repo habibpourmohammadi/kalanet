@@ -1,11 +1,11 @@
 @if (session()->has('error'))
     <div class="alert alert-danger text-center" role="alert">
-        <small>{{ session('error') }}</small>
+        <small><strong>{{ session('error') }}</strong></small>
     </div>
 @endif
 @if (session()->has('success'))
     <div class="alert alert-success text-center" role="alert">
-        <small>{{ session('success') }}</small>
+        <small><strong>{{ session('success') }}</strong></small>
     </div>
 @endif
 <section class="content-wrapper bg-white p-3 rounded-2 mb-3">
@@ -16,7 +16,8 @@
                     من</a></span>
         </section>
         <section class="sidebar-nav-item">
-            <span class="sidebar-nav-item-title"><a class="p-3" href="my-addresses.html">آدرس های
+            <span class="sidebar-nav-item-title"><a class="p-3"
+                    href="{{ route('home.profile.myAddresses.index') }}">آدرس های
                     من</a></span>
         </section>
         <section class="sidebar-nav-item">

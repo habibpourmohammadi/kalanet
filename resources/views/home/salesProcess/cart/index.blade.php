@@ -120,7 +120,8 @@
 
 
                                 <section class="">
-                                    <a href="address.html" class="btn btn-danger d-block">تکمیل فرآیند خرید</a>
+                                    <a href="{{ route('home.salesProcess.delivery') }}"
+                                        class="btn btn-danger d-block">تکمیل فرآیند خرید</a>
                                 </section>
 
                             </section>

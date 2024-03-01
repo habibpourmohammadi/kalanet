@@ -77,6 +77,7 @@ Route::prefix("/")->group(function () {
 
     // Sales Process
     Route::get("/my-cart", [CartController::class, "index"])->name("home.salesProcess.myCart")->middleware("auth");
+    Route::get("/delivery", [CartController::class, "delivery"])->name("home.salesProcess.delivery")->middleware(["auth", "cartitems"]);
 });
 
 

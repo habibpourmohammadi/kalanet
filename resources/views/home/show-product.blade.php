@@ -382,9 +382,11 @@
                                 {!! $product->description !!}
                             </section>
                             {{-- Introduction video --}}
-                            <video class="w-25" controls>
-                                <source src="{{ asset($product->Introduction_video_path) }}" type="video/mp4">
-                            </video>
+                            @if ($product->Introduction_video_path != null)
+                                <video class="w-25" controls>
+                                    <source src="{{ asset($product->Introduction_video_path) }}" type="video/mp4">
+                                </video>
+                            @endif
                             @if ($product->options->count() > 0)
                                 <!-- start vontent header -->
                                 <section id="features" class="content-header mt-2 mb-4">

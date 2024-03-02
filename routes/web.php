@@ -23,6 +23,7 @@ use App\Http\Controllers\Home\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Home\ProductController as HomeProductController;
 use App\Http\Controllers\Home\SalesProcess\CartController;
+use App\Http\Controllers\Home\SalesProcess\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,6 +79,7 @@ Route::prefix("/")->group(function () {
     // Sales Process
     Route::get("/my-cart", [CartController::class, "index"])->name("home.salesProcess.myCart")->middleware("auth");
     Route::get("/delivery", [CartController::class, "delivery"])->name("home.salesProcess.delivery")->middleware(["auth", "cartitems"]);
+    Route::post("/submit-order", [OrderController::class, "submitOrder"])->name("home.salesProcess.submitOrder")->middleware(["auth", "cartitems"]);
 });
 
 

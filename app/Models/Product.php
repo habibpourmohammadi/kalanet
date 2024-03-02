@@ -5,13 +5,14 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\Brand;
 use App\Models\Color;
+use App\Models\Order;
 use App\Models\Comment;
 use App\Models\Category;
 use App\Models\Guarantee;
 use App\Models\ProductImage;
 use App\Models\ProductOption;
-use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -70,5 +71,11 @@ class Product extends Model
     public function images()
     {
         return $this->hasMany(ProductImage::class);
+    }
+
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class);
     }
 }

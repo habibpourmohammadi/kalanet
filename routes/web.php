@@ -80,6 +80,8 @@ Route::prefix("/")->group(function () {
     Route::get("/my-cart", [CartController::class, "index"])->name("home.salesProcess.myCart")->middleware("auth");
     Route::get("/delivery", [CartController::class, "delivery"])->name("home.salesProcess.delivery")->middleware(["auth", "cartitems"]);
     Route::post("/submit-order", [OrderController::class, "submitOrder"])->name("home.salesProcess.submitOrder")->middleware(["auth", "cartitems"]);
+    Route::get("/payment", [OrderController::class, "paymentPage"])->name("home.salesProcess.payment.page")->middleware(["auth", "cartitems"]);
+    Route::post("/payment", [OrderController::class, "payment"])->name("home.salesProcess.payment")->middleware(["auth", "cartitems"]);
 });
 
 

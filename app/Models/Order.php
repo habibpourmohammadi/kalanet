@@ -37,4 +37,9 @@ class Order extends Model
     {
         return $this->belongsToMany(Product::class)->withPivot("color_name", "color_hex_code", "color_price", "guarantee_persian_name", "guarantee_price", "product_price", "number", "total_price", "product_obj")->withTrashed();
     }
+
+    public function payment()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

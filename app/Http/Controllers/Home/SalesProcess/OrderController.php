@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Home\Order\SubmitOrderRequest;
+use App\Http\Requests\Home\Payment\PaymentRequest;
+use App\Models\Payment;
 
 class OrderController extends Controller
 {
@@ -72,6 +74,65 @@ class OrderController extends Controller
         });
 
         // redirect to the payment page
-        // return to_route();
+        return to_route("home.salesProcess.payment.page");
+    }
+
+    // Payment Page
+    public function paymentPage()
+    {
+        $order = Auth::user()->orders->where("payment_status", "unpaid")->where("status", "not_confirmed")->first();
+        if ($order == null) {
+            return to_route("home.index");
+        }
+
+        $total_price = 0;
+        foreach (Auth::user()->cartItems as $cartItem) {
+            $total_price += $cartItem->totalPrice();
+        }
+        return view("home.salesProcess.payment.index", compact("order", "total_price"));
+    }
+
+    // Payment func
+    public function payment(PaymentRequest $request)
+    {
+        $payment_type = $request->payment_type;
+        $order = Auth::user()->orders->where("payment_status", "unpaid")->where("status", "not_confirmed")->first();
+
+        // last check for cartItems
+        foreach (Auth::user()->cartItems as $cartItem) {
+            if ($cartItem->product->status != 'true') {
+                $cartItem->delete();
+                return back()->with("error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
+            } elseif ($cartItem->color_id != null && $cartItem->product->colors->where("id", $cartItem->color->id)->first() == null) {
+                $cartItem->delete();
+                return back()->with("error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
+            } elseif ($cartItem->guarantee_id != null && $cartItem->product->guarantees->where("id", $cartItem->guarantee->id)->first() == null) {
+                $cartItem->delete();
+                return to_route("home.salesProcess.myCart")->with("error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
+            } elseif ($cartItem->product->marketable != 'true' || $cartItem->product->marketable_number < $cartItem->number) {
+                return to_route("home.salesProcess.myCart")->with("error", "یکی از محصولات سبد خرید شما ناموجود است ,لطفا سبد خرید خود را بررسی نمایید");
+            }
+        }
+
+
+        if ($payment_type == 2) {
+            Payment::create([
+                "order_id" => $order->id,
+                "amount" => $order->total_price,
+                "status" => "cash",
+            ]);
+
+            // update order
+            $order->update([
+                "status" => "confirmed"
+            ]);
+
+            // delete cartItems
+            foreach (Auth::user()->cartItems as $cartItem) {
+                $cartItem->delete();
+            }
+
+            return to_route("home.profile.myProfile.index")->with("success", "سفارش شما با موفقیت ثبت شد");
+        }
     }
 }

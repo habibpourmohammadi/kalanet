@@ -8,6 +8,11 @@
         <section class="container-xxl">
             <section class="row">
                 <section class="col">
+                    @if (session()->has('error'))
+                        <div class="alert alert-danger text-center" role="alert">
+                            <strong>{{ session('error') }}</strong>
+                        </div>
+                    @endif
                     <!-- start vontent header -->
                     <section class="content-header">
                         <section class="d-flex justify-content-between align-items-center">

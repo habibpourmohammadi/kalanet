@@ -127,4 +127,11 @@ class AccountController extends Controller
 
         return to_route("home.profile.myAddresses.index")->with("success", "آدرس مورد نظر با موفقیت ویرایش شد");
     }
+
+    // My Orders - Index page
+    public function myOrders()
+    {
+        $orders = Auth::user()->orders;
+        return view("home.account.myOrders", compact("orders"));
+    }
 }

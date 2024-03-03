@@ -70,7 +70,12 @@
                     <section class="d-inline px-md-3">
                         <button class="btn btn-link text-decoration-none text-dark dropdown-toggle profile-button"
                             type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa fa-user"></i>
+                            @guest
+                                <i class="fa fa-user-lock"></i>
+                            @endguest
+                            @auth
+                                <i class="fa fa-user"></i>
+                            @endauth
                         </button>
                         <section class="dropdown-menu dropdown-menu-end custom-drop-down"
                             aria-labelledby="dropdownMenuButton1">

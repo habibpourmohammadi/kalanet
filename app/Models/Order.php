@@ -40,6 +40,22 @@ class Order extends Model
 
     public function payment()
     {
-        return $this->hasMany(Payment::class);
+        return $this->hasOne(Payment::class);
+    }
+
+    public function paymentStatus()
+    {
+        switch ($this->payment_status) {
+            case 'paid':
+                return "پرداخت شده";
+                break;
+
+            case 'unpaid':
+                return "پرداخت نشده";
+                break;
+            default:
+                return "";
+                break;
+        }
     }
 }

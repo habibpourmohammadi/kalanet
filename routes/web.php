@@ -63,6 +63,7 @@ Route::prefix("/")->group(function () {
         Route::post("my-addresses", "storeMyAddress")->name("home.profile.myAddresses.store");
         Route::get("my-addresses/edit/{address}", "editmyAddresses")->name("home.profile.myAddresses.edit");
         Route::put("my-addresses/update/{address}", "updateMyAddress")->name("home.profile.myAddresses.update");
+        Route::get("my-orders", "myOrders")->name("home.profile.myOrders.index");
     });
 
     // Product

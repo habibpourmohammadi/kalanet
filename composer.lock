@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "08427a0faede6da75cf9d63ff0b624a0",
+    "content-hash": "1332b262a7d73d26eb8ce9f864c29edc",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2356,6 +2356,60 @@
                 }
             ],
             "time": "2023-03-22T22:34:01+00:00"
+        },
+        {
+            "name": "nasrinrezaei45/shepacom",
+            "version": "1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nasrinrezaei45/shepacom.git",
+                "reference": "2439a9804ba419e5c69eaf172b7e3e22398215fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nasrinrezaei45/shepacom/zipball/2439a9804ba419e5c69eaf172b7e3e22398215fa",
+                "reference": "2439a9804ba419e5c69eaf172b7e3e22398215fa",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": "^7.2|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "NasrinRezaei45\\Shepacom\\ShepacomServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NasrinRezaei45\\Shepacom\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nasrin Rezaei",
+                    "email": "nasrinrezaei45@gmail.com"
+                }
+            ],
+            "description": "Shepa.com Laravel Package",
+            "keywords": [
+                "Shepa",
+                "laravel",
+                "shepacom"
+            ],
+            "support": {
+                "issues": "https://github.com/nasrinrezaei45/shepacom/issues",
+                "source": "https://github.com/nasrinrezaei45/shepacom/tree/1.0.4"
+            },
+            "time": "2021-11-23T07:08:34+00:00"
         },
         {
             "name": "nesbot/carbon",

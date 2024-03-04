@@ -4,14 +4,16 @@ namespace App\Http\Controllers\Home\SalesProcess;
 
 use App\Models\Order;
 use App\Models\Address;
+use App\Models\Payment;
 use App\Models\Delivery;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\Home\Order\SubmitOrderRequest;
+use NasrinRezaei45\Shepacom\ShepaFacade;
 use App\Http\Requests\Home\Payment\PaymentRequest;
-use App\Models\Payment;
+use App\Http\Requests\Home\Order\SubmitOrderRequest;
 
 class OrderController extends Controller
 {
@@ -190,6 +192,97 @@ class OrderController extends Controller
             });
 
             return to_route("home.profile.myOrders.index")->with("success", "سفارش شما با موفقیت ثبت شد");
+        } elseif ($payment_type == 1) {
+            // unit = Toman
+            $amount = $order->total_price;
+            $result = ShepaFacade::send($amount, Auth::user()->email, null, null, route("home.salesProcess.callback"));
+            $token = Str::afterLast($result, '/');
+
+            Payment::updateOrCreate(
+                ["order_id" => $order->id],
+                [
+                    "token" => $token,
+                    "amount" => $amount,
+                    "status" => "online",
+                    "payment_status" => "unpaid"
+                ]
+            );
+
+            return redirect($result);
         }
+    }
+
+    public function callback(Request $request)
+    {
+        $token = $request->token;
+        $payment = Payment::where("token", $token)->first();
+
+        // check payment
+        if (!$payment) {
+            return to_route("home.index")->with("error", "لطفا دوباره تلاش کنید");
+        } elseif ($payment->order->user->id != Auth::user()->id) {
+            return to_route("home.index")->with("error", "لطفا دوباره تلاش کنید");
+        }
+
+        // set values
+        $first_bank_response = $request->all();
+        $second_bank_response = $payment->second_bank_response ?? null;
+        $transaction_id = $payment->transaction_id ?? null;
+        $payment_status = $payment->order->payment_status;
+        $delivery_status = $payment->order->delivery_status;
+        $payment_status_for_payment = $payment->payment_status;
+
+        // check token and status
+        if ($request->token && $request->status == 'success') {
+            $result = ShepaFacade::verify($token, $payment->amount);
+            if (isset($result["transaction_id"])) {
+                // Payment was successful
+                $transaction_id = $result["transaction_id"];
+                $second_bank_response = $result;
+                $payment_status = "paid";
+                $payment_status_for_payment = "paid";
+                $delivery_status = "processing";
+            } elseif ($result["errorCode"] == 3) {
+                // If the token is checked again
+                return to_route("home.profile.myOrders.index")->with("error", "پرداخت شما نامشخص است ، لطفا وضعیت پرداخت سفارش خود و همچنین حساب بانکی خود را چک کنید");
+            } else {
+                // Other errors
+                $second_bank_response = $result;
+            }
+        } else {
+            // Payment canceled
+            $payment_status = "canceled";
+            $delivery_status = "unpaid";
+            $payment_status_for_payment = "unpaid";
+        }
+
+        // update values
+        DB::transaction(function () use ($payment, $first_bank_response, $second_bank_response, $transaction_id, $payment_status_for_payment, $delivery_status, $payment_status) {
+            // update payment fields
+            $payment->update([
+                "first_bank_response" => $first_bank_response,
+                "second_bank_response" => $second_bank_response,
+                "transaction_id" => $transaction_id,
+                "payment_status" => $payment_status_for_payment
+            ]);
+
+            // update order status
+            $payment->order->update([
+                "payment_status" => $payment_status,
+                "delivery_status" => $delivery_status,
+
+            ]);
+
+            // delete cartItems and update product
+            foreach (Auth::user()->cartItems as $cartItem) {
+                $product = $cartItem->product;
+                $product->increment('sold_number', $cartItem->number);
+                $product->decrement('marketable_number', $cartItem->number);
+                $cartItem->delete();
+            }
+        });
+
+        // redirect user to my orders page
+        return to_route("home.profile.myOrders.index")->with("success", "سفارش شما با موفقیت ثبت شده");
     }
 }

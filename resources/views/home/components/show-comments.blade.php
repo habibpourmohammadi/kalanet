@@ -3,8 +3,14 @@
         <section class="product-comment-header d-flex justify-content-start">
             <section class="product-comment-date">
                 {{ jalaliDate($child->created_at) }}</section>
-            <section class="product-comment-title">{{ $child->author->name }}
-            </section>
+            @if ($product->orders()->where('user_id', $comment->author->id)->first())
+                <section class="product-comment-title">{{ $comment->author->name }} <span class="badge bg-success">این
+                        محصول را خریده</span>
+                </section>
+            @else
+                <section class="product-comment-title">{{ $comment->author->name }}
+                </section>
+            @endif
         </section>
         <section class="product-comment-body">
             {{ $child->comment }}

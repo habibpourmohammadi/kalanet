@@ -24,7 +24,7 @@ class CartController extends Controller
         }
 
         $relatedProducts = $relatedProducts->unique();
-        $relatedProducts = $relatedProducts->whereNotIn("id", $cartItemProductIds);
+        $relatedProducts = $relatedProducts->whereNotIn("id", $cartItemProductIds)->take(15);
 
         return view("home.salesProcess.cart.index", compact("cartItems", "relatedProducts"));
     }

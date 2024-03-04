@@ -273,12 +273,14 @@ class OrderController extends Controller
 
             ]);
 
-            // delete cartItems and update product
-            foreach (Auth::user()->cartItems as $cartItem) {
-                $product = $cartItem->product;
-                $product->increment('sold_number', $cartItem->number);
-                $product->decrement('marketable_number', $cartItem->number);
-                $cartItem->delete();
+            if ($payment_status == "paid" && $delivery_status == "processing" && $payment_status_for_payment == "paid") {
+                // delete cartItems and update product
+                foreach (Auth::user()->cartItems as $cartItem) {
+                    $product = $cartItem->product;
+                    $product->increment('sold_number', $cartItem->number);
+                    $product->decrement('marketable_number', $cartItem->number);
+                    $cartItem->delete();
+                }
             }
         });
 

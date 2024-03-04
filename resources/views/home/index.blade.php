@@ -5,6 +5,11 @@
 @section('content')
     <!-- start slideshow -->
     <section class="container-xxl my-4">
+        @if (session()->has('error'))
+            <div class="alert alert-danger text-center" role="alert">
+                <strong>{{ session('error') }}</strong>
+            </div>
+        @endif
         <section class="row">
             <section class="col-md-8 pe-md-1 ">
                 <section id="slideshow" class="owl-carousel owl-theme">

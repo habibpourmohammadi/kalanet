@@ -82,7 +82,7 @@
                             @auth
                                 <section><a class="dropdown-item" href="{{ route('home.profile.myProfile.index') }}"><i
                                             class="fa fa-user-circle"></i>پروفایل کاربری</a></section>
-                                <section><a class="dropdown-item" href="my-orders.html"><i
+                                <section><a class="dropdown-item" href="{{ route('home.profile.myOrders.index') }}"><i
                                             class="fa fa-newspaper"></i>سفارشات</a></section>
                                 <section><a class="dropdown-item" href="{{ route('home.profile.myBookmarks.index') }}"><i
                                             class="fa fa-heart"></i>لیست

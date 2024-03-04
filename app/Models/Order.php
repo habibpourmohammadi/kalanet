@@ -53,8 +53,38 @@ class Order extends Model
             case 'unpaid':
                 return "پرداخت نشده";
                 break;
+
+            case 'returned':
+                return "مرجوعی";
+                break;
+
+            case 'canceled':
+                return "لغو شده";
+                break;
+
             default:
-                return "";
+                return "نامعلوم";
+                break;
+        }
+    }
+
+    public function deliveryStatus()
+    {
+        switch ($this->delivery_status) {
+            case 'processing':
+                return "در حال بارگیری";
+                break;
+
+            case 'delivered':
+                return "ارسال شده";
+                break;
+
+            case 'unpaid':
+                return "پرداخت نشده";
+                break;
+
+            default:
+                return "نامعلوم";
                 break;
         }
     }

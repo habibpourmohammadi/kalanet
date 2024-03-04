@@ -106,7 +106,7 @@ class HomeController extends Controller
             })->with("brand");
         });
 
-        $products = $products->paginate(15);
+        $products = $products->has("images")->paginate(15);
         $products->appends($request->query());
         return view("home.search", compact("categories", "brands", "products", "categoryFilter"));
     }

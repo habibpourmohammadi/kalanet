@@ -131,7 +131,34 @@ class AccountController extends Controller
     // My Orders - Index page
     public function myOrders()
     {
-        $orders = Auth::user()->orders;
+        $sort = request()->sort;
+        $column = "payment_status";
+
+
+        switch ($sort) {
+            case '1':
+                $sort = "paid";
+                break;
+
+            case '2':
+                $sort = "unpaid";
+                break;
+
+            case '3':
+                $sort = "returned";
+                break;
+
+            case '4':
+                $sort = "canceled";
+                break;
+
+            default:
+                $sort = Auth::user()->id;
+                $column = "user_id";
+                break;
+        }
+
+        $orders = Auth::user()->orders()->where($column, $sort)->get();
         return view("home.account.myOrders", compact("orders"));
     }
 }

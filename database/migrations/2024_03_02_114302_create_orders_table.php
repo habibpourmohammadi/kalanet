@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger("tracking_id")->unique();
             $table->foreignId("user_id")->constrained("users")->nullable();
             $table->foreignId("address_id")->constrained("addresses")->nullable();
             $table->foreignId("delivery_id")->constrained("deliveries")->nullable();
@@ -20,7 +21,8 @@ return new class extends Migration
             $table->text("user_obj")->nullable();
             $table->text("address_obj")->nullable();
             $table->text("delivery_obj")->nullable();
-            $table->enum("payment_status", ["paid", "unpaid"])->default("unpaid");
+            $table->enum("payment_status", ["paid", "unpaid", "returned", "canceled"])->default("unpaid");
+            $table->enum("delivery_status", ["unpaid", "processing", "delivered"])->default("unpaid");
             $table->enum("status", ["confirmed", "not_confirmed"])->default("not_confirmed");
             $table->timestamps();
             $table->softDeletes();

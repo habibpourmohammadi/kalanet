@@ -17,8 +17,12 @@ class ProductController extends Controller
     // show product
     public function show(Product $product)
     {
-        if ($product->status == "false")
+        if ($product->status == "false") {
             abort(404);
+        }
+        if ($product->images->first() == null) {
+            abort(404);
+        }
         $categoryProducts = $product->category->products()->whereNotIn('id', [$product->id])->where('status', 'true')->has("images")->get();
         return view("home.show-product", compact("product", "categoryProducts"));
     }

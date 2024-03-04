@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string("transaction_id")->nullable();
             $table->text("first_bank_response")->nullable();
             $table->text("second_bank_response")->nullable();
-            $table->enum("payment_status", ["paid", "", "unpaid"])->default("unpaid");
+            $table->enum("payment_status", ["paid", "unpaid", "cash_payment"])->default("unpaid");
             $table->enum("status", ["online", "cash"])->default("online");
             $table->timestamps();
             $table->softDeletes();

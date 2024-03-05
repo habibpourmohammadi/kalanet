@@ -65,7 +65,7 @@
                 </section>
                 <section class="sidebar-dropdown">
                     <a href="{{ route('admin.accessManagement.role.index') }}">نقش ها</a>
-                    <a href="{{ route('admin.appearance.banner.index') }}">مجوز ها</a>
+                    <a href="{{ route('admin.accessManagement.permission.index') }}">مجوز ها</a>
                 </section>
             </section>
 

@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\Product\OptionProductController;
 use App\Http\Controllers\Admin\Product\ProductGuaranteeController;
 use App\Http\Controllers\Home\ProductController as HomeProductController;
 use App\Http\Controllers\Admin\Order\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\User\PermissionController;
 use App\Http\Controllers\Admin\User\RoleController;
 
 /*
@@ -221,6 +222,11 @@ Route::prefix("admin")->group(function () {
             Route::post("/store", "store")->name("admin.accessManagement.role.store");
             Route::get("/edit/{role}", "edit")->name("admin.accessManagement.role.edit");
             Route::put("/update/{role}", "update")->name("admin.accessManagement.role.update");
+        });
+        
+        // permissions
+        Route::controller(PermissionController::class)->prefix("permission")->group(function () {
+            Route::get("/", "index")->name("admin.accessManagement.permission.index");
         });
     });
 

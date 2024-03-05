@@ -157,12 +157,16 @@
                                                     @endforeach
                                                 </section>
                                             </section>
-                                            @if ($order->payment_status == 'unpaid' && $order->delivery_status == 'unpaid' && $order->status == 'not_confirmed')
-                                                <section class="order-item-link"><a
-                                                        href="{{ route('home.salesProcess.payment.page') }}">پرداخت
+                                            <section class="order-item-link">
+                                                <a href="{{ route('home.profile.myOrders.show', $order) }}"
+                                                    class="btn btn-sm btn-primary text-light my-3">جزئیات
+                                                    سفارش</a> <br>
+                                                @if ($order->payment_status == 'unpaid' && $order->delivery_status == 'unpaid' && $order->status == 'not_confirmed')
+                                                    <a href="{{ route('home.salesProcess.payment.page') }}"
+                                                        class="btn btn-sm btn-secondary text-light">پرداخت
                                                         سفارش</a>
-                                                </section>
-                                            @endif
+                                                @endif
+                                            </section>
                                         </section>
                                     </section>
                                 @endforeach

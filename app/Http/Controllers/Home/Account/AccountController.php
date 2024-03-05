@@ -10,6 +10,7 @@ use App\Http\Requests\Home\Account\UpdateProfileRequest;
 use App\Models\Address;
 use App\Models\Bookmark;
 use App\Models\City;
+use App\Models\Order;
 
 class AccountController extends Controller
 {
@@ -160,5 +161,14 @@ class AccountController extends Controller
 
         $orders = Auth::user()->orders()->where($column, $sort)->get();
         return view("home.account.myOrders", compact("orders"));
+    }
+
+    public function showMyOrder(Order $order)
+    {
+        if (Auth::user()->id != $order->user_id) {
+            abort(404);
+        }
+
+        return view("home.account.showMyOrder", compact("order"));
     }
 }

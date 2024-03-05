@@ -67,6 +67,7 @@ Route::prefix("/")->group(function () {
         Route::get("my-addresses/edit/{address}", "editmyAddresses")->name("home.profile.myAddresses.edit");
         Route::put("my-addresses/update/{address}", "updateMyAddress")->name("home.profile.myAddresses.update");
         Route::get("my-orders/{sort?}", "myOrders")->name("home.profile.myOrders.index");
+        Route::get("my-order/{order:tracking_id}", "showMyOrder")->name("home.profile.myOrders.show");
     });
 
     // Product
@@ -223,7 +224,7 @@ Route::prefix("admin")->group(function () {
             Route::get("/edit/{role}", "edit")->name("admin.accessManagement.role.edit");
             Route::put("/update/{role}", "update")->name("admin.accessManagement.role.update");
         });
-        
+
         // permissions
         Route::controller(PermissionController::class)->prefix("permission")->group(function () {
             Route::get("/", "index")->name("admin.accessManagement.permission.index");

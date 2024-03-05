@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\Product\OptionProductController;
 use App\Http\Controllers\Admin\Product\ProductGuaranteeController;
 use App\Http\Controllers\Home\ProductController as HomeProductController;
 use App\Http\Controllers\Admin\Order\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\User\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -208,6 +209,18 @@ Route::prefix("admin")->group(function () {
         Route::controller(UserController::class)->group(function () {
             Route::get("/", "index")->name("admin.user.index");
             Route::get("/change-status/{user}", "changeStatus")->name("admin.user.changeStatus");
+        });
+    });
+
+    // Access management
+    Route::prefix("access-management")->group(function () {
+        // roles
+        Route::controller(RoleController::class)->prefix("roles")->group(function () {
+            Route::get("/", "index")->name("admin.accessManagement.role.index");
+            Route::get("/create", "create")->name("admin.accessManagement.role.create");
+            Route::post("/store", "store")->name("admin.accessManagement.role.store");
+            Route::get("/edit/{role}", "edit")->name("admin.accessManagement.role.edit");
+            Route::put("/update/{role}", "update")->name("admin.accessManagement.role.update");
         });
     });
 

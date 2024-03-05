@@ -57,6 +57,17 @@
                 <i class="fas fa-bars"></i>
                 <span>کاربران</span>
             </a>
+            <section class="sidebar-group-link">
+                <section class="sidebar-dropdown-toggle">
+                    <i class="fas fa-chart-bar icon"></i>
+                    <span>مدیریت دسترسی</span>
+                    <i class="fas fa-angle-left angle"></i>
+                </section>
+                <section class="sidebar-dropdown">
+                    <a href="{{ route('admin.accessManagement.role.index') }}">نقش ها</a>
+                    <a href="{{ route('admin.appearance.banner.index') }}">مجوز ها</a>
+                </section>
+            </section>
 
             <section class="sidebar-part-title">ظاهر وب سایت</section>
 

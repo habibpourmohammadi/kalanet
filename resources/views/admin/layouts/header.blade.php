@@ -3,7 +3,8 @@
         <section class="d-flex justify-content-between flex-md-row-reverse px-2">
             <span id="sidebar-toggle-show" class="d-inline d-md-none pointer"><i class="fas fa-toggle-off"></i></span>
             <span id="sidebar-toggle-hide" class="d-none d-md-inline pointer"><i class="fas fa-toggle-on"></i></span>
-            <span><a href="{{ route('admin.index') }}" target="_blank"><img class="logo" src="{{ asset('admin-assets/images/logo.png') }}" alt=""></a></span>
+            <span><a href="{{ route('home.index') }}" target="_blank"><img class="logo"
+                        src="{{ asset('admin-assets/images/logo.png') }}" alt=""></a></span>
             <span class="d-md-none" id="menu-toggle"><i class="fas fa-ellipsis-h"></i></span>
         </section>
     </section>
@@ -79,9 +80,9 @@
                 <span class="ml-2 ml-md-4 position-relative">
                     <span id="header-comment-toggle" class="pointer">
                         <i class="far fa-comment-alt">
-                                <sup class="badge badge-danger">
-                                    5
-                                </sup>
+                            <sup class="badge badge-danger">
+                                5
+                            </sup>
                         </i>
                     </span>
 
@@ -94,19 +95,19 @@
                         <section class="header-comment-wrapper">
                             <ul class="list-group rounded px-0">
 
-                                    <li class="list-group-item list-groupt-item-action">
-                                        <section class="media">
-                                            <img src="{{ asset('admin-assets/images/avatar-2.jpg') }}" alt="avatar"
-                                                class="notification-img">
-                                            <section class="media-body pr-1">
-                                                <section class="d-flex justify-content-between">
-                                                    <h5 class="comment-user">حبیب الله پورمحمدی</h5>
-                                                    <span><i
-                                                            class="fas fa-circle text-success comment-user-status"></i></span>
-                                                </section>
+                                <li class="list-group-item list-groupt-item-action">
+                                    <section class="media">
+                                        <img src="{{ asset('admin-assets/images/avatar-2.jpg') }}" alt="avatar"
+                                            class="notification-img">
+                                        <section class="media-body pr-1">
+                                            <section class="d-flex justify-content-between">
+                                                <h5 class="comment-user">حبیب الله پورمحمدی</h5>
+                                                <span><i
+                                                        class="fas fa-circle text-success comment-user-status"></i></span>
                                             </section>
                                         </section>
-                                    </li>
+                                    </section>
+                                </li>
                             </ul>
                         </section>
 

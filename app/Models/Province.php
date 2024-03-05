@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\City;
+use App\Models\Address;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Province extends Model
 {
@@ -17,5 +19,11 @@ class Province extends Model
     public function cities()
     {
         return $this->hasMany(City::class);
+    }
+
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
     }
 }

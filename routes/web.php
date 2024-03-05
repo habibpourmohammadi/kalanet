@@ -1,29 +1,30 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\Appearance\BannerController;
-use App\Http\Controllers\Admin\Appearance\SliderController;
+use App\Http\Controllers\Home\Auth\AuthController;
+use App\Http\Controllers\Admin\User\UserController;
 use App\Http\Controllers\Admin\Order\CityController;
+use App\Http\Controllers\Admin\Product\BrandController;
+use App\Http\Controllers\Admin\Product\ColorController;
 use App\Http\Controllers\Admin\Order\DeliveryController;
 use App\Http\Controllers\Admin\Order\ProvinceController;
-use App\Http\Controllers\Admin\Product\BrandController;
-use App\Http\Controllers\Admin\Product\CategoryController;
-use App\Http\Controllers\Admin\Product\ColorController;
-use App\Http\Controllers\Admin\Product\CommentController;
-use App\Http\Controllers\Admin\Product\GuaranteeController;
-use App\Http\Controllers\Admin\Product\ImageProductController;
-use App\Http\Controllers\Admin\Product\OptionProductController;
-use App\Http\Controllers\Admin\Product\ProductColorController;
-use App\Http\Controllers\Admin\Product\ProductController;
-use App\Http\Controllers\Admin\Product\ProductGuaranteeController;
-use App\Http\Controllers\Admin\User\UserController;
 use App\Http\Controllers\Home\Account\AccountController;
-use App\Http\Controllers\Home\Auth\AuthController;
-use App\Http\Controllers\Home\HomeController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Home\ProductController as HomeProductController;
+use App\Http\Controllers\Admin\Product\CommentController;
+use App\Http\Controllers\Admin\Product\ProductController;
+use App\Http\Controllers\Admin\Product\CategoryController;
 use App\Http\Controllers\Home\SalesProcess\CartController;
+use App\Http\Controllers\Admin\Appearance\BannerController;
+use App\Http\Controllers\Admin\Appearance\SliderController;
+use App\Http\Controllers\Admin\Product\GuaranteeController;
 use App\Http\Controllers\Home\SalesProcess\OrderController;
+use App\Http\Controllers\Admin\Product\ImageProductController;
+use App\Http\Controllers\Admin\Product\ProductColorController;
+use App\Http\Controllers\Admin\Product\OptionProductController;
+use App\Http\Controllers\Admin\Product\ProductGuaranteeController;
+use App\Http\Controllers\Home\ProductController as HomeProductController;
+use App\Http\Controllers\Admin\Order\OrderController as AdminOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -237,6 +238,16 @@ Route::prefix("admin")->group(function () {
 
     // orders
     Route::prefix("order")->group(function () {
+
+        Route::controller(AdminOrderController::class)->prefix("manage")->group(function () {
+            Route::get("/", "index")->name("admin.order.all.index");
+            Route::get("/filter", "filter")->name("admin.order.filter.index");
+            Route::get("/{order}", "show")->name("admin.order.show");
+            Route::get("/details/{order}", "details")->name("admin.order.details");
+            Route::get("/change-payment-status/{order}", "changePaymentStatus")->name("admin.order.changePaymentStatus");
+            Route::get("/change-delivery-status/{order}", "changeDeliveryStatus")->name("admin.order.changeDeliveryStatus");
+            Route::get("/change-status/{order}", "changeStatus")->name("admin.order.changeStatus");
+        });
 
         // Delivery
         Route::controller(DeliveryController::class)->prefix("delivery")->group(function () {

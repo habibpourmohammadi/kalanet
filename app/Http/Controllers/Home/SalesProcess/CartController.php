@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Home\SalesProcess;
 
 use App\Http\Controllers\Controller;
-use App\Models\City;
 use App\Models\Delivery;
+use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -40,7 +40,7 @@ class CartController extends Controller
         $addresses = Auth::user()->addresses;
         $deliveries = Delivery::where("status", "active")->get();
 
-        $cities = City::where("status", "active")->get();
-        return view("home.salesProcess.delivery.index", compact("addresses", "deliveries", "cities", "cartItems", "totalPrice"));
+        $provinces = Province::where("status", "active")->get();
+        return view("home.salesProcess.delivery.index", compact("addresses", "deliveries", "provinces", "cartItems", "totalPrice"));
     }
 }

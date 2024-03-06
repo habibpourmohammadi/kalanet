@@ -11,6 +11,7 @@ use App\Models\Address;
 use App\Models\Bookmark;
 use App\Models\City;
 use App\Models\Order;
+use App\Models\Province;
 
 class AccountController extends Controller
 {
@@ -45,8 +46,14 @@ class AccountController extends Controller
     public function myAddresses()
     {
         $addresses = Auth::user()->addresses;
-        $cities = City::where("status", "active")->get();
-        return view("home.account.myAddresses", compact("addresses", "cities"));
+        $provinces = Province::where("status", "active")->get();
+        return view("home.account.myAddresses", compact("addresses", "provinces"));
+    }
+
+    public function getCities(Province $province)
+    {
+        $cities = City::where('province_id', $province->id)->where("status", "active")->pluck('name', 'id');
+        return response()->json($cities);
     }
 
     public function storeMyAddress(StoreAddressRequest $request)
@@ -88,8 +95,8 @@ class AccountController extends Controller
             abort(404);
         }
 
-        $cities = City::where("status", "active")->get();
-        return view("home.account.myAddressEdit", compact("address", "cities"));
+        $provinces = Province::where("status", "active")->get();
+        return view("home.account.myAddressEdit", compact("address", "provinces"));
     }
 
     public function updateMyAddress(StoreAddressRequest $request, Address $address)

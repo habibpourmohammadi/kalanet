@@ -172,14 +172,14 @@
                                 <section class="d-flex justify-content-between align-items-center">
                                     <p class="text-muted">قیمت کالا</p>
                                     <p class="text-muted">{{ priceFormat($product->price) }}<span
-                                            class="small">تومان</span></p>
+                                            class="small"> تومان</span></p>
                                 </section>
                                 @if ($product->colors->count() > 0)
                                     <section class="d-flex justify-content-between align-items-center">
                                         <p class="text-muted">قیمت رنگ کالا</p>
                                         <p class="text-muted">
                                             <span id="finalColorPrice"></span>
-                                            <span class="small">تومان</span>
+                                            <span class="small"> تومان</span>
                                         </p>
                                     </section>
                                 @endif
@@ -188,7 +188,7 @@
                                         <p class="text-muted">قیمت گارانتی کالا</p>
                                         <p class="text-muted">
                                             <span id="finalGuaranteePrice"></span>
-                                            <span class="small">تومان</span>
+                                            <span class="small"> تومان</span>
                                         </p>
                                     </section>
                                 @endif
@@ -204,7 +204,7 @@
                                     <p class="text-muted">قیمت نهایی</p>
                                     <p class="fw-bolder"><span
                                             id="finalPrice">{{ priceFormat($product->price) }}</span><span
-                                            class="small">تومان</span>
+                                            class="small"> تومان</span>
                                     </p>
                                 </section>
                                 <p class="d-none" id="productPrice" data-product-price="{{ $product->price }}"></p>

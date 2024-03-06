@@ -237,19 +237,27 @@
                             </section>
                             <section class="modal-body">
                                 <section class="row">
-
                                     <section class="col-12 col-md-6 mb-2">
-                                        <label for="city" class="form-label mb-1">شهر
-                                            <strong class="text-danger">*</strong></label>
-                                        <select class="form-select form-select-sm" id="city" name="city_id">
-                                            @foreach ($cities as $city)
-                                                <option @selected(old('city_id') == $city->id) value="{{ $city->id }}">
-                                                    {{ $city->name }}
+                                        <label for="province_select" class="form-label mb-1">استان <strong
+                                                class="text-danger">*</strong></label>
+                                        <select id="province_select" class="form-select form-select-sm"
+                                            name="province_id">
+                                            <option value="">انتخاب استان</option>
+                                            @foreach ($provinces as $province)
+                                                <option @selected(old('province_id') == $province->id) value="{{ $province->id }}">
+                                                    {{ $province->name }}
                                                 </option>
                                             @endforeach
                                         </select>
                                     </section>
-                                    <section class="col-12 col-md-6">
+                                    <section class="col-12 col-md-6 mb-2">
+                                        <label for="city_select" class="form-label mb-1">شهر <strong
+                                                class="text-danger">*</strong></label>
+                                        <select class="form-select form-select-sm" id="city_select" name="city_id">
+                                            <option value="">انتخاب شهر</option>
+                                        </select>
+                                    </section>
+                                    <section class="col-12 col-md-12">
                                         <label for="mobile" class="form-label mb-1">شماره تماس
                                             <strong class="text-danger">*</strong></label>
                                         <input type="number" name="mobile" id="mobile"
@@ -346,9 +354,11 @@
             </form>
         </section>
     </section>
+    <input type="hidden" id="cities_url" value="{{ route('home.profile.myAddresses.getCities') }}" class="d-none">
     <!-- end cart -->
 @endsection
 @section('script')
     <script src="{{ asset('home-assets/js/home/add-address.js') }}"></script>
     <script src="{{ asset('home-assets/js/home/delivery.js') }}"></script>
+    <script src="{{ asset('home-assets/js/home/get-cities.js') }}"></script>
 @endsection

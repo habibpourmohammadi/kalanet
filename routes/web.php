@@ -95,7 +95,7 @@ Route::prefix("/")->group(function () {
 
 
 // Admin routes
-Route::prefix("admin")->group(function () {
+Route::middleware("auth")->prefix("admin")->group(function () {
     Route::get("/", [AdminController::class, "index"])->name("admin.index");
 
 

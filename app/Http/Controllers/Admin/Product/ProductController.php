@@ -97,8 +97,7 @@ class ProductController extends Controller
             $inputs["Introduction_video_path"] = null;
         }
 
-        // $inputs["seller_id"] = Auth::user()->id;
-        $inputs["seller_id"] = 1;
+        $inputs["seller_id"] = Auth::user()->id;
 
         Product::create([
             "category_id" => $inputs["category_id"],

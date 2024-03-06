@@ -14,18 +14,17 @@
             <section class="col-md-8 pe-md-1 ">
                 <section id="slideshow" class="owl-carousel owl-theme">
                     @foreach ($sliders as $slider)
-                        <section class="item"><a class="w-100 d-block h-auto text-decoration-none"
-                                href="{{ asset($slider->slider_path) }}" target="_blank"><img
-                                    class="w-100 rounded-2 d-block h-auto" src="{{ asset($slider->slider_path) }}"
-                                    alt="{{ $slider->title }}"></a>
+                        <section class="item"><a class="w-100 d-block h-auto text-decoration-none" href="{{ $slider->url }}"
+                                target="_blank"><img class="w-100 rounded-2 d-block h-auto"
+                                    src="{{ asset($slider->slider_path) }}" alt="{{ $slider->title }}"></a>
                         </section>
                     @endforeach
                 </section>
             </section>
             <section class="col-md-4 ps-md-1 mt-2 mt-md-0">
                 @foreach ($topLeftBanners as $topLeftBanner)
-                    <section class="mb-2"><a href="{{ asset($topLeftBanner->banner_path) }}" class="d-block"
-                            target="_blank"><img class="w-100 rounded-2" src="{{ asset($topLeftBanner->banner_path) }}"
+                    <section class="mb-2"><a href="{{ $topLeftBanner->url }}" class="d-block" target="_blank"><img
+                                class="w-100 rounded-2" src="{{ asset($topLeftBanner->banner_path) }}"
                                 alt="{{ $topLeftBanner->title }}"></a></section>
                 @endforeach
             </section>
@@ -46,7 +45,7 @@
                                     <span>پرفروش ترین کالاها</span>
                                 </h2>
                                 <section class="content-header-link">
-                                    <a href="#">مشاهده همه</a>
+                                    <a href="{{ route('home.search') }}">مشاهده همه</a>
                                 </section>
                             </section>
                         </section>
@@ -148,8 +147,12 @@
                 <!-- two column-->
                 <section class="row py-4">
                     @foreach ($middleBanners as $middleBanner)
-                        <section class="col-12 col-md-6 mt-2 mt-md-0"><img class="d-block rounded-2 w-100"
-                                src="{{ $middleBanner->banner_path }}" alt="{{ $middleBanner->title }}"></section>
+                        <section class="col-12 col-md-6 mt-2 mt-md-0">
+                            <a href="{{ $middleBanner->url }}" target="_blank">
+                                <img class="d-block rounded-2 w-100" src="{{ $middleBanner->banner_path }}"
+                                    alt="{{ $middleBanner->title }}">
+                            </a>
+                        </section>
                     @endforeach
                 </section>
 
@@ -172,7 +175,7 @@
                                     <span>محصولات پیشنهاد شده</span>
                                 </h2>
                                 <section class="content-header-link">
-                                    <a href="#">مشاهده همه</a>
+                                    <a href="{{ route('home.search') }}">مشاهده همه</a>
                                 </section>
                             </section>
                         </section>
@@ -271,8 +274,12 @@
             <section class="container-xxl">
                 <!-- one column -->
                 <section class="row py-4">
-                    <section class="col"><img class="d-block rounded-2 w-100" src="{{ $bottomBanner->banner_path }}"
-                            alt="{{ $bottomBanner->title }}"></section>
+                    <section class="col">
+                        <a href="{{ $bottomBanner->url }}" target="_blank">
+                            <img class="d-block rounded-2 w-100" src="{{ $bottomBanner->banner_path }}"
+                                alt="{{ $bottomBanner->title }}">
+                        </a>
+                    </section>
                 </section>
 
             </section>

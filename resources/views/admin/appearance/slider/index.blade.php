@@ -36,6 +36,7 @@
                                 <th>اسلایدر</th>
                                 <th>سایز اسلایدر</th>
                                 <th>نوع اسلایدر</th>
+                                <th>آدرس اسلایدر</th>
                                 <th>وضعیت اسلایدر</th>
                                 <th>تاریخ ایجاد اسلایدر</th>
                                 <th class="max-width-16-rem text-center"><i class="fa fa-cogs"></i> تنظیمات </th>
@@ -54,6 +55,9 @@
                                     </td>
                                     <td>{{ $slider->slider_size }}</td>
                                     <td>{{ $slider->slider_type }}</td>
+                                    <td>
+                                        <a href="{{ $slider->url }}" class="text-decoration-none" target="_blank">کلیک کنید</a>
+                                    </td>
                                     <td><span
                                             @class([
                                                 'text-success' => $slider->status == 'true',

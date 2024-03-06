@@ -23,7 +23,15 @@ class StoreRequest extends FormRequest
     {
         return [
             "slider_path" => ["required", "image", "mimes:png,jpg,jpeg,gif", "max:1024"],
+            "url" => ["required", 'regex:#^(https?://)?([\da-z\.-]+)\.([a-z\.]{2,6})([/\w\.-]*)*/?#'],
             "title" => ["required", "max:255"],
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            "url" => "آدرس اسلایدر"
         ];
     }
 }

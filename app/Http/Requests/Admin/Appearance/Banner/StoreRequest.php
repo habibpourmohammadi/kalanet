@@ -24,7 +24,8 @@ class StoreRequest extends FormRequest
         return [
             "title" => ["required", "max:255"],
             "banner_path" => ["required", "image", "mimes:png,jpg,jpeg,gif", "max:1024"],
-            "banner_position" => ["required", "integer", "between:1,3"]
+            "banner_position" => ["required", "integer", "between:1,3"],
+            "url" => ["required", 'regex:#^(https?://)?([\da-z\.-]+)\.([a-z\.]{2,6})([/\w\.-]*)*/?#'],
         ];
     }
 
@@ -32,7 +33,8 @@ class StoreRequest extends FormRequest
     {
         return [
             "banner_path" => "بنر",
-            "banner_position" => "موقعیت بنر"
+            "banner_position" => "موقعیت بنر",
+            "url" => "آدرس بنر"
         ];
     }
 }

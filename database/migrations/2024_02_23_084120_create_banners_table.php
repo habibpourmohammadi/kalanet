@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text("banner_path");
             $table->integer("banner_size");
             $table->string("banner_type");
+            $table->text("url")->nullable();
             $table->enum("status", ["true", "false"])->default("true");
             $table->enum("banner_position", ["topLeft", "middle", "bottom"])->comment("top left => two banners , middle => two banners, bottom => one banner");
             $table->timestamps();

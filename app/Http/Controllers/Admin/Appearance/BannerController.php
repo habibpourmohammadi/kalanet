@@ -98,7 +98,8 @@ class BannerController extends Controller
             "banner_path" => $inputs["banner_path"],
             "banner_size" => $banner_size,
             "banner_type" => $banner_type,
-            "banner_position" => $inputs["banner_position"]
+            "banner_position" => $inputs["banner_position"],
+            "url" => $inputs["url"],
         ]);
 
         return to_route("admin.appearance.banner.index")->with("swal-success", "بنر جدید شما با موفقیت ایجاد شد");
@@ -173,7 +174,8 @@ class BannerController extends Controller
             "banner_path" => $inputs["banner_path"],
             "banner_size" => $banner_size,
             "banner_type" => $banner_type,
-            "banner_position" => $inputs["banner_position"]
+            "banner_position" => $inputs["banner_position"],
+            "url" => $inputs["url"],
         ]);
 
         return to_route("admin.appearance.banner.index")->with("swal-success", "بنر مورد نظر با موفقیت ویرایش شد");

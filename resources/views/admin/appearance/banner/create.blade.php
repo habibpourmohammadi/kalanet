@@ -31,7 +31,7 @@
                         id="form">
                         @csrf
                         <section class="row">
-                            <section class="col-12 col-md-4">
+                            <section class="col-12 col-md-3">
                                 <div class="form-group">
                                     <label for="title">عنوان بنر</label>
                                     <input type="text" class="form-control form-control-sm" name="title"
@@ -45,7 +45,21 @@
                                     </span>
                                 @enderror
                             </section>
-                            <section class="col-12 col-md-4">
+                            <section class="col-12 col-md-3">
+                                <div class="form-group">
+                                    <label for="url">آدرس بنر</label>
+                                    <input type="text" class="form-control form-control-sm" name="url"
+                                        value="{{ old('url') }}" id="url" placeholder="مثال : https://domain.com">
+                                </div>
+                                @error('url')
+                                    <span class="alert-danger" role="alert">
+                                        <strong>
+                                            {{ $message }}
+                                        </strong>
+                                    </span>
+                                @enderror
+                            </section>
+                            <section class="col-12 col-md-3">
                                 <div class="form-group">
                                     <label for="banner_position">موقعیت بنر</label>
                                     <select name="banner_position" id="banner_position" class="form-control">
@@ -62,7 +76,7 @@
                                     </span>
                                 @enderror
                             </section>
-                            <section class="col-12 col-md-4">
+                            <section class="col-12 col-md-3">
                                 <div class="form-group">
                                     <label for="banner_path">بنر</label>
                                     <input type="file" class="form-control form-control-sm" name="banner_path"

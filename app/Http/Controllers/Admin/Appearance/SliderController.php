@@ -67,6 +67,7 @@ class SliderController extends Controller
             "slider_path" => $inputs["slider_path"],
             "slider_size" => $slider_size,
             "slider_type" => $slider_type,
+            "url" => $inputs["url"],
         ]);
 
         return to_route("admin.appearance.slider.index")->with("swal-success", "اسلایدر جدید شما با موفقیت ایجاد شد");
@@ -113,6 +114,7 @@ class SliderController extends Controller
             "slider_path" => $inputs["slider_path"],
             "slider_size" => $slider_size,
             "slider_type" => $slider_type,
+            "url" => $inputs["url"],
         ]);
 
         return to_route("admin.appearance.slider.index")->with("swal-success", "اسلایدر مورد نظر با موفقیت ویرایش شد");

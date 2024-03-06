@@ -31,7 +31,7 @@
                         id="form">
                         @csrf
                         <section class="row">
-                            <section class="col-12 col-md-6">
+                            <section class="col-12 col-md-4">
                                 <div class="form-group">
                                     <label for="title">عنوان اسلایدر</label>
                                     <input type="text" class="form-control form-control-sm" name="title"
@@ -45,7 +45,21 @@
                                     </span>
                                 @enderror
                             </section>
-                            <section class="col-12 col-md-6">
+                            <section class="col-12 col-md-4">
+                                <div class="form-group">
+                                    <label for="url">آدرس اسلایدر</label>
+                                    <input type="text" class="form-control form-control-sm" name="url"
+                                        value="{{ old('url') }}" id="url" placeholder="مثال : https://domain.com">
+                                </div>
+                                @error('url')
+                                    <span class="alert-danger" role="alert">
+                                        <strong>
+                                            {{ $message }}
+                                        </strong>
+                                    </span>
+                                @enderror
+                            </section>
+                            <section class="col-12 col-md-4">
                                 <div class="form-group">
                                     <label for="slider_path">اسلایدر</label>
                                     <input type="file" class="form-control form-control-sm" name="slider_path"

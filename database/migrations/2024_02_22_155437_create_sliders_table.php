@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text("slider_path");
             $table->integer("slider_size");
             $table->string("slider_type");
+            $table->text("url")->nullable();
             $table->enum("status", ["true", "false"])->default("true");
             $table->timestamps();
             $table->softDeletes();

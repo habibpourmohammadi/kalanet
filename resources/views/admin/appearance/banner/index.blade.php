@@ -37,6 +37,7 @@
                                 <th>سایز بنر</th>
                                 <th>نوع بنر</th>
                                 <th>موقعیت بنر</th>
+                                <th>آدرس بنر</th>
                                 <th>وضعیت بنر</th>
                                 <th>تاریخ ایجاد بنر</th>
                                 <th class="max-width-16-rem text-center"><i class="fa fa-cogs"></i> تنظیمات </th>
@@ -56,6 +57,10 @@
                                     <td>{{ $banner->banner_size }}</td>
                                     <td>{{ $banner->banner_type }}</td>
                                     <td>{{ $banner->position() }}</td>
+                                    <td>
+                                        <a href="{{ $banner->url }}" target="_blank" class="text-decoration-none">کلیک
+                                            کنید</a>
+                                    </td>
                                     <td><span
                                             @class([
                                                 'text-success' => $banner->status == 'true',

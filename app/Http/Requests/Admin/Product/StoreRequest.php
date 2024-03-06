@@ -27,7 +27,7 @@ class StoreRequest extends FormRequest
             "brand_id" => ["required", "numeric", "exists:brands,id"],
             "description" => ["required"],
             "price" => ["required", "numeric"],
-            "Introduction_video_path" => ["nullable", "mimes:mp4"],
+            "Introduction_video_path" => ["nullable", "file", "max:5000", "mimetypes:video/mp4"],
             "marketable_number" => ["required", "numeric", "digits_between:0,10"],
         ];
     }

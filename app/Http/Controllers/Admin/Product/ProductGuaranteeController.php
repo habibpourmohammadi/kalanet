@@ -16,6 +16,8 @@ class ProductGuaranteeController extends Controller
      */
     public function index(Product $product)
     {
+        $this->authorize('update', [$product]);
+
         $search = request()->search;
 
         $guarantees = $product->guarantees()->when($search, function ($guarantees) use ($search) {
@@ -32,6 +34,8 @@ class ProductGuaranteeController extends Controller
      */
     public function create(Product $product)
     {
+        $this->authorize('update', [$product]);
+
         $unauthorized_ids = [];
 
         foreach ($product->guarantees as $guarantee) {
@@ -47,6 +51,8 @@ class ProductGuaranteeController extends Controller
      */
     public function store(StoreRequest $request, Product $product)
     {
+        $this->authorize('update', [$product]);
+
         $unauthorized_ids = [];
 
         foreach ($product->guarantees as $guarantee) {
@@ -67,6 +73,8 @@ class ProductGuaranteeController extends Controller
      */
     public function edit(Product $product, Guarantee $guarantee)
     {
+        $this->authorize('update', [$product]);
+
         return view("admin.product.product-guarantees.edit", compact("product", "guarantee"));
     }
 
@@ -75,6 +83,8 @@ class ProductGuaranteeController extends Controller
      */
     public function update(UpdateRequest $request, Product $product, Guarantee $guarantee)
     {
+        $this->authorize('update', [$product]);
+
         if (!$product->guarantees()->where("id", $guarantee->id)->first()) {
             return to_route("admin.product.product-guarantees.index", $product)->with("swal-error", "مشکلی پیش آمده ، لطفا دوباره تلاش کنید");
         }
@@ -89,6 +99,8 @@ class ProductGuaranteeController extends Controller
      */
     public function destroy(Product $product, Guarantee $guarantee)
     {
+        $this->authorize('update', [$product]);
+
         $product->guarantees()->detach($guarantee->id);
 
         return to_route("admin.product.product-guarantees.index", $product)->with("swal-success", "گارانتی مورد نظر با موفقیت حذف شد");

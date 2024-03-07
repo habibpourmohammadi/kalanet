@@ -99,7 +99,7 @@ Route::middleware("checkActivation")->group(function () {
 
 
     // Admin routes
-    Route::middleware("auth")->prefix("admin")->group(function () {
+    Route::middleware("auth", "checkRoles")->prefix("admin")->group(function () {
         Route::get("/", [AdminController::class, "index"])->name("admin.index");
 
 
@@ -217,6 +217,8 @@ Route::middleware("checkActivation")->group(function () {
             Route::controller(UserController::class)->group(function () {
                 Route::get("/", "index")->name("admin.user.index");
                 Route::get("/change-status/{user}", "changeStatus")->name("admin.user.changeStatus");
+                Route::get("/set-role/{user}", "setRolePage")->name("admin.user.setRolePage");
+                Route::post("/set-role/{user}", "setRole")->name("admin.user.setRole");
             });
         });
 
@@ -229,6 +231,9 @@ Route::middleware("checkActivation")->group(function () {
                 Route::post("/store", "store")->name("admin.accessManagement.role.store");
                 Route::get("/edit/{role}", "edit")->name("admin.accessManagement.role.edit");
                 Route::put("/update/{role}", "update")->name("admin.accessManagement.role.update");
+                Route::delete("/delete/{role}", "destroy")->name("admin.accessManagement.role.delete");
+                Route::get("/permissions/{role}", "permissionsPage")->name("admin.accessManagement.role.permissions.page");
+                Route::post("/permissions/{role}", "permissionsStore")->name("admin.accessManagement.role.permissions.store");
             });
 
             // permissions

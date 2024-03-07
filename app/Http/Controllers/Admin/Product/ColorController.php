@@ -14,6 +14,8 @@ class ColorController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Color::class);
+
         $search = request()->search;
         $colors = Color::query()->when($search, function ($colors) use ($search) {
             return $colors->where("name", "like", "%$search%")->orWhere("hex_code", "like", "%$search%")->get();
@@ -29,6 +31,8 @@ class ColorController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Color::class);
+
         return view("admin.product.color.create");
     }
 
@@ -37,6 +41,8 @@ class ColorController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->authorize('create', Color::class);
+
         $inputs = $request->validated();
 
         Color::create([
@@ -52,6 +58,8 @@ class ColorController extends Controller
      */
     public function edit(Color $color)
     {
+        $this->authorize('update', [$color]);
+
         return view("admin.product.color.edit", compact("color"));
     }
 
@@ -60,6 +68,8 @@ class ColorController extends Controller
      */
     public function update(StoreRequest $request, Color $color)
     {
+        $this->authorize('update', [$color]);
+
         $inputs = $request->validated();
 
         $color->update([
@@ -75,6 +85,8 @@ class ColorController extends Controller
      */
     public function destroy(Color $color)
     {
+        $this->authorize('delete', [$color]);
+
         $color->delete();
 
         return back()->with("swal-success", "رنگ مورد نظر با موفقیت حذف شد");

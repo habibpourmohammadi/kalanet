@@ -18,6 +18,8 @@ class BrandController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Brand::class);
+
         $search = request()->search;
 
         $brands = Brand::query()->when($search, function ($brands) use ($search) {
@@ -34,6 +36,8 @@ class BrandController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Brand::class);
+
         return view("admin.product.brand.create");
     }
 
@@ -42,6 +46,8 @@ class BrandController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->authorize('create', Brand::class);
+
         $inputs = $request->validated();
 
         if ($request->hasFile("logo_path")) {
@@ -72,6 +78,8 @@ class BrandController extends Controller
      */
     public function edit(Brand $brand)
     {
+        $this->authorize('update', [$brand]);
+
         return view("admin.product.brand.edit", compact("brand"));
     }
 
@@ -80,6 +88,8 @@ class BrandController extends Controller
      */
     public function update(UpdateRequest $request, Brand $brand)
     {
+        $this->authorize('update', [$brand]);
+
         $inputs = $request->validated();
 
         if ($request->hasFile("logo_path")) {
@@ -114,6 +124,8 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand)
     {
+        $this->authorize('delete', [$brand]);
+
         DB::transaction(function () use ($brand) {
             $brand->update([
                 "original_name" => $brand->original_name . "-" . $brand->id,

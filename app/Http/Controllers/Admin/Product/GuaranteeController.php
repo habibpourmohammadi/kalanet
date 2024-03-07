@@ -16,6 +16,8 @@ class GuaranteeController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Guarantee::class);
+
         $search = request()->search;
 
         $guarantees = Guarantee::query()->when($search, function ($guarantees) use ($search) {
@@ -32,6 +34,8 @@ class GuaranteeController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Guarantee::class);
+
         return view("admin.product.guarantee.create");
     }
 
@@ -40,6 +44,8 @@ class GuaranteeController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->authorize('create', Guarantee::class);
+
         $inputs = $request->validated();
 
         Guarantee::create([
@@ -56,6 +62,8 @@ class GuaranteeController extends Controller
      */
     public function edit(Guarantee $guarantee)
     {
+        $this->authorize('update', [$guarantee]);
+
         return view("admin.product.guarantee.edit", compact("guarantee"));
     }
 
@@ -64,6 +72,8 @@ class GuaranteeController extends Controller
      */
     public function update(UpdateRequest $request, Guarantee $guarantee)
     {
+        $this->authorize('update', [$guarantee]);
+
         $inputs = $request->validated();
 
         $guarantee->update([
@@ -80,6 +90,8 @@ class GuaranteeController extends Controller
      */
     public function destroy(Guarantee $guarantee)
     {
+        $this->authorize('delete', [$guarantee]);
+
         DB::transaction(function () use ($guarantee) {
             $guarantee->update([
                 "persian_name" => $guarantee->persian_name . '-' . $guarantee->id,

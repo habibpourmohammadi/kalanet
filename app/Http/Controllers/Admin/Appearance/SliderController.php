@@ -20,6 +20,8 @@ class SliderController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Slider::class);
+
         $search = request()->search;
 
         $sliders = Slider::query()->when($search, function ($sliders) use ($search) {
@@ -36,6 +38,8 @@ class SliderController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Slider::class);
+
         return view("admin.appearance.slider.create");
     }
 
@@ -44,6 +48,8 @@ class SliderController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->authorize('create', Slider::class);
+
         $inputs = $request->validated();
 
         if ($request->hasFile("slider_path")) {
@@ -78,6 +84,8 @@ class SliderController extends Controller
      */
     public function edit(Slider $slider)
     {
+        $this->authorize('update', [$slider]);
+
         return view("admin.appearance.slider.edit", compact("slider"));
     }
 
@@ -86,6 +94,8 @@ class SliderController extends Controller
      */
     public function update(UpdateRequest $request, Slider $slider)
     {
+        $this->authorize('update', [$slider]);
+
         $inputs = $request->validated();
 
         if ($request->hasFile("slider_path")) {
@@ -125,6 +135,8 @@ class SliderController extends Controller
      */
     public function destroy(Slider $slider)
     {
+        $this->authorize('delete', [$slider]);
+
         if (File::exists(public_path($slider->slider_path))) {
             File::delete(public_path($slider->slider_path));
         }
@@ -136,6 +148,8 @@ class SliderController extends Controller
 
     public function changeStatus(Slider $slider)
     {
+        $this->authorize('update', [$slider]);
+
         if ($slider->status == 'false') {
             $slider->update([
                 "status" => "true"

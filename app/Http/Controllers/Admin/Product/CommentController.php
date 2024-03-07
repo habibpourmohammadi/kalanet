@@ -14,6 +14,8 @@ class CommentController extends Controller
      */
     public function index(Product $product)
     {
+        $this->authorize('update', [$product]);
+
         $search = request()->search;
 
         $sort = request()->sort;
@@ -58,12 +60,16 @@ class CommentController extends Controller
      */
     public function show(Product $product, Comment $comment)
     {
+        $this->authorize('update', [$product]);
+
         return view("admin.product.comment.show", compact("product", "comment"));
     }
 
 
     public function changeStatus(Product $product, Comment $comment)
     {
+        $this->authorize('update', [$product]);
+
         if ($comment->status == "false") {
             $comment->update([
                 "status" => "true"
@@ -80,6 +86,8 @@ class CommentController extends Controller
 
     public function changeSeenStatus(Product $product, Comment $comment)
     {
+        $this->authorize('update', [$product]);
+
         if ($comment->seen == "false") {
             $comment->update([
                 "seen" => "true"
@@ -99,6 +107,8 @@ class CommentController extends Controller
      */
     public function destroy(Product $product, Comment $comment)
     {
+        $this->authorize('update', [$product]);
+
         $comment->delete();
         return back()->with("swal-success", "کامنت مورد نظر با موفقیت حذف شد");
     }

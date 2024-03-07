@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin\User;
 
-use App\Http\Controllers\Controller;
-use App\Models\Permission;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
@@ -13,10 +13,12 @@ class PermissionController extends Controller
      */
     public function index()
     {
+        $this->authorize('index', Permission::class);
+
         $search = request()->search;
 
         $permissions = Permission::query()->when($search, function ($permissions) use ($search) {
-            return $permissions->where("name", "like", "%$search%")->orWhere("name", "like", "%$search%")->get();
+            return $permissions->where("name", "like", "%$search%")->get();
         }, function ($permissions) {
             return $permissions->get();
         });

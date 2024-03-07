@@ -16,6 +16,8 @@ class CityController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', City::class);
+
         $search = request()->search;
         $sort = request()->sort;
 
@@ -39,6 +41,8 @@ class CityController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', City::class);
+
         $provinces = Province::where("status", "active")->get();
         return view("admin.order.city.create", compact("provinces"));
     }
@@ -48,6 +52,8 @@ class CityController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->authorize('create', City::class);
+
         City::create([
             "name" => $request->name,
             "province_id" => $request->province_id,
@@ -62,6 +68,8 @@ class CityController extends Controller
      */
     public function edit(City $city)
     {
+        $this->authorize('update', [$city]);
+
         $provinces = Province::where("status", "active")->get();
         return view("admin.order.city.edit", compact("provinces", "city"));
     }
@@ -72,6 +80,8 @@ class CityController extends Controller
      */
     public function update(UpdateRequest $request, City $city)
     {
+        $this->authorize('update', [$city]);
+
         $city->update([
             "name" => $request->name,
             "province_id" => $request->province_id,
@@ -83,6 +93,8 @@ class CityController extends Controller
 
     public function changeStatus(City $city)
     {
+        $this->authorize('update', [$city]);
+
         if ($city->status == "deactive") {
             $city->update([
                 "status" => "active"
@@ -101,6 +113,8 @@ class CityController extends Controller
      */
     public function destroy(City $city)
     {
+        $this->authorize('delete', [$city]);
+
         $city->delete();
         return back()->with("swal-success", "شهر مورد نظر با موفقیت حذف شد");
     }

@@ -46,19 +46,6 @@
                                     </span>
                                 @enderror
                             </section>
-                            <section class="col-12 col-md-12">
-                                <div class="form-group">
-                                    <label for="description">توضیحات نقش را به صورت کامل بنویسید</label>
-                                    <textarea name="description" id="description" cols="30" rows="10" class="form-control form-control-sm">{{ old('description', $role->description) }}</textarea>
-                                </div>
-                                @error('description')
-                                    <span class="alert-danger" role="alert">
-                                        <strong>
-                                            {{ $message }}
-                                        </strong>
-                                    </span>
-                                @enderror
-                            </section>
                             <section class="col-12 mt-3">
                                 <button class="btn btn-primary btn-sm">ویرایش</button>
                             </section>
@@ -68,10 +55,4 @@
             </section>
         </section>
     </section>
-@endsection
-@section('script')
-    <script src="{{ asset('admin-assets/ckeditor/ckeditor.js') }}"></script>
-    <script>
-        CKEDITOR.replace('description');
-    </script>
 @endsection

@@ -125,116 +125,120 @@
                         </thead>
                         <tbody>
                             @forelse ($products as $product)
-                                <tr>
-                                    <th>{{ $loop->iteration }}</th>
-                                    <td>{{ Str::limit($product->name, 20, '...') }}</td>
-                                    <td>
-                                        <a
-                                            href="{{ route('admin.product.category.index', ['search' => $product->category->name]) }}">{{ $product->category->name }}</a>
-                                    </td>
-                                    <td>
-                                        <a
-                                            href="{{ route('admin.product.brand.index', ['search' => $product->brand->persian_name]) }}">
-                                            {{ $product->brand->persian_name }}</a>
-                                    </td>
-                                    <td>{{ Str::limit($product->slug, 20, '...') }}</td>
-                                    <td>{{ $product->seller->name }}</td>
-                                    <td class="text-success">{{ priceFormat($product->price) }} تومان</td>
-                                    <td>
-                                        @if ($product->discount != 0)
-                                            <span class="text-success">{{ priceFormat($product->discount) }} تومان</span>
-                                        @else
-                                            <span class="text-danger">ندارد</span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $product->sold_number }} عدد</td>
-                                    <td>{{ $product->marketable_number }} عدد</td>
-                                    <td class="text-{{ $product->marketable == 'true' ? 'success' : 'danger' }}">
-                                        {{ $product->marketable == 'true' ? 'مجاز' : 'غیر مجاز' }}</td>
-                                    <td class="text-{{ $product->status == 'true' ? 'success' : 'danger' }}">
-                                        {{ $product->status == 'true' ? 'فعال' : 'غیر فعال' }}</td>
-                                    <td
-                                        class="text-{{ $product->Introduction_video_path == null ? 'danger' : 'success' }}">
-                                        {{ $product->Introduction_video_path == null ? 'ندارد' : 'دارد' }}</td>
-                                    <td>{{ Str::limit($product->description, 20, '...') }}</td>
-                                    <td class="width-16-rem text-left">
-                                        <div class="dropdown">
-                                            <button class="btn btn-sm btn-info dropdown-toggle" type="button"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="fa fa-cogs"></i>
-                                                تنظیمات
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li class="my-1">
-                                                    <a class="dropdown-item bg-danger text-light text-center"
-                                                        href="{{ route('admin.product.discount.index', ['product' => $product]) }}"><small><i
-                                                                class="fa fa-money-bill-alt"></i> تخفیف</small></a>
-                                                </li>
-                                                <li class="my-1">
-                                                    <a class="dropdown-item bg-dark text-light text-center"
-                                                        href="{{ route('admin.product.comment.index', ['product' => $product]) }}"><small><i
-                                                                class="fa fa-comment-dots"></i> کامنت ها</small></a>
-                                                </li>
-                                                <li class="my-1">
-                                                    <a class="dropdown-item bg-success text-light text-center"
-                                                        href="{{ route('admin.product.option.index', ['product' => $product]) }}"><small><i
-                                                                class="fa fa-chart-area"></i> ویژگی ها</small></a>
-                                                </li>
-                                                <li class="my-1">
-                                                    <a class="dropdown-item bg-info text-light text-center"
-                                                        href="{{ route('admin.product.image.index', $product) }}"><small><i
-                                                                class="fa fa-photo-video"></i> عکس ها</small></a>
-                                                </li>
-                                                <li class="my-1">
-                                                    <a class="dropdown-item bg-secondary text-light text-center"
-                                                        href="{{ route('admin.product.product-guarantees.index', $product) }}"><small><i
-                                                                class="fa fa-shield-alt"></i> گارانتی ها</small></a>
-                                                </li>
-                                                <li class="my-1">
-                                                    <a class="dropdown-item bg-primary text-light text-center"
-                                                        href="{{ route('admin.product.product-color.index', $product) }}"><small><i
-                                                                class="fa fa-paint-brush"></i> رنگ ها</small></a>
-                                                </li>
-                                                <li class="my-1">
-                                                    <a class="dropdown-item bg-warning text-dark text-center"
-                                                        href="{{ route('admin.product.changeStatus', $product) }}"><small><i
-                                                                class="fa fa-check"></i> تغییر وضعیت محصول</small></a>
-                                                </li>
-                                                <li class="my-1">
-                                                    <a class="dropdown-item bg-warning text-dark text-center"
-                                                        href="{{ route('admin.product.changeSaleStatus', $product) }}"><small><i
-                                                                class="fa fa-check"></i> تغییر وضعیت فروش</small></a>
-                                                </li>
-                                                <li class="my-1">
-                                                    <a class="dropdown-item bg-info text-light text-center"
-                                                        href="{{ route('admin.product.show', $product) }}"><small><i
-                                                                class="fa fa-eye"></i> نمایش</small></a>
-                                                </li>
-                                                <li class="my-1">
-                                                    <a class="dropdown-item bg-primary text-light text-center"
-                                                        href="{{ route('admin.product.edit', $product) }}"><small><i
-                                                                class="fa fa-edit"></i> ویرایش</small></a>
-                                                </li>
-                                                <li class="my-1">
-                                                    <form class="d-inline w-100 bg-danger"
-                                                        action="{{ route('admin.product.delete', $product) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger btn-sm delete w-100">
-                                                            <i class="fa fa-trash-alt"></i>
-                                                            حذف
-                                                        </button>
-                                                    </form>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                @if ($product->seller_id == auth()->user()->id || auth()->user()->hasRole('admin'))
+                                    <tr>
+                                        <th>{{ $loop->iteration }}</th>
+                                        <td>{{ Str::limit($product->name, 20, '...') }}</td>
+                                        <td>
+                                            <a
+                                                href="{{ route('admin.product.category.index', ['search' => $product->category->name]) }}">{{ $product->category->name }}</a>
+                                        </td>
+                                        <td>
+                                            <a
+                                                href="{{ route('admin.product.brand.index', ['search' => $product->brand->persian_name]) }}">
+                                                {{ $product->brand->persian_name }}</a>
+                                        </td>
+                                        <td>{{ Str::limit($product->slug, 20, '...') }}</td>
+                                        <td>{{ $product->seller->name }}</td>
+                                        <td class="text-success">{{ priceFormat($product->price) }} تومان</td>
+                                        <td>
+                                            @if ($product->discount != 0)
+                                                <span class="text-success">{{ priceFormat($product->discount) }}
+                                                    تومان</span>
+                                            @else
+                                                <span class="text-danger">ندارد</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $product->sold_number }} عدد</td>
+                                        <td>{{ $product->marketable_number }} عدد</td>
+                                        <td class="text-{{ $product->marketable == 'true' ? 'success' : 'danger' }}">
+                                            {{ $product->marketable == 'true' ? 'مجاز' : 'غیر مجاز' }}</td>
+                                        <td class="text-{{ $product->status == 'true' ? 'success' : 'danger' }}">
+                                            {{ $product->status == 'true' ? 'فعال' : 'غیر فعال' }}</td>
+                                        <td
+                                            class="text-{{ $product->Introduction_video_path == null ? 'danger' : 'success' }}">
+                                            {{ $product->Introduction_video_path == null ? 'ندارد' : 'دارد' }}</td>
+                                        <td>{{ Str::limit($product->description, 20, '...') }}</td>
+                                        <td class="width-16-rem text-left">
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-info dropdown-toggle" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fa fa-cogs"></i>
+                                                    تنظیمات
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li class="my-1">
+                                                        <a class="dropdown-item bg-danger text-light text-center"
+                                                            href="{{ route('admin.product.discount.index', ['product' => $product]) }}"><small><i
+                                                                    class="fa fa-money-bill-alt"></i> تخفیف</small></a>
+                                                    </li>
+                                                    <li class="my-1">
+                                                        <a class="dropdown-item bg-dark text-light text-center"
+                                                            href="{{ route('admin.product.comment.index', ['product' => $product]) }}"><small><i
+                                                                    class="fa fa-comment-dots"></i> کامنت ها</small></a>
+                                                    </li>
+                                                    <li class="my-1">
+                                                        <a class="dropdown-item bg-success text-light text-center"
+                                                            href="{{ route('admin.product.option.index', ['product' => $product]) }}"><small><i
+                                                                    class="fa fa-chart-area"></i> ویژگی ها</small></a>
+                                                    </li>
+                                                    <li class="my-1">
+                                                        <a class="dropdown-item bg-info text-light text-center"
+                                                            href="{{ route('admin.product.image.index', $product) }}"><small><i
+                                                                    class="fa fa-photo-video"></i> عکس ها</small></a>
+                                                    </li>
+                                                    <li class="my-1">
+                                                        <a class="dropdown-item bg-secondary text-light text-center"
+                                                            href="{{ route('admin.product.product-guarantees.index', $product) }}"><small><i
+                                                                    class="fa fa-shield-alt"></i> گارانتی ها</small></a>
+                                                    </li>
+                                                    <li class="my-1">
+                                                        <a class="dropdown-item bg-primary text-light text-center"
+                                                            href="{{ route('admin.product.product-color.index', $product) }}"><small><i
+                                                                    class="fa fa-paint-brush"></i> رنگ ها</small></a>
+                                                    </li>
+                                                    <li class="my-1">
+                                                        <a class="dropdown-item bg-warning text-dark text-center"
+                                                            href="{{ route('admin.product.changeStatus', $product) }}"><small><i
+                                                                    class="fa fa-check"></i> تغییر وضعیت محصول</small></a>
+                                                    </li>
+                                                    <li class="my-1">
+                                                        <a class="dropdown-item bg-warning text-dark text-center"
+                                                            href="{{ route('admin.product.changeSaleStatus', $product) }}"><small><i
+                                                                    class="fa fa-check"></i> تغییر وضعیت فروش</small></a>
+                                                    </li>
+                                                    <li class="my-1">
+                                                        <a class="dropdown-item bg-info text-light text-center"
+                                                            href="{{ route('admin.product.show', $product) }}"><small><i
+                                                                    class="fa fa-eye"></i> نمایش</small></a>
+                                                    </li>
+                                                    <li class="my-1">
+                                                        <a class="dropdown-item bg-primary text-light text-center"
+                                                            href="{{ route('admin.product.edit', $product) }}"><small><i
+                                                                    class="fa fa-edit"></i> ویرایش</small></a>
+                                                    </li>
+                                                    <li class="my-1">
+                                                        <form class="d-inline w-100 bg-danger"
+                                                            action="{{ route('admin.product.delete', $product) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit"
+                                                                class="btn btn-danger btn-sm delete w-100">
+                                                                <i class="fa fa-trash-alt"></i>
+                                                                حذف
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                </ul>
+                                            </div>
 
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                @endif
                             @empty
                                 <tr>
-                                    <td colspan="20">
+                                    <td colspan="25">
                                         <div class="alert alert-danger text-center" role="alert">
                                             @if (isset(request()->search))
                                                 موردی یافت نشد

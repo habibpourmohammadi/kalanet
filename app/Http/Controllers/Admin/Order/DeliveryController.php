@@ -14,6 +14,8 @@ class DeliveryController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Delivery::class);
+
         $search = request()->search;
 
         $deliveries = Delivery::query()->when($search, function ($deliveries) use ($search) {
@@ -30,6 +32,8 @@ class DeliveryController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Delivery::class);
+
         return view("admin.order.delivery.create");
     }
 
@@ -38,6 +42,8 @@ class DeliveryController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->authorize('create', Delivery::class);
+
         $inputs = $request->validated();
 
         Delivery::create([
@@ -55,6 +61,8 @@ class DeliveryController extends Controller
      */
     public function edit(Delivery $delivery)
     {
+        $this->authorize('update', [$delivery]);
+
         return view("admin.order.delivery.edit", compact("delivery"));
     }
 
@@ -63,6 +71,8 @@ class DeliveryController extends Controller
      */
     public function update(StoreRequest $request, Delivery $delivery)
     {
+        $this->authorize('update', [$delivery]);
+
         $inputs = $request->validated();
 
         $delivery->update([
@@ -80,6 +90,8 @@ class DeliveryController extends Controller
      */
     public function destroy(Delivery $delivery)
     {
+        $this->authorize('delete', [$delivery]);
+
         $delivery->delete();
 
         return back()->with("swal-success", "حمل و نقل مورد نظر با موفقیت حذف شد");
@@ -87,6 +99,8 @@ class DeliveryController extends Controller
 
     public function changeStatus(Delivery $delivery)
     {
+        $this->authorize('update', [$delivery]);
+
         if ($delivery->status == "deactive") {
             $delivery->update([
                 "status" => "active"

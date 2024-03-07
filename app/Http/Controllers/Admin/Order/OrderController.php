@@ -13,6 +13,8 @@ class OrderController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Order::class);
+
         $search = request()->search;
         $orders = Order::query()->when($search, function ($orders) use ($search) {
             return $orders->where("tracking_id", "like", "%$search%")->orWhere("total_price", "like", "%$search%")->orWhereHas("user", function ($users) use ($search) {
@@ -37,6 +39,8 @@ class OrderController extends Controller
 
     public function filter()
     {
+        $this->authorize('viewAny', Order::class);
+
         $filter = request()->filter;
         $search = request()->search;
 
@@ -70,18 +74,24 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
+        $this->authorize('view', [$order]);
+
         return view("admin.order.show", compact("order"));
     }
 
 
     public function details(Order $order)
     {
+        $this->authorize('view', [$order]);
+
         return view("admin.order.details", compact("order"));
     }
 
 
     public function changePaymentStatus(Order $order)
     {
+        $this->authorize('view', [$order]);
+
         $payment_status = null;
 
         switch ($order->payment_status) {
@@ -112,6 +122,8 @@ class OrderController extends Controller
 
     public function changeDeliveryStatus(Order $order)
     {
+        $this->authorize('view', [$order]);
+
         $delivery_status = null;
 
         switch ($order->delivery_status) {
@@ -139,6 +151,8 @@ class OrderController extends Controller
 
     public function changeStatus(Order $order)
     {
+        $this->authorize('view', [$order]);
+
         if ($order->status == "not_confirmed") {
             $order->update([
                 "status" => "confirmed"

@@ -20,6 +20,8 @@ class ProductController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Product::class);
+
         $search = request()->search;
 
         $sort = request()->sort;
@@ -76,6 +78,8 @@ class ProductController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Product::class);
+
         $categories = Category::all();
         $brands = Brand::all();
         return view("admin.product.product.create", compact("categories", "brands"));
@@ -86,6 +90,8 @@ class ProductController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->authorize('create', Product::class);
+
         $inputs = $request->validated();
 
         if ($request->hasFile("Introduction_video_path")) {
@@ -117,11 +123,15 @@ class ProductController extends Controller
     // Discount for the product
     public function productDiscount(Product $product)
     {
+        $this->authorize('update', [$product]);
+
         return view("admin.product.product.product-discount", compact("product"));
     }
 
     public function productDiscountUpdate(UpdateDiscountRequest $request, Product $product)
     {
+        $this->authorize('update', [$product]);
+
         $discount = $request->discount;
 
         if ($product->price <= $discount) {
@@ -140,6 +150,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $this->authorize('view', [$product]);
+
         return view("admin.product.product.show", compact("product"));
     }
 
@@ -148,6 +160,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        $this->authorize('update', [$product]);
+
         $categories = Category::all();
         $brands = Brand::all();
         return view("admin.product.product.edit", compact("product", "categories", "brands"));
@@ -158,6 +172,8 @@ class ProductController extends Controller
      */
     public function update(StoreRequest $request, Product $product)
     {
+        $this->authorize('update', [$product]);
+
         $inputs = $request->validated();
 
         if ($request->hasFile("Introduction_video_path")) {
@@ -192,6 +208,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        $this->authorize('delete', [$product]);
+
         DB::transaction(function () use ($product) {
 
             if (File::exists(public_path($product->Introduction_video_path))) {
@@ -210,6 +228,8 @@ class ProductController extends Controller
 
     public function changeStatus(Product $product)
     {
+        $this->authorize('update', [$product]);
+
         if ($product->status == "false") {
             $product->update([
                 "status" => "true"
@@ -227,6 +247,8 @@ class ProductController extends Controller
 
     public function changeSaleStatus(Product $product)
     {
+        $this->authorize('update', [$product]);
+
         if ($product->marketable == "false") {
             $product->update([
                 "marketable" => "true"

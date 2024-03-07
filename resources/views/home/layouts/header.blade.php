@@ -80,6 +80,14 @@
                         <section class="dropdown-menu dropdown-menu-end custom-drop-down"
                             aria-labelledby="dropdownMenuButton1">
                             @auth
+                                @if (auth()->user()->roles()->count() != 0)
+                                    <section>
+                                        <a class="dropdown-item" target="_blank" href="{{ route('admin.index') }}">
+                                            <i class="fa fa-lock-open"></i>
+                                            پنل ادمین
+                                        </a>
+                                    </section>
+                                @endif
                                 <section><a class="dropdown-item" href="{{ route('home.profile.myProfile.index') }}"><i
                                             class="fa fa-user-circle"></i>پروفایل کاربری</a></section>
                                 <section><a class="dropdown-item" href="{{ route('home.profile.myOrders.index') }}"><i

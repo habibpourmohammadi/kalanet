@@ -15,6 +15,8 @@ class ProvinceController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Province::class);
+
         $search = request()->search;
 
         $provinces = Province::query()->when($search, function ($provinces) use ($search) {
@@ -31,6 +33,8 @@ class ProvinceController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Province::class);
+
         return view("admin.order.province.create");
     }
 
@@ -39,6 +43,8 @@ class ProvinceController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->authorize('create', Province::class);
+
         Province::create([
             "name" => $request->name
         ]);
@@ -51,6 +57,8 @@ class ProvinceController extends Controller
      */
     public function edit(Province $province)
     {
+        $this->authorize('update', [$province]);
+
         return view("admin.order.province.edit", compact("province"));
     }
 
@@ -59,6 +67,8 @@ class ProvinceController extends Controller
      */
     public function update(UpdateRequest $request, Province $province)
     {
+        $this->authorize('update', [$province]);
+
         $province->update([
             "name" => $request->name
         ]);
@@ -68,6 +78,8 @@ class ProvinceController extends Controller
 
     public function changeStatus(Province $province)
     {
+        $this->authorize('update', [$province]);
+
         if ($province->status == "deactive") {
             $province->update([
                 "status" => "active"
@@ -88,6 +100,8 @@ class ProvinceController extends Controller
      */
     public function destroy(Province $province)
     {
+        $this->authorize('delete', [$province]);
+
         $province->delete();
         return back()->with("swal-success", "استان مورد نظر با موفقیت حذف شد");
     }

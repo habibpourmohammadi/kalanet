@@ -59,6 +59,11 @@
                                             <i class="fa fa-check"></i>
                                             تغییر وضعیت
                                         </a>
+                                        <a href="{{ route('admin.user.setRolePage', $user) }}"
+                                            class="btn btn-sm btn-secondary">
+                                            <i class="fa fa-users"></i>
+                                            نقش ها
+                                        </a>
                                     </td>
                                 </tr>
                             @empty

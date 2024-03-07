@@ -34,7 +34,6 @@
                             <tr>
                                 <th>#</th>
                                 <th>نام نقش</th>
-                                <th>توضیحات نقش</th>
                                 <th>تاریخ ایجاد نقش</th>
                                 <th class="max-width-16-rem text-center"><i class="fa fa-cogs"></i> تنظیمات </th>
                             </tr>
@@ -44,14 +43,35 @@
                                 <tr>
                                     <th>{{ $loop->iteration }}</th>
                                     <td>{{ $role->name }}</td>
-                                    <td>{{ Str::limit($role->description, 30, '...') }}</td>
                                     <td>{{ jalaliDate($role->created_at) }}</td>
                                     <td class="width-16-rem text-left">
-                                        <a href="{{ route('admin.accessManagement.role.edit', $role) }}"
-                                            class="btn-primary btn btn-sm">
-                                            <i class="fa fa-edit"></i>
-                                            ویرایش
-                                        </a>
+                                        @if ($role->name === 'admin')
+                                            <a href="{{ route('admin.accessManagement.role.edit', $role) }}"
+                                                class="btn-primary btn btn-sm disabled">
+                                                <i class="fa fa-edit"></i>
+                                                ویرایش
+                                            </a>
+                                        @else
+                                            <a href="{{ route('admin.accessManagement.role.permissions.page', $role) }}"
+                                                class="btn btn-sm btn-warning">
+                                                <i class="fa fa-user"></i>
+                                                مدیریت مجوز ها
+                                            </a>
+                                            <a href="{{ route('admin.accessManagement.role.edit', $role) }}"
+                                                class="btn-primary btn btn-sm">
+                                                <i class="fa fa-edit"></i>
+                                                ویرایش
+                                            </a>
+                                            <form action="{{ route('admin.accessManagement.role.delete', $role) }}"
+                                                method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn-danger btn btn-sm delete">
+                                                    <i class="fa fa-trash"></i>
+                                                    حذف
+                                                </button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty

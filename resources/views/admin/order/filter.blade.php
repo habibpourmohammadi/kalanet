@@ -67,86 +67,89 @@
                         </thead>
                         <tbody>
                             @forelse ($orders as $order)
-                                <tr>
-                                    <th>{{ $loop->iteration }}</th>
-                                    <td>{{ $order->tracking_id }}</td>
-                                    <td>{{ $order->user->name ?? '-' }}</td>
-                                    <td><strong class="text-success">{{ priceFormat($order->total_price) }}</strong> تومان
-                                    </td>
-                                    <td>
-                                        <strong>{{ $order->payment->status == 'online' ? 'پرداخت آنلاین' : 'پرداخت در محل' }}</strong>
-                                    </td>
-                                    <td><span
-                                            @class([
-                                                'text-success' => $order->payment_status == 'paid',
-                                                'text-danger' => $order->payment_status != 'paid',
-                                            ])><strong>{{ $order->paymentStatus() }}</strong></span>
-                                    </td>
-                                    <td><span
-                                            @class([
-                                                'text-danger' => $order->delivery_status == 'unpaid',
-                                                'text-warning' => $order->delivery_status == 'processing',
-                                                'text-success' => $order->delivery_status == 'delivered',
-                                            ])><strong>{{ $order->deliveryStatus() }}</strong></span>
-                                    </td>
-                                    <td><span
-                                            @class([
-                                                'text-danger' => $order->status == 'not_confirmed',
-                                                'text-success' => $order->status == 'confirmed',
-                                            ])><strong>{{ $order->status == 'not_confirmed' ? 'تایید نشده' : 'تایید شده' }}</strong></span>
-                                    </td>
-                                    <td>{{ jalaliDate($order->created_at, 'H:i:s Y-m-d') }}</td>
-                                    <td>{{ jalaliDate($order->updated_at, 'H:i:s Y-m-d') }}</td>
-                                    <td class="width-16-rem text-left">
-                                        <div class="dropdown">
-                                            <button class="btn btn-sm btn-primary dropdown-toggle" type="button"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                تنظیمات
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a href="{{ route('admin.order.show', $order) }}"
-                                                        class="btn btn-sm btn-info w-100 mb-1">
-                                                        <i class="fa fa-eye"></i>
-                                                        <small>
-                                                            نمایش اطلاعات تکمیلی
-                                                        </small>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="{{ route('admin.order.changePaymentStatus', $order) }}"
-                                                        class="btn btn-sm btn-warning w-100">
-                                                        <i class="fa fa-money-bill-alt"></i>
-                                                        <small>
-                                                            تغییر وضعیت پرداخت
-                                                        </small>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="{{ route('admin.order.changeDeliveryStatus', $order) }}"
-                                                        class="btn btn-sm btn-warning w-100 my-1">
-                                                        <i class="fa fa-box-open"></i>
-                                                        <small>
-                                                            تغییر وضعیت ارسال
-                                                        </small>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="{{ route('admin.order.changeStatus', $order) }}"
-                                                        class="btn btn-sm btn-warning w-100 my-1">
-                                                        <i class="fa fa-check"></i>
-                                                        <small>
-                                                            تغییر وضعیت سفارش
-                                                        </small>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @if ($order->products()->where('seller_id', auth()->user()->id)->count() != 0 || auth()->user()->hasRole('admin'))
+                                    <tr>
+                                        <th>{{ $loop->iteration }}</th>
+                                        <td>{{ $order->tracking_id }}</td>
+                                        <td>{{ $order->user->name ?? '-' }}</td>
+                                        <td><strong class="text-success">{{ priceFormat($order->total_price) }}</strong>
+                                            تومان
+                                        </td>
+                                        <td>
+                                            <strong>{{ $order->payment->status == 'online' ? 'پرداخت آنلاین' : 'پرداخت در محل' }}</strong>
+                                        </td>
+                                        <td><span
+                                                @class([
+                                                    'text-success' => $order->payment_status == 'paid',
+                                                    'text-danger' => $order->payment_status != 'paid',
+                                                ])><strong>{{ $order->paymentStatus() }}</strong></span>
+                                        </td>
+                                        <td><span
+                                                @class([
+                                                    'text-danger' => $order->delivery_status == 'unpaid',
+                                                    'text-warning' => $order->delivery_status == 'processing',
+                                                    'text-success' => $order->delivery_status == 'delivered',
+                                                ])><strong>{{ $order->deliveryStatus() }}</strong></span>
+                                        </td>
+                                        <td><span
+                                                @class([
+                                                    'text-danger' => $order->status == 'not_confirmed',
+                                                    'text-success' => $order->status == 'confirmed',
+                                                ])><strong>{{ $order->status == 'not_confirmed' ? 'تایید نشده' : 'تایید شده' }}</strong></span>
+                                        </td>
+                                        <td>{{ jalaliDate($order->created_at, 'H:i:s Y-m-d') }}</td>
+                                        <td>{{ jalaliDate($order->updated_at, 'H:i:s Y-m-d') }}</td>
+                                        <td class="width-16-rem text-left">
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-primary dropdown-toggle" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    تنظیمات
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a href="{{ route('admin.order.show', $order) }}"
+                                                            class="btn btn-sm btn-info w-100 mb-1">
+                                                            <i class="fa fa-eye"></i>
+                                                            <small>
+                                                                نمایش اطلاعات تکمیلی
+                                                            </small>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ route('admin.order.changePaymentStatus', $order) }}"
+                                                            class="btn btn-sm btn-warning w-100">
+                                                            <i class="fa fa-money-bill-alt"></i>
+                                                            <small>
+                                                                تغییر وضعیت پرداخت
+                                                            </small>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ route('admin.order.changeDeliveryStatus', $order) }}"
+                                                            class="btn btn-sm btn-warning w-100 my-1">
+                                                            <i class="fa fa-box-open"></i>
+                                                            <small>
+                                                                تغییر وضعیت ارسال
+                                                            </small>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ route('admin.order.changeStatus', $order) }}"
+                                                            class="btn btn-sm btn-warning w-100 my-1">
+                                                            <i class="fa fa-check"></i>
+                                                            <small>
+                                                                تغییر وضعیت سفارش
+                                                            </small>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endif
                             @empty
                                 <tr>
-                                    <td colspan="10">
+                                    <td colspan="25">
                                         <div class="alert alert-danger text-center" role="alert">
                                             @if (isset(request()->search))
                                                 موردی یافت نشد

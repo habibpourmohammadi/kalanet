@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin\User;
 
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\Role\StoreRequest;
+use App\Http\Requests\Admin\User\Role\Permissions\StoreRequets as StorePermissionsRequest;
 use App\Http\Requests\Admin\User\Role\UpdateRequest;
-use App\Models\Role;
-use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
@@ -15,10 +17,12 @@ class RoleController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Role::class);
+
         $search = request()->search;
 
         $roles = Role::query()->when($search, function ($roles) use ($search) {
-            return $roles->where("name", "like", "%$search%")->orWhere("description", "like", "%$search%")->get();
+            return $roles->where("name", "like", "%$search%")->get();
         }, function ($roles) {
             return $roles->get();
         });
@@ -31,6 +35,8 @@ class RoleController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Role::class);
+
         return view("admin.user.role.create");
     }
 
@@ -39,11 +45,12 @@ class RoleController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->authorize('create', Role::class);
+
         $inputs = $request->validated();
 
         Role::create([
             "name" => $inputs["name"],
-            "description" => $inputs["description"],
         ]);
 
         return to_route("admin.accessManagement.role.index")->with("swal-success", "نقش جدید شما با موفقیت ایجاد شد");
@@ -55,6 +62,12 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
+        $this->authorize('update', [$role]);
+
+        if ($role->name === "admin") {
+            abort(404);
+        }
+
         return view("admin.user.role.edit", compact("role"));
     }
 
@@ -63,13 +76,60 @@ class RoleController extends Controller
      */
     public function update(UpdateRequest $request, Role $role)
     {
+        $this->authorize('update', [$role]);
+
+        if ($role->name === "admin") {
+            abort(404);
+        }
+
         $inputs = $request->validated();
 
         $role->update([
             "name" => $inputs["name"],
-            "description" => $inputs["description"],
         ]);
 
         return to_route("admin.accessManagement.role.index")->with("swal-success", "نقش مورد نظر با موفقیت ویرایش شد");
+    }
+
+
+
+    public function destroy(Role $role)
+    {
+        $this->authorize('delete', [$role]);
+
+        if ($role->name === "admin") {
+            abort(404);
+        }
+
+        $role->delete();
+        return back()->with("swal-success", "نقش مورد نظر با موفقیت حذف شد");
+    }
+
+
+    public function permissionsPage(Role $role)
+    {
+        $this->authorize('update', [$role]);
+
+        if ($role->name === "admin") {
+            abort(404);
+        }
+
+        $permissions = Permission::all();
+        return view("admin.user.role.permission.create", compact("role", "permissions"));
+    }
+
+    public function permissionsStore(StorePermissionsRequest $request, Role $role)
+    {
+        $this->authorize('update', [$role]);
+
+        if ($role->name === "admin") {
+            abort(404);
+        }
+
+        $permissions = $request->permissions;
+
+        $role->syncPermissions($permissions);
+
+        return to_route("admin.accessManagement.role.index")->with("swal-success", "مجوز های نقش مورد نظر با موفقیت ویرایش شد");
     }
 }

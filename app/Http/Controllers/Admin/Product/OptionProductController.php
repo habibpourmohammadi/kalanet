@@ -15,6 +15,8 @@ class OptionProductController extends Controller
      */
     public function index(Product $product)
     {
+        $this->authorize('update', [$product]);
+
         $search = request()->search;
 
         $options = $product->options()->when($search, function ($options) use ($search) {
@@ -33,6 +35,8 @@ class OptionProductController extends Controller
      */
     public function create(Product $product)
     {
+        $this->authorize('update', [$product]);
+
         return view("admin.product.option.create", compact("product"));
     }
 
@@ -41,6 +45,8 @@ class OptionProductController extends Controller
      */
     public function store(StoreRequest $request, Product $product)
     {
+        $this->authorize('update', [$product]);
+
         $inputs = $request->validated();
 
         ProductOption::create([
@@ -57,6 +63,8 @@ class OptionProductController extends Controller
      */
     public function show(Product $product, ProductOption $option)
     {
+        $this->authorize('update', [$product]);
+
         return view("admin.product.option.show", compact("product", "option"));
     }
 
@@ -65,6 +73,8 @@ class OptionProductController extends Controller
      */
     public function edit(Product $product, ProductOption $option)
     {
+        $this->authorize('update', [$product]);
+
         return view("admin.product.option.edit", compact("product", "option"));
     }
 
@@ -73,6 +83,8 @@ class OptionProductController extends Controller
      */
     public function update(StoreRequest $request, Product $product, ProductOption $option)
     {
+        $this->authorize('update', [$product]);
+
         $inputs = $request->validated();
 
         $option->update([
@@ -88,6 +100,8 @@ class OptionProductController extends Controller
      */
     public function destroy(Product $product, ProductOption $option)
     {
+        $this->authorize('update', [$product]);
+
         $option->delete();
 
         return back()->with("swal-success", "ویژگی مورد نظر با موفقیت حذف شد");

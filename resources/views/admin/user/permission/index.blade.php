@@ -23,7 +23,8 @@
                 </section>
                 <section class="d-flex justify-content-between align-items-center mt-4 mb-3 border-bottom pb-2">
                     <div></div>
-                    <form action="{{ route('admin.accessManagement.permission.index') }}" method="GET" class="max-width-16-rem">
+                    <form action="{{ route('admin.accessManagement.permission.index') }}" method="GET"
+                        class="max-width-16-rem">
                         <input type="text" class="form-control form-control-sm form-text" name="search"
                             placeholder="جستجو" value="{{ request()->search }}">
                     </form>
@@ -34,9 +35,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>نام مجوز</th>
-                                <th>توضیحات مجوز</th>
                                 <th>تاریخ ایجاد مجوز</th>
-                                <th class="max-width-16-rem text-center"><i class="fa fa-cogs"></i> تنظیمات </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,15 +43,7 @@
                                 <tr>
                                     <th>{{ $loop->iteration }}</th>
                                     <td>{{ $permission->name }}</td>
-                                    <td>{{ Str::limit($permission->description, 30, '...') }}</td>
                                     <td>{{ jalaliDate($permission->created_at) }}</td>
-                                    <td class="width-16-rem text-left">
-                                        <a href="{{ route('admin.accessManagement.role.edit', $role) }}"
-                                            class="btn-primary btn btn-sm">
-                                            <i class="fa fa-edit"></i>
-                                            ویرایش
-                                        </a>
-                                    </td>
                                 </tr>
                             @empty
                                 <tr>

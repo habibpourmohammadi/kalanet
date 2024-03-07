@@ -16,6 +16,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Category::class);
+
         $search = request()->search;
         $sort = request()->sort;
 
@@ -39,6 +41,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Category::class);
+
         $categories = Category::all();
         return view("admin.product.category.create", compact("categories"));
     }
@@ -48,6 +52,8 @@ class CategoryController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->authorize('create', Category::class);
+
         $inputs = $request->validated();
 
         $inputs["slug"] = str_replace(" ", "-", $inputs["name"]);
@@ -68,6 +74,8 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
+        $this->authorize('update', [$category]);
+
         $unauthorized_ids = [$category->id];
 
         $unauthorized_ids = array_merge($unauthorized_ids, $category->getChildrenIds());
@@ -81,6 +89,8 @@ class CategoryController extends Controller
      */
     public function update(UpdateRequest $request, Category $category)
     {
+        $this->authorize('update', [$category]);
+
         $inputs = $request->validated();
 
         $unauthorized_ids = [$category->id];
@@ -107,6 +117,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        $this->authorize('delete', [$category]);
+
         DB::transaction(function () use ($category) {
             $category->update([
                 "name" => $category->name . "-" . $category->id,

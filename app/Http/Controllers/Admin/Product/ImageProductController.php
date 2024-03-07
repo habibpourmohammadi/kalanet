@@ -17,6 +17,8 @@ class ImageProductController extends Controller
      */
     public function index(Product $product)
     {
+        $this->authorize('update', [$product]);
+
         return view("admin.product.image.index", compact("product"));
     }
 
@@ -25,6 +27,8 @@ class ImageProductController extends Controller
      */
     public function create(Product $product)
     {
+        $this->authorize('update', [$product]);
+
         return view("admin.product.image.create", compact("product"));
     }
 
@@ -33,6 +37,8 @@ class ImageProductController extends Controller
      */
     public function store(StoreRequest $request, Product $product)
     {
+        $this->authorize('update', [$product]);
+
         if ($request->hasFile("image_path")) {
             $image = $request->file("image_path");
             $imageName = time() . '.' . $image->extension();
@@ -56,6 +62,8 @@ class ImageProductController extends Controller
      */
     public function edit(Product $product, ProductImage $image)
     {
+        $this->authorize('update', [$product]);
+
         return view("admin.product.image.edit", compact("product", "image"));
     }
 
@@ -64,6 +72,8 @@ class ImageProductController extends Controller
      */
     public function update(StoreRequest $request, Product $product, ProductImage $image)
     {
+        $this->authorize('update', [$product]);
+
         if ($request->hasFile("image_path")) {
             if (File::exists(public_path($image->image_path))) {
                 File::delete(public_path($image->image_path));
@@ -89,6 +99,8 @@ class ImageProductController extends Controller
      */
     public function destroy(Product $product, ProductImage $image)
     {
+        $this->authorize('update', [$product]);
+
         if (File::exists(public_path($image->image_path))) {
             File::delete(public_path($image->image_path));
         }

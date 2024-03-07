@@ -20,6 +20,8 @@ class BannerController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Banner::class);
+
         $search = request()->search;
 
         $banners = Banner::query()->when($search, function ($banners) use ($search) {
@@ -36,6 +38,8 @@ class BannerController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Banner::class);
+
         return view("admin.appearance.banner.create");
     }
 
@@ -44,6 +48,8 @@ class BannerController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->authorize('create', Banner::class);
+
         $inputs = $request->validated();
 
         switch ($inputs["banner_position"]) {
@@ -110,6 +116,8 @@ class BannerController extends Controller
      */
     public function edit(Banner $banner)
     {
+        $this->authorize('update', [$banner]);
+
         return view("admin.appearance.banner.edit", compact("banner"));
     }
 
@@ -118,6 +126,8 @@ class BannerController extends Controller
      */
     public function update(UpdateRequest $request, Banner $banner)
     {
+        $this->authorize('update', [$banner]);
+
         $inputs = $request->validated();
 
         switch ($inputs["banner_position"]) {
@@ -186,6 +196,8 @@ class BannerController extends Controller
      */
     public function destroy(Banner $banner)
     {
+        $this->delete('update', [$banner]);
+
         if (File::exists(public_path($banner->banner_path)))
             File::delete(public_path($banner->banner_path));
 
@@ -196,6 +208,8 @@ class BannerController extends Controller
 
     public function changeStatus(Banner $banner)
     {
+        $this->authorize('update', [$banner]);
+
         if ($banner->status == 'false') {
             $banner->update([
                 "status" => "true"

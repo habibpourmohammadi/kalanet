@@ -15,6 +15,8 @@ class ProductColorController extends Controller
      */
     public function index(Product $product)
     {
+        $this->authorize('update', [$product]);
+
         $search = request()->search;
 
         $colors = $product->colors()->when($search, function ($colors) use ($search) {
@@ -31,6 +33,8 @@ class ProductColorController extends Controller
      */
     public function create(Product $product)
     {
+        $this->authorize('update', [$product]);
+
         $unauthorized_ids = [];
 
         foreach ($product->colors as $color) {
@@ -46,6 +50,8 @@ class ProductColorController extends Controller
      */
     public function store(StoreRequest $request, Product $product)
     {
+        $this->authorize('update', [$product]);
+
         $unauthorized_ids = [];
 
         foreach ($product->colors as $color) {
@@ -67,6 +73,8 @@ class ProductColorController extends Controller
      */
     public function edit(Product $product, Color $color)
     {
+        $this->authorize('update', [$product]);
+
         return view("admin.product.product-colors.edit", compact("product", "color"));
     }
 
@@ -75,6 +83,8 @@ class ProductColorController extends Controller
      */
     public function update(StoreRequest $request, Product $product, Color $color)
     {
+        $this->authorize('update', [$product]);
+
         if (!$product->colors()->where("id", $color->id)->first()) {
             return to_route("admin.product.product-guarantees.index", $product)->with("swal-error", "مشکلی پیش آمده ، لطفا دوباره تلاش کنید");
         }
@@ -89,6 +99,8 @@ class ProductColorController extends Controller
      */
     public function destroy(Product $product, Color $color)
     {
+        $this->authorize('update', [$product]);
+
         $product->colors()->detach($color->id);
 
         return to_route("admin.product.product-color.index", $product)->with("swal-success", "رنگ مورد نظر با موفقیت حذف شد");

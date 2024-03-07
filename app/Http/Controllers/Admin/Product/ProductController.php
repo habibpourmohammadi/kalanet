@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\Admin\Product\StoreRequest;
+use App\Http\Requests\Admin\Product\UpdateDiscountRequest;
 
 class ProductController extends Controller
 {
@@ -111,6 +112,27 @@ class ProductController extends Controller
         ]);
 
         return to_route("admin.product.index")->with("swal-success", "محصول جدید شما با موفقیت ایجاد شد");
+    }
+
+    // Discount for the product
+    public function productDiscount(Product $product)
+    {
+        return view("admin.product.product.product-discount", compact("product"));
+    }
+
+    public function productDiscountUpdate(UpdateDiscountRequest $request, Product $product)
+    {
+        $discount = $request->discount;
+
+        if ($product->price <= $discount) {
+            return back()->with("swal-error", "تخفیف نباید هم قیمت یا بیشتر از قیمت خود محصول باشد");
+        }
+
+        $product->update([
+            "discount" => $discount
+        ]);
+
+        return to_route("admin.product.index")->with("swal-success", "تخفیف با موفقیت اعمال شد");
     }
 
     /**

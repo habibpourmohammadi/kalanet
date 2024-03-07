@@ -84,6 +84,9 @@
                                     @endif
                                 </th>
                                 <th>
+                                    تخفیف
+                                </th>
+                                <th>
                                     @if (request()->sort == null || request()->sort == 'ASC')
                                         <a href="{{ route('admin.product.index', ['search' => request()->search, 'sort' => 'DESC', 'column' => '4']) }}"
                                             class="text-decoration-none">
@@ -137,6 +140,13 @@
                                     <td>{{ Str::limit($product->slug, 20, '...') }}</td>
                                     <td>{{ $product->seller->name }}</td>
                                     <td class="text-success">{{ priceFormat($product->price) }} تومان</td>
+                                    <td>
+                                        @if ($product->discount != 0)
+                                            <span class="text-success">{{ priceFormat($product->discount) }} تومان</span>
+                                        @else
+                                            <span class="text-danger">ندارد</span>
+                                        @endif
+                                    </td>
                                     <td>{{ $product->sold_number }} عدد</td>
                                     <td>{{ $product->marketable_number }} عدد</td>
                                     <td class="text-{{ $product->marketable == 'true' ? 'success' : 'danger' }}">
@@ -155,6 +165,11 @@
                                                 تنظیمات
                                             </button>
                                             <ul class="dropdown-menu">
+                                                <li class="my-1">
+                                                    <a class="dropdown-item bg-danger text-light text-center"
+                                                        href="{{ route('admin.product.discount.index', ['product' => $product]) }}"><small><i
+                                                                class="fa fa-money-bill-alt"></i> تخفیف</small></a>
+                                                </li>
                                                 <li class="my-1">
                                                     <a class="dropdown-item bg-dark text-light text-center"
                                                         href="{{ route('admin.product.comment.index', ['product' => $product]) }}"><small><i

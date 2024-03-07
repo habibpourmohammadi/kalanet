@@ -151,6 +151,8 @@ Route::middleware("checkActivation")->group(function () {
                 Route::get("/", "index")->name("admin.product.index");
                 Route::get("/create", "create")->name("admin.product.create");
                 Route::get("/show/{product}", "show")->name("admin.product.show");
+                Route::get("/product-discount/{product}", "productDiscount")->name("admin.product.discount.index");
+                Route::put("/product-discount/{product}", "productDiscountUpdate")->name("admin.product.discount.update");
                 Route::post("/", "store")->name("admin.product.store");
                 Route::get("/{product}", "edit")->name("admin.product.edit");
                 Route::put("/{product}", "update")->name("admin.product.update");

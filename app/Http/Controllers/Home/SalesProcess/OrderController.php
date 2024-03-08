@@ -30,8 +30,9 @@ class OrderController extends Controller
             return back();
         }
 
-        // calc total price
+        // calc total price and total discount
         $total_price = 0;
+        $total_discount = 0;
 
         // find products
         foreach ($user->cartItems as $cartItem) {
@@ -50,8 +51,9 @@ class OrderController extends Controller
                 return to_route("home.salesProcess.myCart")->with("error", "یکی از محصولات سبد خرید شما ناموجود است ,لطفا سبد خرید خود را بررسی نمایید");
             }
 
-            // calc total price
+            // calc total price and total discount
             $total_price += $cartItem->totalPrice();
+            $total_discount += $cartItem->product->discount * $cartItem->number;
         }
 
         // find tracking_id
@@ -64,11 +66,11 @@ class OrderController extends Controller
         }
 
 
-        DB::transaction(function () use ($user, $address, $delivery, $tracking_id, $total_price, $user_obj) {
+        DB::transaction(function () use ($user, $address, $delivery, $tracking_id, $total_price, $total_discount, $user_obj) {
             // find or create Order
             $order = Order::updateOrCreate(
                 ['user_id' => $user->id, "payment_status" => "unpaid", "status" => "not_confirmed", "delivery_status" => "unpaid", "tracking_id" => $tracking_id],
-                ['address_id' => $address->id, 'delivery_id' => $delivery->id, "total_price" => $total_price + $delivery->price, "user_obj" => $user_obj, "address_obj" => $address, "delivery_obj" => $delivery]
+                ['address_id' => $address->id, 'delivery_id' => $delivery->id, "total_price" => ($total_price + $delivery->price) - $total_discount, "total_discount" => $total_discount, "user_obj" => $user_obj, "address_obj" => $address, "delivery_obj" => $delivery]
             );
 
             // detach old products
@@ -95,8 +97,10 @@ class OrderController extends Controller
                     "guarantee_persian_name" => $cartItem->guarantee->persian_name ?? null,
                     "guarantee_price" => $guarantee_price ?? null,
                     "product_price" => $cartItem->product->price,
+                    "product_discount" => $cartItem->product->discount,
                     "number" => $cartItem->number,
                     "total_price" => $cartItem->totalPrice(),
+                    "total_discount" => $cartItem->product->discount * $cartItem->number,
                     "product_obj" => json_encode($cartItem->product->toArray()),
                 ]);
             }
@@ -115,10 +119,12 @@ class OrderController extends Controller
         }
 
         $total_price = 0;
+        $total_discount = 0;
         foreach (Auth::user()->cartItems as $cartItem) {
             $total_price += $cartItem->totalPrice();
+            $total_discount += $cartItem->product->discount * $cartItem->number;
         }
-        return view("home.salesProcess.payment.index", compact("order", "total_price"));
+        return view("home.salesProcess.payment.index", compact("order", "total_price", "total_discount"));
     }
 
     // Payment func
@@ -128,8 +134,9 @@ class OrderController extends Controller
         $order = Auth::user()->orders->where("payment_status", "unpaid")->where("status", "not_confirmed")->where("delivery_status", "unpaid")->first();
         $cartItems = Auth::user()->cartItems;
 
-        // get totalPrice
+        // get totalPrice and total discount
         $totalPrice = 0;
+        $totalDiscount = 0;
 
         // last check for cartItems
         foreach ($cartItems as $cartItem) {
@@ -148,6 +155,7 @@ class OrderController extends Controller
             }
 
             $totalPrice += $cartItem->totalPrice();
+            $totalDiscount += $cartItem->product->discount * $cartItem->number;
         }
 
         // check delivery price
@@ -159,12 +167,16 @@ class OrderController extends Controller
 
         // check products number
         if ($cartItems->count() != $order->products->count()) {
-            dd($cartItems->count(), $order);
+            return to_route("home.salesProcess.myCart")->with("error", "لطفا روند ثبت سفارش خود را تکرار کنید");
+        }
+
+        // check product discount
+        if ($totalDiscount != $order->total_discount) {
             return to_route("home.salesProcess.myCart")->with("error", "لطفا روند ثبت سفارش خود را تکرار کنید");
         }
 
         // check final price
-        if (($order->delivery->price + $totalPrice) != $order->total_price) {
+        if (($order->delivery->price + $totalPrice) - $totalDiscount != $order->total_price) {
             return to_route("home.salesProcess.myCart")->with("error", "لطفا روند ثبت سفارش خود را تکرار کنید");
         }
 

@@ -142,16 +142,18 @@
                                         <p class="text-muted">{{ priceFormat($total_price) }} تومان</p>
                                     </section>
 
-                                    {{-- <section class="d-flex justify-content-between align-items-center">
-                                    <p class="text-muted">تخفیف کالاها</p>
-                                    <p class="text-danger fw-bolder">78,000 تومان</p>
-                                </section> --}}
+                                    @if ($total_discount != 0)
+                                        <section class="d-flex justify-content-between align-items-center">
+                                            <p class="text-muted">تخفیف کالاها</p>
+                                            <p class="text-danger fw-bolder">{{ priceFormat($total_discount) }} تومان</p>
+                                        </section>
+                                    @endif
 
                                     <section class="border-bottom mb-3"></section>
 
                                     <section class="d-flex justify-content-between align-items-center">
                                         <p class="text-muted">جمع سبد خرید</p>
-                                        <p class="fw-bolder">{{ priceFormat($total_price) }} تومان</p>
+                                        <p class="fw-bolder">{{ priceFormat($total_price - $total_discount) }} تومان</p>
                                     </section>
 
                                     <section class="d-flex justify-content-between align-items-center">
@@ -160,9 +162,9 @@
                                     </section>
 
                                     {{-- <section class="d-flex justify-content-between align-items-center">
-                                    <p class="text-muted">تخفیف اعمال شده</p>
-                                    <p class="text-danger">100,000 تومان</p>
-                                </section> --}}
+                                        <p class="text-muted">تخفیف اعمال شده</p>
+                                        <p class="text-danger">100,000 تومان</p>
+                                    </section> --}}
 
                                     <p class="my-3">
                                         <i class="fa fa-info-circle me-1"></i> کاربر گرامی کالاها بر اساس نوع ارسالی که

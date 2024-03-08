@@ -15,32 +15,38 @@ class CartController extends Controller
         $cartItems = Auth::user()->cartItems;
         $cartItemProductIds = [];
         $relatedProducts = collect();
+        $discountPrice = 0;
 
         foreach ($cartItems as $cartItem) {
             array_push($cartItemProductIds, $cartItem->product->id);
             foreach ($cartItem->product->category->products as $product) {
                 $relatedProducts = $relatedProducts->concat([$product]);
             }
+            $discountPrice += ($cartItem->product->discount * $cartItem->number);
         }
 
         $relatedProducts = $relatedProducts->unique();
         $relatedProducts = $relatedProducts->whereNotIn("id", $cartItemProductIds)->take(15);
 
-        return view("home.salesProcess.cart.index", compact("cartItems", "relatedProducts"));
+        return view("home.salesProcess.cart.index", compact("cartItems", "relatedProducts", "discountPrice"));
     }
 
     public function delivery()
     {
         $cartItems = Auth::user()->cartItems;
         $totalPrice = 0;
+        $discountPrice = 0;
+
         foreach ($cartItems as $cartItem) {
             $totalPrice +=  $cartItem->totalPrice();
+
+            $discountPrice += ($cartItem->product->discount * $cartItem->number);
         }
 
         $addresses = Auth::user()->addresses;
         $deliveries = Delivery::where("status", "active")->get();
 
         $provinces = Province::where("status", "active")->get();
-        return view("home.salesProcess.delivery.index", compact("addresses", "deliveries", "provinces", "cartItems", "totalPrice"));
+        return view("home.salesProcess.delivery.index", compact("addresses", "deliveries", "provinces", "cartItems", "totalPrice", "discountPrice"));
     }
 }

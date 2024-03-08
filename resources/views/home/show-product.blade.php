@@ -171,8 +171,8 @@
                             <section class="content-wrapper bg-white p-3 rounded-2 cart-total-price">
                                 <section class="d-flex justify-content-between align-items-center">
                                     <p class="text-muted">قیمت کالا</p>
-                                    <p class="text-muted">{{ priceFormat($product->price) }}<span
-                                            class="small"> تومان</span></p>
+                                    <p class="text-muted">{{ priceFormat($product->price) }}<span class="small">
+                                            تومان</span></p>
                                 </section>
                                 @if ($product->colors->count() > 0)
                                     <section class="d-flex justify-content-between align-items-center">
@@ -193,10 +193,17 @@
                                     </section>
                                 @endif
 
-                                {{-- <section class="d-flex justify-content-between align-items-center">
-                                    <p class="text-muted">تخفیف کالا</p>
-                                    <p class="text-danger fw-bolder">260,000 <span class="small">تومان</span></p>
-                                </section> --}}
+                                @if ($product->discount != 0)
+                                    <section class="d-flex justify-content-between align-items-center">
+                                        <p class="text-muted">تخفیف کالا</p>
+                                        <p class="text-danger fw-bolder">
+                                            <span id="finalDiscountPrice">{{ priceFormat($product->discount) }}</span>
+                                            <span class="small">تومان</span>
+                                        </p>
+                                    </section>
+                                @endif
+                                <input type="number" id="discountPrice" value="{{ $product->discount }}" class="d-none">
+
 
                                 <section class="border-bottom mb-3"></section>
 

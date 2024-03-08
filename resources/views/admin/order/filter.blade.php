@@ -55,7 +55,8 @@
                                 <th>#</th>
                                 <th>کد سفارش</th>
                                 <th>نام و نام خانوادگی مشتری</th>
-                                <th>هزینه سفارش</th>
+                                <th>تخفیف سفارش</th>
+                                <th>هزینه پایانی سفارش</th>
                                 <th>روش پرداخت</th>
                                 <th>وضعیت پرداخت</th>
                                 <th>وضعیت ارسال</th>
@@ -72,6 +73,9 @@
                                         <th>{{ $loop->iteration }}</th>
                                         <td>{{ $order->tracking_id }}</td>
                                         <td>{{ $order->user->name ?? '-' }}</td>
+                                        <td><strong class="text-danger">{{ priceFormat($order->total_discount) }}</strong>
+                                            تومان
+                                        </td>
                                         <td><strong class="text-success">{{ priceFormat($order->total_price) }}</strong>
                                             تومان
                                         </td>

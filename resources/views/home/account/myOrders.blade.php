@@ -92,6 +92,15 @@
                                                     :
                                                     {{ $order->tracking_id }}
                                                 </section>
+                                                @if ($order->total_discount != 0)
+                                                    <section class="order-item-id"><i class="fa fa-money-bill"></i>مجموع
+                                                        تخفیف
+                                                        سفارش
+                                                        :
+                                                        <span
+                                                            class="text-danger">{{ priceFormat($order->total_discount) }}</span>
+                                                    </section>
+                                                @endif
                                                 <section class="order-item-id"><i class="fa fa-money-bill"></i>مجموع هزینه
                                                     سفارش
                                                     :

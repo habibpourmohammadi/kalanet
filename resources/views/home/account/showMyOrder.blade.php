@@ -35,8 +35,8 @@
                                             <th scope="col">#</th>
                                             <th scope="col">نام</th>
                                             <th scope="col">عکس</th>
-                                            <th scope="col">قیمت</th>
                                             <th scope="col">تعداد</th>
+                                            <th scope="col">تخفیف</th>
                                             <th scope="col">قیمت نهایی</th>
                                             <th scope="col">جزئیات رنگ</th>
                                             <th scope="col">جزئیات گارانتی</th>
@@ -58,19 +58,19 @@
                                                         width="50">
                                                 </td>
                                                 <td>
-                                                    <small>
-                                                        <span
-                                                            class="text-success">{{ priceFormat($product->pivot->product_price) }}</span>
-                                                        تومان
-                                                    </small>
-                                                </td>
-                                                <td>
                                                     <small>{{ $product->pivot->number }} عدد</small>
                                                 </td>
                                                 <td>
                                                     <small>
                                                         <span
-                                                            class="text-success">{{ priceFormat($product->pivot->total_price) }}</span>
+                                                            class="text-danger">{{ priceFormat($product->pivot->total_discount) }}</span>
+                                                        تومان
+                                                    </small>
+                                                </td>
+                                                <td>
+                                                    <small>
+                                                        <span
+                                                            class="text-success">{{ priceFormat($product->pivot->total_price - $product->pivot->total_discount) }}</span>
                                                         تومان
                                                     </small>
                                                 </td>
@@ -79,7 +79,7 @@
                                                         <small>
                                                             نام رنگ : {{ $product->pivot->color_name }} <br>
                                                             کد رنگ : {{ $product->pivot->color_hex_code }} <br>
-                                                            قیمت رنگ : {{ $product->pivot->color_price }} <br>
+                                                            قیمت رنگ : {{ priceFormat($product->pivot->color_price) }} <br>
                                                         </small>
                                                     @else
                                                         <small class="text-danger">رنگ ندارد</small>
@@ -90,7 +90,8 @@
                                                         <small>
                                                             نام گارانتی : {{ $product->pivot->guarantee_persian_name }}
                                                             <br>
-                                                            قیمت گارانتی : {{ $product->pivot->guarantee_price }} <br>
+                                                            قیمت گارانتی :
+                                                            {{ priceFormat($product->pivot->guarantee_price) }} <br>
                                                         </small>
                                                     @else
                                                         <small class="text-danger">گارانتی ندارد</small>

@@ -106,14 +106,16 @@
                                     <p class="text-muted">{{ priceFormat($totalPrice) }} تومان</p>
                                 </section>
 
-                                {{-- <section class="d-flex justify-content-between align-items-center">
-                                    <p class="text-muted">تخفیف کالاها</p>
-                                    <p class="text-danger fw-bolder">78,000 تومان</p>
-                                </section> --}}
+                                @if ($discountPrice != 0)
+                                    <section class="d-flex justify-content-between align-items-center">
+                                        <p class="text-muted">تخفیف کالاها</p>
+                                        <p class="text-danger fw-bolder">{{ priceFormat($discountPrice) }} تومان</p>
+                                    </section>
+                                @endif
                                 <section class="border-bottom mb-3"></section>
                                 <section class="d-flex justify-content-between align-items-center">
                                     <p class="text-muted">جمع سبد خرید</p>
-                                    <p class="fw-bolder">{{ priceFormat($totalPrice) }} تومان</p>
+                                    <p class="fw-bolder">{{ priceFormat($totalPrice - $discountPrice) }} تومان</p>
                                 </section>
 
                                 <p class="my-3">

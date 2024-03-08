@@ -129,8 +129,15 @@
                             </tr>
 
                             <tr class="border-bottom">
-                                <th>هزینه سفارش : </th>
-                                <td class="text-left font-weight-bolder">
+                                <th>تخفیف سفارش : </th>
+                                <td class="text-left font-weight-bolder text-danger">
+                                    {{ priceFormat($order->total_discount) }} تومان
+                                </td>
+                            </tr>
+
+                            <tr class="border-bottom">
+                                <th>هزینه پایانی سفارش : </th>
+                                <td class="text-left font-weight-bolder text-success">
                                     {{ priceFormat($order->total_price) }} تومان
                                 </td>
                             </tr>
@@ -138,13 +145,13 @@
                             <tr class="border-bottom">
                                 <th>نحوه ارسال : </th>
                                 <td class="text-left font-weight-bolder">
-                                    {{ $order->delivery_obj["name"] }}
+                                    {{ $order->delivery_obj['name'] }}
                                 </td>
                             </tr>
                             <tr class="border-bottom">
                                 <th>هزینه ارسال : </th>
                                 <td class="text-left font-weight-bolder">
-                                    {{ priceFormat($order->delivery_obj["price"]) }} تومان
+                                    {{ priceFormat($order->delivery_obj['price']) }} تومان
                                 </td>
                             </tr>
 

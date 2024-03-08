@@ -30,9 +30,11 @@
                                 <th>#</th>
                                 <th>نام محصول</th>
                                 <th>عکس محصول</th>
-                                <th>قیمت محصول</th>
+                                <th>قیمت برای هر محصول</th>
+                                <th>تخفیف برای هر محصول</th>
                                 <th>تعداد محصول</th>
-                                <th>قیمت نهایی محصول</th>
+                                <th>جمع تخفیف محصول</th>
+                                <th>جمع قیمت نهایی محصول</th>
                                 <th>رنگ محصول</th>
                                 <th>گارانتی محصول</th>
                             </tr>
@@ -59,10 +61,20 @@
                                         تومان
                                     </td>
                                     <td>
+                                        <span
+                                            class="text-danger">{{ priceFormat($product->pivot->product_discount) }}</span>
+                                        تومان
+                                    </td>
+                                    <td>
                                         {{ $product->pivot->number }} عدد
                                     </td>
                                     <td>
-                                        <span class="text-success">{{ priceFormat($product->pivot->total_price) }}</span>
+                                        <span class="text-danger">{{ priceFormat($product->pivot->total_discount) }}</span>
+                                        تومان
+                                    </td>
+                                    <td>
+                                        <span
+                                            class="text-success">{{ priceFormat($product->pivot->total_price - $product->pivot->total_discount) }}</span>
                                         تومان
                                     </td>
                                     <td>

@@ -6,13 +6,15 @@ var finalColorPriceTag = $("#finalColorPrice");
 var finalGuaranteePriceTag = $("#finalGuaranteePrice");
 var finalPriceTag = $("#finalPrice");
 var productNumber = $("#productNumber");
-
+var finalDiscountPriceElement = $("#finalDiscountPrice");
+var discountPriceElement = $("#discountPrice");
 
 // calc price
 var productPrice = $("#productPrice").data("productPrice");
 var colorPrice = 0;
 var guaranteePrice = 0;
 var finalProductPrice = 0;
+var discountPrice = 0;
 
 
 // convert price to persian number
@@ -45,7 +47,9 @@ productColorRadio.each(function (index, element) {
         finalColorPriceTag.html(convertToPersianNumber(String(colorPrice)))
 
         finalProductPrice = 0;
-        finalProductPrice = (Number(productPrice) + (Number(colorPrice) + Number(guaranteePrice))) * Number(productNumber.val())
+        discountPrice = 0;
+        discountPrice = Number(discountPriceElement.val()) * Number(productNumber.val());
+        finalProductPrice = ((Number(productPrice) + (Number(colorPrice) + Number(guaranteePrice))) * Number(productNumber.val())) - Number(discountPrice)
         finalPriceTag.html(convertToPersianNumber(String(finalProductPrice)))
     }
 });
@@ -61,7 +65,9 @@ productColorRadio.change(function (e) {
     finalColorPriceTag.html(convertToPersianNumber(String(colorPrice)))
 
     finalProductPrice = 0;
-    finalProductPrice = (Number(productPrice) + (Number(colorPrice) + Number(guaranteePrice))) * Number(productNumber.val())
+    discountPrice = 0;
+    discountPrice = Number(discountPriceElement.val()) * Number(productNumber.val());
+    finalProductPrice = ((Number(productPrice) + (Number(colorPrice) + Number(guaranteePrice))) * Number(productNumber.val())) - Number(discountPrice)
     finalPriceTag.html(convertToPersianNumber(String(finalProductPrice)))
 });
 
@@ -79,14 +85,18 @@ $("#productGuarantee").change(function (e) {
     finalGuaranteePriceTag.html(convertToPersianNumber(String(guaranteePrice)))
 
     finalProductPrice = 0;
-    finalProductPrice = (Number(productPrice) + (Number(colorPrice) + Number(guaranteePrice))) * Number(productNumber.val())
+    discountPrice = 0;
+    discountPrice = Number(discountPriceElement.val()) * Number(productNumber.val());
+    finalProductPrice = ((Number(productPrice) + (Number(colorPrice) + Number(guaranteePrice))) * Number(productNumber.val())) - Number(discountPrice)
     finalPriceTag.html(convertToPersianNumber(String(finalProductPrice)))
 });
 
 
 $(".productNumber").mouseleave(function () {
     finalProductPrice = 0;
-    finalProductPrice = (Number(productPrice) + (Number(colorPrice) + Number(guaranteePrice))) * Number(productNumber.val())
+    discountPrice = 0;
+    discountPrice = Number(discountPriceElement.val()) * Number(productNumber.val());
+    finalProductPrice = ((Number(productPrice) + (Number(colorPrice) + Number(guaranteePrice))) * Number(productNumber.val())) - Number(discountPrice)
     finalPriceTag.html(convertToPersianNumber(String(finalProductPrice)))
 });
 
@@ -95,7 +105,8 @@ $(document).ready(function () {
     if (guaranteePrice == undefined) {
         guaranteePrice = 0;
     }
-    finalProductPrice = (Number(productPrice) + (Number(colorPrice) + Number(guaranteePrice))) * Number(productNumber.val())
+    discountPrice = Number(discountPriceElement.val()) * Number(productNumber.val());
+    finalProductPrice = ((Number(productPrice) + (Number(colorPrice) + Number(guaranteePrice))) * Number(productNumber.val())) - Number(discountPrice)
     finalPriceTag.html(convertToPersianNumber(String(finalProductPrice)))
 });
 

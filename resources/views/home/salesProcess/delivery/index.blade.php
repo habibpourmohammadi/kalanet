@@ -171,20 +171,22 @@
                                     <section class="d-flex justify-content-between align-items-center">
                                         <p class="text-muted">قیمت کالاها ({{ $cartItems->count() }})</p>
                                         <p class="text-muted">{{ priceFormat($totalPrice) }} تومان</p>
-                                        <span id="totalPrice" class="d-none">{{ $totalPrice }}</span>
+                                        <span id="totalPrice" class="d-none">{{ $totalPrice - $discountPrice }}</span>
                                     </section>
 
-                                    {{-- <section class="d-flex justify-content-between align-items-center">
-                                    <p class="text-muted">تخفیف کالاها</p>
-                                    <p class="text-danger fw-bolder">78,000 تومان</p>
-                                </section> --}}
+                                    @if ($discountPrice != 0)
+                                        <section class="d-flex justify-content-between align-items-center">
+                                            <p class="text-muted">تخفیف کالاها</p>
+                                            <p class="text-danger fw-bolder">{{ priceFormat($discountPrice) }} تومان</p>
+                                        </section>
+                                    @endif
 
                                     <section class="border-bottom mb-3"></section>
 
-                                    {{-- <section class="d-flex justify-content-between align-items-center">
-                                    <p class="text-muted">جمع سبد خرید</p>
-                                    <p class="fw-bolder">320,000 تومان</p>
-                                </section> --}}
+                                    <section class="d-flex justify-content-between align-items-center">
+                                        <p class="text-muted">جمع سبد خرید</p>
+                                        <p class="fw-bolder">{{ priceFormat($totalPrice - $discountPrice) }} تومان</p>
+                                    </section>
 
                                     <section class="d-flex justify-content-between align-items-center">
                                         <p class="text-muted">هزینه ارسال</p>
@@ -201,7 +203,7 @@
 
                                     <section class="d-flex justify-content-between align-items-center">
                                         <p class="text-muted">مبلغ قابل پرداخت</p>
-                                        <p class="fw-bold"><span id="finalPrice">{{ priceFormat($totalPrice) }}</span>
+                                        <p class="fw-bold"><span id="finalPrice">{{ priceFormat($totalPrice - $discountPrice) }}</span>
                                             تومان
                                         </p>
                                     </section>

@@ -21,7 +21,53 @@
                     </h5>
                 </section>
                 <section class="d-flex justify-content-between align-items-center mt-4 mb-3 border-bottom pb-2">
-                    <a href="{{ route('admin.product.create') }}" class="btn btn-info btn-sm">ایجاد محصول</a>
+                    <div>
+                        <a href="{{ route('admin.product.create') }}" class="btn btn-info btn-sm">ایجاد محصول</a>
+                        <a class="btn btn-sm btn-info disabled" href="" id="showBtn"><small><i
+                                    class="fa fa-eye"></i>
+                                نمایش</small></a>
+                        <a class="btn btn-sm btn-primary disabled" href="" id="editBtn"><small><i
+                                    class="fa fa-edit"></i>
+                                ویرایش</small></a>
+                        <a class="btn btn-sm btn-warning disabled" href="" id="changeStatusBtn"><small><i
+                                    class="fa fa-check"></i>
+                                تغییر وضعیت محصول</small></a>
+                        <a class="btn btn-sm btn-warning disabled" href="" id="changeSaleStatusBtn"><small><i
+                                    class="fa fa-check"></i> تغییر
+                                وضعیت
+                                فروش</small></a>
+                        <a class="btn btn-sm btn-dark disabled" href="" id="commentBtn">
+                            <small><i class="fa fa-comment-dots"></i> کامنت ها</small></a>
+                        <a class="btn btn-sm btn-success disabled" href="" id="optionBtn"><small><i
+                                    class="fa fa-chart-area"></i>
+                                ویژگی
+                                ها</small></a>
+                        <a class="btn btn-sm btn-info disabled" href="" id="imageBtn"><small><i
+                                    class="fa fa-photo-video"></i> عکس
+                                ها</small></a>
+                        <a class="btn btn-sm btn-secondary disabled" href="" id="guaranteeBtn"><small><i
+                                    class="fa fa-shield-alt"></i>
+                                گارانتی
+                                ها</small></a>
+                        <a class="btn btn-sm btn-primary disabled" href="" id="colorBtn"><small><i
+                                    class="fa fa-paint-brush"></i>
+                                رنگ
+                                ها</small></a>
+                        <a class="btn btn-sm btn-success disabled" href="" id="discountBtn">
+                            <small><i class="fa fa-money-bill-alt"></i>
+                                تخفیف</small>
+                        </a>
+                        <form class="d-inline" action="" method="POST" id="deleteForm">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm disabled delete" id="deleteBtn">
+                                <small>
+                                    <i class="fa fa-trash-alt"></i>
+                                    حذف
+                                </small>
+                            </button>
+                        </form>
+                    </div>
                     <form action="{{ route('admin.product.index') }}" method="GET" class="max-width-16-rem">
                         <input type="text" class="form-control form-control-sm form-text" name="search"
                             placeholder="جستجو" value="{{ request()->search }}">
@@ -120,7 +166,8 @@
                                 <th>وضعیت محصول</th>
                                 <th>ویدیو معرفی</th>
                                 <th>توضیحات</th>
-                                <th class="max-width-16-rem text-center"><i class="fa fa-cogs"></i> تنظیمات </th>
+                                <th class="max-width-16-rem text-center"><i class="fa fa-hand-pointer"></i> انتخاب کنید
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -160,79 +207,10 @@
                                             {{ $product->Introduction_video_path == null ? 'ندارد' : 'دارد' }}</td>
                                         <td>{{ Str::limit($product->description, 20, '...') }}</td>
                                         <td class="width-16-rem text-left">
-                                            <div class="dropdown">
-                                                <button class="btn btn-sm btn-info dropdown-toggle" type="button"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="fa fa-cogs"></i>
-                                                    تنظیمات
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li class="my-1">
-                                                        <a class="dropdown-item bg-danger text-light text-center"
-                                                            href="{{ route('admin.product.discount.index', ['product' => $product]) }}"><small><i
-                                                                    class="fa fa-money-bill-alt"></i> تخفیف</small></a>
-                                                    </li>
-                                                    <li class="my-1">
-                                                        <a class="dropdown-item bg-dark text-light text-center"
-                                                            href="{{ route('admin.product.comment.index', ['product' => $product]) }}"><small><i
-                                                                    class="fa fa-comment-dots"></i> کامنت ها</small></a>
-                                                    </li>
-                                                    <li class="my-1">
-                                                        <a class="dropdown-item bg-success text-light text-center"
-                                                            href="{{ route('admin.product.option.index', ['product' => $product]) }}"><small><i
-                                                                    class="fa fa-chart-area"></i> ویژگی ها</small></a>
-                                                    </li>
-                                                    <li class="my-1">
-                                                        <a class="dropdown-item bg-info text-light text-center"
-                                                            href="{{ route('admin.product.image.index', $product) }}"><small><i
-                                                                    class="fa fa-photo-video"></i> عکس ها</small></a>
-                                                    </li>
-                                                    <li class="my-1">
-                                                        <a class="dropdown-item bg-secondary text-light text-center"
-                                                            href="{{ route('admin.product.product-guarantees.index', $product) }}"><small><i
-                                                                    class="fa fa-shield-alt"></i> گارانتی ها</small></a>
-                                                    </li>
-                                                    <li class="my-1">
-                                                        <a class="dropdown-item bg-primary text-light text-center"
-                                                            href="{{ route('admin.product.product-color.index', $product) }}"><small><i
-                                                                    class="fa fa-paint-brush"></i> رنگ ها</small></a>
-                                                    </li>
-                                                    <li class="my-1">
-                                                        <a class="dropdown-item bg-warning text-dark text-center"
-                                                            href="{{ route('admin.product.changeStatus', $product) }}"><small><i
-                                                                    class="fa fa-check"></i> تغییر وضعیت محصول</small></a>
-                                                    </li>
-                                                    <li class="my-1">
-                                                        <a class="dropdown-item bg-warning text-dark text-center"
-                                                            href="{{ route('admin.product.changeSaleStatus', $product) }}"><small><i
-                                                                    class="fa fa-check"></i> تغییر وضعیت فروش</small></a>
-                                                    </li>
-                                                    <li class="my-1">
-                                                        <a class="dropdown-item bg-info text-light text-center"
-                                                            href="{{ route('admin.product.show', $product) }}"><small><i
-                                                                    class="fa fa-eye"></i> نمایش</small></a>
-                                                    </li>
-                                                    <li class="my-1">
-                                                        <a class="dropdown-item bg-primary text-light text-center"
-                                                            href="{{ route('admin.product.edit', $product) }}"><small><i
-                                                                    class="fa fa-edit"></i> ویرایش</small></a>
-                                                    </li>
-                                                    <li class="my-1">
-                                                        <form class="d-inline w-100 bg-danger"
-                                                            action="{{ route('admin.product.delete', $product) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit"
-                                                                class="btn btn-danger btn-sm delete w-100">
-                                                                <i class="fa fa-trash-alt"></i>
-                                                                حذف
-                                                            </button>
-                                                        </form>
-                                                    </li>
-                                                </ul>
+                                            <div class="text-center">
+                                                <input type="radio" name="radio" class="product-radio-btn"
+                                                    data-product-id="{{ $product->id }}">
                                             </div>
-
                                         </td>
                                     </tr>
                                 @endif
@@ -259,4 +237,60 @@
 @section('script')
     @include('admin.alerts.sweetalert.delete-confirm', ['className' => 'delete']);
     <script src="{{ asset('admin-assets/js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            let showUrl = "product/show/";
+            let editUrl = "product/";
+            let changeStatusUrl = "product/change-status/";
+            let changeSaleStatusUrl = "product/change-sale-status/";
+            let deleteUrl = "product/";
+            let commentUrl = "product/comment/";
+            let optionUrl = "product/option/";
+            let imageUrl = "product/image/";
+            let guaranteeUrl = "product/product-guarantees/";
+            let colorUrl = "product/product-color/";
+            let discountUrl = "product/product-discount/";
+
+            $("#deleteForm").submit(function(e) {
+                e.preventDefault();
+            });
+
+            $(".product-radio-btn").change(function(e) {
+                let product_id = $(this).data("product-id");
+
+                $("#showBtn").attr("href", showUrl + product_id);
+                $("#showBtn").removeClass("disabled");
+
+                $("#editBtn").attr("href", editUrl + product_id);
+                $("#editBtn").removeClass("disabled");
+
+                $("#changeStatusBtn").attr("href", changeStatusUrl + product_id);
+                $("#changeStatusBtn").removeClass("disabled");
+
+                $("#changeSaleStatusBtn").attr("href", changeSaleStatusUrl + product_id);
+                $("#changeSaleStatusBtn").removeClass("disabled");
+
+                $("#commentBtn").attr("href", commentUrl + product_id);
+                $("#commentBtn").removeClass("disabled");
+
+                $("#optionBtn").attr("href", optionUrl + product_id);
+                $("#optionBtn").removeClass("disabled");
+
+                $("#imageBtn").attr("href", imageUrl + product_id);
+                $("#imageBtn").removeClass("disabled");
+
+                $("#guaranteeBtn").attr("href", guaranteeUrl + product_id);
+                $("#guaranteeBtn").removeClass("disabled");
+
+                $("#colorBtn").attr("href", colorUrl + product_id);
+                $("#colorBtn").removeClass("disabled");
+
+                $("#discountBtn").attr("href", discountUrl + product_id);
+                $("#discountBtn").removeClass("disabled");
+
+                $("#deleteForm").attr("action", deleteUrl + product_id);
+                $("#deleteBtn").removeClass("disabled");
+            });
+        });
+    </script>
 @endsection

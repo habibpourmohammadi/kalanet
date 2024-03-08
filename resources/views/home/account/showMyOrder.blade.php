@@ -53,7 +53,7 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <img src="{{ asset($product->images->first()->image_path) }}"
+                                                    <img src="{{ asset($product->images->first()->image_path ?? '') }}"
                                                         alt=" {{ Str::limit(json_decode($product->pivot->product_obj)->name, 20, '...') }}"
                                                         width="50">
                                                 </td>

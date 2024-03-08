@@ -25,7 +25,8 @@
                 reverseButtons: true
             }).then((result) => {
                 if (result.value == true) {
-                    $(this).parent().submit();
+                    // console.log($(this).parent());
+                    $(this).parent().unbind("submit").submit();
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                     swalWithBootstrapButtons.fire({
                         title: 'لغو درخواست',

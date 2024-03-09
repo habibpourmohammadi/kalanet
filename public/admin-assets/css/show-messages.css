@@ -1,0 +1,22 @@
+.chat-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-message {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    align-self: flex-end;
+}
+
+.admin-message {
+    background-color: #3498db;
+    color: white;
+    padding: 8px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    align-self: flex-start;
+}

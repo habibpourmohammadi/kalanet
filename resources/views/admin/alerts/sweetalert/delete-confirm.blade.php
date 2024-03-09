@@ -24,8 +24,7 @@
                 cancelButtonText: 'خیر درخواست لغو شود',
                 reverseButtons: true
             }).then((result) => {
-                if (result.value == true) {
-                    // console.log($(this).parent());
+                if (result.value == true && $(this).parent().attr("action").length != 0) {
                     $(this).parent().unbind("submit").submit();
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                     swalWithBootstrapButtons.fire({

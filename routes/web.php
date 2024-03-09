@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\Product\OptionProductController;
 use App\Http\Controllers\Admin\Product\ProductGuaranteeController;
 use App\Http\Controllers\Home\ProductController as HomeProductController;
 use App\Http\Controllers\Admin\Order\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\Ticket\TicketController;
 use App\Http\Controllers\Admin\User\PermissionController;
 use App\Http\Controllers\Admin\User\RoleController;
 
@@ -312,6 +313,15 @@ Route::middleware("checkActivation")->group(function () {
                 Route::get("/change-status/{city}", "changeStatus")->name("admin.order.city.changeStatus");
                 Route::delete("/delete/{city}", "destroy")->name("admin.order.city.delete");
             });
+        });
+
+        // tickets
+        Route::controller(TicketController::class)->prefix("ticket")->group(function () {
+            Route::get("/", "index")->name("admin.ticket.index");
+            Route::get("/messages/{ticket}", "messages")->name("admin.ticket.messages");
+            Route::post("/messages/{ticket}", "storeMessages")->name("admin.ticket.messages.store");
+            Route::get("/change-status/{ticket}", "changeStatus")->name("admin.ticket.changeStatus");
+            Route::delete("/delete/{ticket}", "destroy")->name("admin.ticket.delete");
         });
     });
 });

@@ -73,6 +73,10 @@ Route::middleware("checkActivation")->group(function () {
             Route::put("my-addresses/update/{address}", "updateMyAddress")->name("home.profile.myAddresses.update");
             Route::get("my-orders/{sort?}", "myOrders")->name("home.profile.myOrders.index");
             Route::get("my-order/{order:tracking_id}", "showMyOrder")->name("home.profile.myOrders.show");
+            Route::get("my-tickets", "myTickets")->name("home.profile.myTickets.index");
+            Route::post("my-tickets", "storeTicket")->name("home.profile.myTickets.storeTicket");
+            Route::get("my-tickets/messages/{ticket:ticket_id}", "myTicketMessages")->name("home.profile.myTickets.messages.index");
+            Route::post("my-tickets/messages/{ticket:ticket_id}", "myTicketMessagesStore")->name("home.profile.myTickets.messages.store");
         });
 
         // Product

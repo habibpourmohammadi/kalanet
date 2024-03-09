@@ -2,19 +2,27 @@
 
 namespace App\Http\Controllers\Home\Account;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Home\Account\StoreAddressRequest;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\Home\Account\UpdateProfileRequest;
-use App\Models\Address;
-use App\Models\Bookmark;
 use App\Models\City;
 use App\Models\Order;
+use App\Models\Ticket;
+use App\Models\Address;
+use App\Models\Bookmark;
 use App\Models\Province;
+use Illuminate\Http\Request;
+use App\Models\TicketMessage;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Facades\Image;
+use App\Http\Requests\Home\Account\StoreTicketRequest;
+use App\Http\Requests\Home\Account\StoreAddressRequest;
+use App\Http\Requests\Admin\Ticket\StoreMessagesRequest;
+use App\Http\Requests\Home\Account\UpdateProfileRequest;
 
 class AccountController extends Controller
 {
+
+    private $path = 'ticket' . DIRECTORY_SEPARATOR . "files" . DIRECTORY_SEPARATOR;
+
     public function myProfile()
     {
         return view("home.account.myProfile");
@@ -177,5 +185,82 @@ class AccountController extends Controller
         }
 
         return view("home.account.showMyOrder", compact("order"));
+    }
+
+    // my tickets
+
+    public function myTickets()
+    {
+        $tickets = Auth::user()->tickets;
+        return view("home.account.myTickets", compact("tickets"));
+    }
+
+    public function storeTicket(StoreTicketRequest $request)
+    {
+        $inputs = $request->validated();
+        $priorities = ["low", "medium", "important", "very_important"];
+
+        if (!in_array($inputs["priority_status"], $priorities)) {
+            return back();
+        }
+
+        if (Auth::user()->name == null) {
+            return to_route("home.profile.myProfile.index")->with("error", "لطفا نام خود را وارد نمایید");
+        }
+
+        $ticket_id = rand(10000000, 99999999);
+
+        Ticket::create([
+            "user_id" => Auth::user()->id,
+            "ticket_id" => $ticket_id,
+            "title" => $inputs["title"],
+            "priority_status" => $inputs["priority_status"],
+        ]);
+
+        return to_route("home.profile.myTickets.messages.index", $ticket_id)->with("success", "تیکت شما با موفقیت ثبت شد. گفت و گوی خود را با ادمین وبسایت آغاز کنید");
+    }
+
+    public function myTicketMessages(Ticket $ticket)
+    {
+        if ($ticket->user->id != Auth::user()->id) {
+            return back();
+        }
+
+        return view("home.account.myTicketMessages", compact("ticket"));
+    }
+
+
+    public function myTicketMessagesStore(StoreMessagesRequest $request, Ticket $ticket)
+    {
+        $inputs = $request->validated();
+
+        if ($ticket->status == "closed") {
+            return back()->with("error", "تیکت مورد نظر بسته است");
+        }
+
+        if ($request->hasFile("file_path")) {
+            $file = $request->file("file_path");
+            $file_size = $file->getSize();
+            $file_type = $file->extension();
+            $file_name = time() . '.' . $file_type;
+
+            $inputs["file_path"] = $this->path . $file_name;
+            if ($file_type == "xlsx" || $file_type == "xls" || $file_type == "docx" || $file_type == "doc" || $file_type == "pdf") {
+                $file->move(public_path($this->path), $file_name);
+            } elseif ($file_type == "png" || $file_type == "jpg" || $file_type == "jpeg") {
+                Image::make($file->getRealPath())->save(public_path($this->path) . $file_name);
+            }
+        } else {
+            $inputs["file_path"] = null;
+        }
+
+        TicketMessage::create([
+            "ticket_id" => $ticket->id,
+            "user_id" => Auth::user()->id,
+            "message" => $inputs["message"],
+            "file_path" => $inputs["file_path"],
+        ]);
+
+        return back()->with("success", "پیام شما با موفقیت ثبت شد");
     }
 }

@@ -17,6 +17,11 @@
                     من</a></span>
         </section>
         <section class="sidebar-nav-item">
+            <span class="sidebar-nav-item-title"><a class="p-3" href="{{ route('home.profile.myTickets.index') }}">
+                    تیکت های من
+                </a></span>
+        </section>
+        <section class="sidebar-nav-item">
             <span class="sidebar-nav-item-title"><a class="p-3"
                     href="{{ route('home.profile.myAddresses.index') }}">آدرس های
                     من</a></span>

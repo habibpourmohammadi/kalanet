@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\TicketMessage;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 use App\Http\Requests\Home\Account\StoreTicketRequest;
 use App\Http\Requests\Home\Account\StoreAddressRequest;
@@ -30,11 +31,28 @@ class AccountController extends Controller
 
     public function updateProfile(UpdateProfileRequest $request)
     {
+        if ($request->hasFile("profile_path")) {
+            if (File::exists(public_path(Auth::user()->profile_path))) {
+                File::delete(public_path(Auth::user()->profile_path));
+            }
+
+            $profileFile = $request->file("profile_path");
+            $profileName = time() . '.' . $profileFile->extension();
+            $profilePath = public_path('images' . DIRECTORY_SEPARATOR . "profile" . DIRECTORY_SEPARATOR . $profileName);
+            Image::make($profileFile->getRealPath())->save($profilePath);
+            $profile_path = 'images' . DIRECTORY_SEPARATOR . "profile" . DIRECTORY_SEPARATOR . $profileName;
+        } else {
+            $profile_path = Auth::user()->profile_path;
+        }
+
+
         Auth::user()->update([
-            "name" => $request->name
+            "name" => $request->name,
+            "mobile" => $request->mobile,
+            "profile_path" => $profile_path,
         ]);
 
-        return back()->with("success", "نام شما با موفقیت ویرایش شد");
+        return back()->with("success", "اطلاعات حساب کاربری شما با موفقیت ویرایش شد");
     }
 
 

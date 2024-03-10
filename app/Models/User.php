@@ -28,6 +28,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'mobile',
+        'profile_path',
         'email',
         'activation',
         'email_verified_at',

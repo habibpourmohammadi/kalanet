@@ -22,7 +22,18 @@ class UpdateProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => ["required", "max:255"]
+            "name" => ["required", "max:255"],
+            "mobile" => ["required", "unique:users,mobile," . auth()->user()->id],
+            "profile_path" => ["nullable", "image", "mimes:png,jpg,jpeg", "max:1024"],
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            "name" => "نام و نام خانوادگی",
+            "mobile" => "شماره موبایل",
+            "profile_path" => "پروفایل",
         ];
     }
 }

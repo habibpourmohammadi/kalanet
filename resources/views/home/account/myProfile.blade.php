@@ -35,30 +35,53 @@
                                 data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 <i class="fa fa-edit px-1"></i>ویرایش حساب
                             </button>
-
-                            {{-- <a class="btn btn-link btn-sm text-info text-decoration-none mx-1" href="#"><i
-                                    class="fa fa-edit px-1"></i>ویرایش حساب</a> --}}
                         </section>
 
 
                         <section class="row">
-                            <section class="col-6 border-bottom mb-2 py-2">
+                            <section class="col-6 mb-2 py-2">
                                 <section class="field-title">نام و نام خانوادگی</section>
                                 <section class="field-value overflow-auto">
-                                    {{ auth()->user()->name ?? 'لطفا نام و نام خانوادگی خود را وارد کنید' }}</section>
+                                    @if (!auth()->user()->name)
+                                        <strong class="text-danger">لطفا نام و نام خانوادگی خود را وارد کنید</strong>
+                                    @else
+                                        {{ auth()->user()->name }}
+                                    @endif
+                                </section>
                             </section>
 
 
-                            <section class="col-6 border-bottom my-2 py-2">
+                            <section class="col-6 my-2 py-2">
                                 <section class="field-title">ایمیل</section>
                                 <section class="field-value overflow-auto">{{ auth()->user()->email }}</section>
                             </section>
+
+                            <section class="col-6 my-2 py-2">
+                                <section class="field-title">شماره موبایل</section>
+                                <section class="field-value overflow-auto">
+                                    @if (!auth()->user()->mobile)
+                                        <strong class="text-danger">لطفا شماره تلفن خود را وارد نمایید</strong>
+                                    @else
+                                        {{ auth()->user()->mobile }}
+                                    @endif
+                                </section>
+                            </section>
+
+                            @if (auth()->user()->profile_path)
+                                <section class="col-6 my-2 py-2 d-flex align-items-center">
+                                    <section class="field-title me-3">پروفایل</section>
+                                    <section class="field-value overflow-auto">
+                                        <img src="{{ asset(auth()->user()->profile_path) }}" alt="پروفایل شما موجود نیست"
+                                            class="rounded-circle" width="50">
+                                    </section>
+                                </section>
+                            @endif
                         </section>
 
 
                         <form action="{{ route('home.profile.myProfile.updateProfile') }}" method="POST"
                             class="modal fade mt-5" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                            aria-hidden="true" onsubmit="return updateProfileModal()">
+                            aria-hidden="true" onsubmit="return updateProfileModal()" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div class="modal-dialog">
@@ -71,12 +94,32 @@
                                     <div class="modal-body">
                                         <div>
                                             <div class="mb-3">
-                                                <label for="recipient-name" class="col-form-label">نام و نام خانوادگی
-                                                    :</label>
+                                                <label for="user-name" class="col-form-label">نام و نام خانوادگی
+                                                    <small class="text-danger">*</small>
+                                                </label>
                                                 <input type="text" class="form-control" name="name" id="user-name"
                                                     value="{{ auth()->user()->name ?? '' }}">
                                             </div>
-                                            <small class="text-danger ms-2" id="errorName"></small>
+                                            <small class="text-danger ms-2"><strong id="errorName"></strong></small>
+                                        </div>
+                                        <div>
+                                            <div class="mb-3">
+                                                <label for="user-mobile" class="col-form-label">شماره موبایل
+                                                    <small class="text-danger">*</small>
+                                                </label>
+                                                <input type="text" class="form-control" name="mobile" id="user-mobile"
+                                                    value="{{ auth()->user()->mobile ?? '' }}">
+                                            </div>
+                                            <small class="text-danger ms-2"><strong id="errorMobile"></strong></small>
+                                        </div>
+                                        <div>
+                                            <div class="mb-3">
+                                                <label for="user-profile" class="col-form-label">پروفایل
+                                                </label>
+                                                <input type="file" class="form-control" name="profile_path"
+                                                    id="user-profile">
+                                            </div>
+                                            <small class="text-danger ms-2"><strong id="errorProfile"></strong></small>
                                         </div>
                                     </div>
                                     <div class="modal-footer justify-content-start">
@@ -89,6 +132,13 @@
                                 </div>
                             </div>
                         </form>
+                        @if ($errors->any())
+                            <div class="alert alert-danger text-center" role="alert">
+                                @foreach ($errors->all() as $error)
+                                    <strong>{{ $error }}</strong> <br>
+                                @endforeach
+                            </div>
+                        @endif
 
                     </section>
                 </main>
@@ -97,16 +147,4 @@
     </section>
     <!-- end body -->
 @endsection
-<script>
-    function updateProfileModal() {
-        if ($("#user-name").val().length <= 0) {
-            $("#errorName").html("لطفا نام و نام خانوادگی خود را وارد نمایید");
-            return false;
-        } else if ($("#user-name").val().length >= 254) {
-            $("#errorName").html("طول نام وارد شده بسیار بلند است");
-            return false;
-        } else {
-            return true;
-        }
-    }
-</script>
+<script src="{{ asset('home-assets/js/home/my-profile.js') }}"></script>

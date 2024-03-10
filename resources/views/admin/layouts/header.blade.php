@@ -116,26 +116,28 @@
                 </span>
                 <span class="ml-3 ml-md-5 position-relative">
                     <span id="header-profile-toggle" class="pointer">
-                        <img class="header-avatar" src="{{ asset('admin-assets/images/avatar-2.jpg') }}"
+                        <img class="header-avatar" src="{{ asset(auth()->user()->profile_path ?? '') }}"
                             alt="">
-                        <span class="header-username">حبیب الله پورمحمدی</span>
+                        <span class="header-username">{{ auth()->user()->name ?? '' }}</span>
                         <i class="fas fa-angle-down"></i>
                     </span>
                     <section id="header-profile" class="header-profile rounded">
                         <section class="list-group rounded">
-                            <a href="#" class="list-group-item list-group-item-action header-profile-link">
+                            <a href="{{ route('home.profile.myProfile.index') }}"
+                                class="list-group-item list-group-item-action header-profile-link">
                                 <i class="fas fa-cog"></i>تنظیمات
                             </a>
-                            <a href="#" class="list-group-item list-group-item-action header-profile-link">
+                            {{-- <a href="#" class="list-group-item list-group-item-action header-profile-link">
                                 <i class="fas fa-user"></i>کاربر
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action header-profile-link">
+                            </a> --}}
+                            {{-- <a href="#" class="list-group-item list-group-item-action header-profile-link">
                                 <i class="far fa-envelope"></i>پیام ها
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action header-profile-link">
+                            </a> --}}
+                            {{-- <a href="#" class="list-group-item list-group-item-action header-profile-link">
                                 <i class="fas fa-lock"></i>قفل صفحه
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action header-profile-link">
+                            </a> --}}
+                            <a href="{{ route('home.auth.logout') }}"
+                                class="list-group-item list-group-item-action header-profile-link">
                                 <i class="fas fa-sign-out-alt"></i>خروج
                             </a>
                         </section>

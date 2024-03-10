@@ -15,6 +15,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Province;
 use App\Models\Slider;
+use App\Models\Ticket;
 use App\Models\User;
 use App\Policies\BannerPolicy;
 use App\Policies\BrandPolicy;
@@ -29,6 +30,7 @@ use App\Policies\ProductPolicy;
 use App\Policies\ProvincePolicy;
 use App\Policies\RolePolicy;
 use App\Policies\SliderPolicy;
+use App\Policies\TicketPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Spatie\Permission\Models\Permission;
@@ -56,6 +58,7 @@ class AuthServiceProvider extends ServiceProvider
         Slider::class => SliderPolicy::class,
         Banner::class => BannerPolicy::class,
         Role::class => RolePolicy::class,
+        Ticket::class => TicketPolicy::class,
     ];
 
     /**

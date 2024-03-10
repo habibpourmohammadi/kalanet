@@ -88,5 +88,12 @@ class PermissionSeeder extends Seeder
         Permission::create(["name" => "create_banner"]);
         Permission::create(["name" => "edit_banner"]);
         Permission::create(["name" => "delete_banner"]);
+
+        // tickets
+        Permission::create(["name" => "show_ticket"]);
+        Permission::create(["name" => "show_messages_ticket"]);
+        Permission::create(["name" => "send_message_ticket"]);
+        Permission::create(["name" => "change_status_ticket"]);
+        Permission::create(["name" => "delete_ticket"]);
     }
 }

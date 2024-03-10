@@ -20,6 +20,8 @@ class TicketController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Ticket::class);
+
         $search = request()->search;
 
         $sort = request()->sort;
@@ -68,6 +70,8 @@ class TicketController extends Controller
 
     public function messages(Ticket $ticket)
     {
+        $this->authorize('viewMessages', [$ticket]);
+
         $unseenMessages = $ticket->messages()->where("seen", "false")->get();
 
         foreach ($unseenMessages as $message) {
@@ -82,6 +86,8 @@ class TicketController extends Controller
 
     public function storeMessages(StoreMessagesRequest $request, Ticket $ticket)
     {
+        $this->authorize('sendMessage', [$ticket]);
+
         $inputs = $request->validated();
 
         if ($ticket->status == "closed") {
@@ -119,6 +125,8 @@ class TicketController extends Controller
 
     public function changeStatus(Ticket $ticket)
     {
+        $this->authorize('changeStatus', [$ticket]);
+
         if ($ticket->status == "closed") {
             $ticket->update([
                 "status" => "open"
@@ -139,6 +147,8 @@ class TicketController extends Controller
      */
     public function destroy(Ticket $ticket)
     {
+        $this->authorize('delete', [$ticket]);
+
         $messages = $ticket->messages()->whereNotNull("file_path")->get();
 
         if ($messages->count() != 0) {

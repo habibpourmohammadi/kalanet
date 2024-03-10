@@ -116,8 +116,10 @@
                 </span>
                 <span class="ml-3 ml-md-5 position-relative">
                     <span id="header-profile-toggle" class="pointer">
-                        <img class="header-avatar" src="{{ asset(auth()->user()->profile_path ?? '') }}"
-                            alt="">
+                       @if (auth()->user()->profile_path)
+                         <img class="header-avatar" src="{{ asset(auth()->user()->profile_path ?? '') }}"
+                             alt="">
+                       @endif
                         <span class="header-username">{{ auth()->user()->name ?? '' }}</span>
                         <i class="fas fa-angle-down"></i>
                     </span>

@@ -22,24 +22,30 @@
                 </section>
                 <section class="d-flex justify-content-between align-items-center mt-4 mb-3 border-bottom pb-2">
                     <div>
-                        <a href="" class="btn btn-sm btn-info disabled" id="messagesBtn">
-                            <i class="fa fa-comment-medical"></i>
-                            پاسخ به تیکت
-                        </a>
-                        <a href="" class="btn btn-sm btn-warning disabled" id="changeStatusBtn">
-                            <i class="fa fa-check"></i>
-                            تغییر وضعیت تیکت
-                        </a>
-                        <form class="d-inline" action="" method="POST" id="deleteForm">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm disabled delete" id="deleteBtn">
-                                <small>
-                                    <i class="fa fa-trash-alt"></i>
-                                    حذف
-                                </small>
-                            </button>
-                        </form>
+                        @can('show_messages_ticket')
+                            <a href="" class="btn btn-sm btn-info disabled" id="messagesBtn">
+                                <i class="fa fa-comment-medical"></i>
+                                پاسخ به تیکت
+                            </a>
+                        @endcan
+                        @can('change_status_ticket')
+                            <a href="" class="btn btn-sm btn-warning disabled" id="changeStatusBtn">
+                                <i class="fa fa-check"></i>
+                                تغییر وضعیت تیکت
+                            </a>
+                        @endcan
+                        @can('delete_ticket')
+                            <form class="d-inline" action="" method="POST" id="deleteForm">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm disabled delete" id="deleteBtn">
+                                    <small>
+                                        <i class="fa fa-trash-alt"></i>
+                                        حذف
+                                    </small>
+                                </button>
+                            </form>
+                        @endcan
                     </div>
                     <form action="{{ route('admin.ticket.index') }}" method="GET" class="max-width-16-rem">
                         <input type="text" class="form-control form-control-sm form-text" name="search"

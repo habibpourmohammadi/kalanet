@@ -115,18 +115,20 @@
                 </section>
             @endcanany
 
-            <section class="sidebar-part-title">تیکت های وبسایت</section>
+            @can('show_ticket')
+                <section class="sidebar-part-title">تیکت های وبسایت</section>
 
-            <section class="sidebar-group-link">
-                <section class="sidebar-dropdown-toggle">
-                    <i class="fas fa-chart-bar icon"></i>
-                    <span>تیکت ها</span>
-                    <i class="fas fa-angle-left angle"></i>
+                <section class="sidebar-group-link">
+                    <section class="sidebar-dropdown-toggle">
+                        <i class="fas fa-chart-bar icon"></i>
+                        <span>تیکت ها</span>
+                        <i class="fas fa-angle-left angle"></i>
+                    </section>
+                    <section class="sidebar-dropdown">
+                        <a href="{{ route('admin.ticket.index') }}">همه تیکت ها</a>
+                    </section>
                 </section>
-                <section class="sidebar-dropdown">
-                    <a href="{{ route('admin.ticket.index') }}">همه تیکت ها</a>
-                </section>
-            </section>
+            @endcan
         </section>
     </section>
 </aside>

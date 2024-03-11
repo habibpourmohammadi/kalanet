@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\Product\CategoryController;
 use App\Http\Controllers\Home\SalesProcess\CartController;
 use App\Http\Controllers\Admin\Appearance\BannerController;
 use App\Http\Controllers\Admin\Appearance\SliderController;
+use App\Http\Controllers\Admin\Notifications\EmailController;
 use App\Http\Controllers\Admin\Product\GuaranteeController;
 use App\Http\Controllers\Home\SalesProcess\OrderController;
 use App\Http\Controllers\Admin\Product\ImageProductController;
@@ -326,6 +327,19 @@ Route::middleware("checkActivation")->group(function () {
             Route::post("/messages/{ticket}", "storeMessages")->name("admin.ticket.messages.store");
             Route::get("/change-status/{ticket}", "changeStatus")->name("admin.ticket.changeStatus");
             Route::delete("/delete/{ticket}", "destroy")->name("admin.ticket.delete");
+        });
+
+
+        Route::prefix("notification")->group(function () {
+            Route::controller(EmailController::class)->prefix("email")->group(function () {
+                Route::get("/", "index")->name("admin.notification.email.index");
+                Route::get("/create", "create")->name("admin.notification.email.create");
+                Route::post("/store", "store")->name("admin.notification.email.store");
+                Route::get("/show/{email}", "show")->name("admin.notification.email.show");
+                Route::get("/edit/{email}", "edit")->name("admin.notification.email.edit");
+                Route::put("/update/{email}", "update")->name("admin.notification.email.update");
+                Route::delete("/delete/{email}", "destroy")->name("admin.notification.email.delete");
+            });
         });
     });
 });

@@ -129,6 +129,13 @@
                     </section>
                 </section>
             @endcan
+
+            <section class="sidebar-part-title">اطلاعیه ها</section>
+
+            <a href="{{ route('admin.notification.email.index') }}" class="sidebar-link">
+                <i class="fas fa-bars"></i>
+                <span>ایمیلی</span>
+            </a>
         </section>
     </section>
 </aside>

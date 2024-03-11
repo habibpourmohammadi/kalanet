@@ -49,7 +49,8 @@
                                     <td>{{ $notification->author->name ?? $notification->author->email }}</td>
                                     <td>{{ jalaliDate($notification->created_at) }}</td>
                                     <td class="width-16-rem text-left">
-                                        <a href="" class="btn btn-success btn-sm"><i class="fa fa-comment"></i>
+                                        <a href="{{ route('admin.notification.email.send', $notification) }}"
+                                            class="btn btn-success btn-sm"><i class="fa fa-comment"></i>
                                             ارسال </a>
                                         <a href="{{ route('admin.notification.email.show', $notification) }}"
                                             class="btn btn-info btn-sm"><i class="fa fa-eye"></i>

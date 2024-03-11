@@ -336,6 +336,7 @@ Route::middleware("checkActivation")->group(function () {
                 Route::get("/create", "create")->name("admin.notification.email.create");
                 Route::post("/store", "store")->name("admin.notification.email.store");
                 Route::get("/show/{email}", "show")->name("admin.notification.email.show");
+                Route::get("/send/{email}", "send")->name("admin.notification.email.send");
                 Route::get("/edit/{email}", "edit")->name("admin.notification.email.edit");
                 Route::put("/update/{email}", "update")->name("admin.notification.email.update");
                 Route::delete("/delete/{email}", "destroy")->name("admin.notification.email.delete");

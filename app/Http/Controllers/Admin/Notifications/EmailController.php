@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Admin\Notifications;
 use Illuminate\Http\Request;
 use App\Models\EmailNotification;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Notification\Email\StoreRequest;
+use App\Jobs\SendEmailNotifications;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Admin\Notification\Email\StoreRequest;
 
 class EmailController extends Controller
 {
@@ -56,6 +57,13 @@ class EmailController extends Controller
     public function show(EmailNotification $email)
     {
         return view("admin.notifications.email.show", compact("email"));
+    }
+
+    public function send(EmailNotification $email)
+    {
+        dispatch(new SendEmailNotifications($email));
+
+        return back()->with("swal-success", "اطلاعیه ایمیلی مورد نظر با موفقیت ایجاد شد");
     }
 
     /**

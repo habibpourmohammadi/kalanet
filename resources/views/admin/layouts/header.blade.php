@@ -28,56 +28,49 @@
             <section>
                 <span class="ml-2 ml-md-4 position-relative">
                     <span id="header-notification-toggle" class="pointer">
-                        <i class="far fa-bell"></i><sup class="badge badge-danger">4</sup>
+                        <i class="far fa-bell"></i><sup class="badge badge-danger">{{ $messages->count() }}</sup>
                     </span>
                     <section id="header-notification" class="header-notifictation rounded">
                         <section class="d-flex justify-content-between">
                             <span class="px-2">
-                                نوتیفیکیشن ها
+                                تیکت ها
                             </span>
                             <span class="px-2">
-                                <span class="badge badge-danger">جدید</span>
+                                @if ($messages->count() > 0)
+                                    <span class="badge badge-danger">جدید</span>
+                                @endif
                             </span>
                         </section>
 
-                        <ul class="list-group rounded px-0">
-                            <li class="list-group-item list-group-item-action">
-                                <section class="media">
-                                    <img class="notification-img" src="{{ asset('admin-assets/images/avatar-2.jpg') }}"
-                                        alt="avatar">
-                                    <section class="media-body pr-1">
-                                        <h5 class="notification-user">حبیب الله پورمحمدی</h5>
-                                        <p class="notification-text">این یک متن تستی است</p>
-                                        <p class="notification-time">30 دقیقه پیش</p>
-                                    </section>
-                                </section>
-                            </li>
-                            <li class="list-group-item list-group-item-action">
-                                <section class="media">
-                                    <img class="notification-img" src="{{ asset('admin-assets/images/avatar-2.jpg') }}"
-                                        alt="">
-                                    <section class="media-body pr-1">
-                                        <h5 class="notification-user">حبیب الله پورمحمدی</h5>
-                                        <p class="notification-text">این یک متن تستی است</p>
-                                        <p class="notification-time">30 دقیقه پیش</p>
-                                    </section>
-                                </section>
-                            </li>
-                            <li class="list-group-item list-group-item-action">
-                                <section class="media">
-                                    <img class="notification-img" src="{{ asset('admin-assets/images/avatar-2.jpg') }}"
-                                        alt="">
-                                    <section class="media-body pr-1">
-                                        <h5 class="notification-user">حبیب الله پورمحمدی</h5>
-                                        <p class="notification-text">این یک متن تستی است</p>
-                                        <p class="notification-time">30 دقیقه پیش</p>
-                                    </section>
-                                </section>
-                            </li>
-                        </ul>
+                        @forelse ($messages as $message)
+                            <ul class="list-group rounded px-0">
+                                <a href="{{ route('admin.ticket.messages', $message->ticket) }}"
+                                    class="text-decoration-none">
+                                    <li class="list-group-item list-group-item-action">
+                                        <section class="media">
+                                            @if ($message->user->profile_path)
+                                                <img class="notification-img"
+                                                    src="{{ asset($message->user->profile_path) }}" alt="avatar">
+                                            @endif
+                                            <section class="media-body pr-1">
+                                                <h5 class="notification-user">{{ $message->user->name ?? '-' }}</h5>
+                                                <p class="notification-text">
+                                                    {{ Str::limit($message->message, 20, '...') }}
+                                                </p>
+                                                <p class="notification-time">{{ getAgo($message->created_at) }}</p>
+                                            </section>
+                                        </section>
+                                    </li>
+                                </a>
+                            </ul>
+                        @empty
+                            <div class="alert alert-success mx-2 text-center" role="alert">
+                               <small><strong>لیست تیکت ها خالی است</strong></small>
+                            </div>
+                        @endforelse
                     </section>
                 </span>
-                <span class="ml-2 ml-md-4 position-relative">
+                {{-- <span class="ml-2 ml-md-4 position-relative">
                     <span id="header-comment-toggle" class="pointer">
                         <i class="far fa-comment-alt">
                             <sup class="badge badge-danger">
@@ -113,13 +106,13 @@
 
                     </section>
 
-                </span>
+                </span> --}}
                 <span class="ml-3 ml-md-5 position-relative">
                     <span id="header-profile-toggle" class="pointer">
-                       @if (auth()->user()->profile_path)
-                         <img class="header-avatar" src="{{ asset(auth()->user()->profile_path ?? '') }}"
-                             alt="">
-                       @endif
+                        @if (auth()->user()->profile_path)
+                            <img class="header-avatar" src="{{ asset(auth()->user()->profile_path ?? '') }}"
+                                alt="">
+                        @endif
                         <span class="header-username">{{ auth()->user()->name ?? '' }}</span>
                         <i class="fas fa-angle-down"></i>
                     </span>

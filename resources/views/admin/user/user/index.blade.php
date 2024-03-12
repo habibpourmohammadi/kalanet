@@ -34,6 +34,8 @@
                                 <th>#</th>
                                 <th>نام کاربر</th>
                                 <th>ایمیل کاربر</th>
+                                <th>شماره کاربر</th>
+                                <th>پروفایل کاربر</th>
                                 <th>تاریخ احراز هویت حساب کاربر</th>
                                 <th>وضعیت کاربر</th>
                                 <th>تاریخ ثبت نام کاربر</th>
@@ -44,8 +46,24 @@
                             @forelse ($users as $user)
                                 <tr>
                                     <th>{{ $loop->iteration }}</th>
-                                    <td>{{ $user->name }}</td>
+                                    <td>
+                                        <span
+                                            class="text-{{ $user->name != null ? 'success' : 'danger' }}">{{ $user->name ?? 'ثبت نشده' }}</span>
+                                    </td>
                                     <td>{{ $user->email }}</td>
+                                    <td>
+                                        <span
+                                            class="text-{{ $user->mobile != null ? 'success' : 'danger' }}">{{ $user->mobile ?? 'ثبت نشده' }}</span>
+                                    </td>
+                                    <td>
+                                        @if ($user->profile_path)
+                                            <a href="{{ asset($user->profile_path) }}" target="_blank">
+                                                <img src="{{ asset($user->profile_path) }}" alt="" width="40">
+                                            </a>
+                                        @else
+                                            <span class="text-danger">ثبت نشده</span>
+                                        @endif
+                                    </td>
                                     <td><span
                                             class="text-{{ $user->email_verified_at != null ? 'dark' : 'danger' }}">{{ $user->email_verified_at != null ? jalaliDate($user->email_verified_at) : 'کاربر هنوز احراز هویت نشده' }}</span>
                                     </td>

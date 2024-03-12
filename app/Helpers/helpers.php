@@ -7,6 +7,11 @@ function jalaliDate($date, $format = '%A, %d %B %Y')
     return Jalalian::forge($date)->format($format);
 }
 
+function getAgo($date, $format = '%A, %d %B %Y')
+{
+    return Jalalian::forge($date)->ago();
+}
+
 
 function convertEnglishToPersian($number)
 {

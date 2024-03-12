@@ -18,6 +18,7 @@ use App\Http\Controllers\Home\SalesProcess\CartController;
 use App\Http\Controllers\Admin\Appearance\BannerController;
 use App\Http\Controllers\Admin\Appearance\SliderController;
 use App\Http\Controllers\Admin\Discount\DiscountCouponController;
+use App\Http\Controllers\Admin\Discount\GeneralDiscountController;
 use App\Http\Controllers\Admin\Notifications\EmailController;
 use App\Http\Controllers\Admin\Product\GuaranteeController;
 use App\Http\Controllers\Home\SalesProcess\OrderController;
@@ -356,6 +357,16 @@ Route::middleware("checkActivation")->group(function () {
                 Route::put("/update/{coupon}", "update")->name("admin.discount.coupon.update");
                 Route::delete("/delete/{coupon}", "destroy")->name("admin.discount.coupon.delete");
                 Route::get("/change-status/{coupon}", "changeStatus")->name("admin.discount.coupon.changeStatus");
+            });
+            // general discount
+            Route::controller(GeneralDiscountController::class)->prefix("general")->group(function () {
+                Route::get("/", "index")->name("admin.discount.general.index");
+                Route::get("/create", "create")->name("admin.discount.general.create");
+                Route::post("/store", "store")->name("admin.discount.general.store");
+                Route::get("/edit/{discount}", "edit")->name("admin.discount.general.edit");
+                Route::put("/update/{discount}", "update")->name("admin.discount.general.update");
+                Route::delete("/delete/{discount}", "destroy")->name("admin.discount.general.delete");
+                Route::get("/change-status/{discount}", "changeStatus")->name("admin.discount.general.changeStatus");
             });
         });
     });

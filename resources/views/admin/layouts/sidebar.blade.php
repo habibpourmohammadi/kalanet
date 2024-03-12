@@ -147,7 +147,7 @@
                 </section>
                 <section class="sidebar-dropdown">
                     <a href="{{ route('admin.discount.coupon.index') }}">کوپن تخفیف</a>
-                    {{-- <a href="">تخفیف عمومی</a> --}}
+                    <a href="{{ route('admin.discount.general.index') }}">تخفیف عمومی</a>
                 </section>
             </section>
 

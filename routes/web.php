@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\Product\CategoryController;
 use App\Http\Controllers\Home\SalesProcess\CartController;
 use App\Http\Controllers\Admin\Appearance\BannerController;
 use App\Http\Controllers\Admin\Appearance\SliderController;
+use App\Http\Controllers\Admin\Discount\DiscountCouponController;
 use App\Http\Controllers\Admin\Notifications\EmailController;
 use App\Http\Controllers\Admin\Product\GuaranteeController;
 use App\Http\Controllers\Home\SalesProcess\OrderController;
@@ -329,8 +330,9 @@ Route::middleware("checkActivation")->group(function () {
             Route::delete("/delete/{ticket}", "destroy")->name("admin.ticket.delete");
         });
 
-
+        // notifications
         Route::prefix("notification")->group(function () {
+            // email
             Route::controller(EmailController::class)->prefix("email")->group(function () {
                 Route::get("/", "index")->name("admin.notification.email.index");
                 Route::get("/create", "create")->name("admin.notification.email.create");
@@ -340,6 +342,20 @@ Route::middleware("checkActivation")->group(function () {
                 Route::get("/edit/{email}", "edit")->name("admin.notification.email.edit");
                 Route::put("/update/{email}", "update")->name("admin.notification.email.update");
                 Route::delete("/delete/{email}", "destroy")->name("admin.notification.email.delete");
+            });
+        });
+
+        // discounts
+        Route::prefix("discount")->group(function () {
+            // coupon
+            Route::controller(DiscountCouponController::class)->prefix("coupon")->group(function () {
+                Route::get("/", "index")->name("admin.discount.coupon.index");
+                Route::get("/create", "create")->name("admin.discount.coupon.create");
+                Route::post("/store", "store")->name("admin.discount.coupon.store");
+                Route::get("/edit/{coupon}", "edit")->name("admin.discount.coupon.edit");
+                Route::put("/update/{coupon}", "update")->name("admin.discount.coupon.update");
+                Route::delete("/delete/{coupon}", "destroy")->name("admin.discount.coupon.delete");
+                Route::get("/change-status/{coupon}", "changeStatus")->name("admin.discount.coupon.changeStatus");
             });
         });
     });

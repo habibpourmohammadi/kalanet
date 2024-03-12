@@ -136,6 +136,21 @@
                 <i class="fas fa-bars"></i>
                 <span>ایمیلی</span>
             </a>
+
+            <section class="sidebar-part-title">تخفیف ها</section>
+
+            <section class="sidebar-group-link">
+                <section class="sidebar-dropdown-toggle">
+                    <i class="fas fa-chart-bar icon"></i>
+                    <span>تخفیف ها</span>
+                    <i class="fas fa-angle-left angle"></i>
+                </section>
+                <section class="sidebar-dropdown">
+                    <a href="{{ route('admin.discount.coupon.index') }}">کوپن تخفیف</a>
+                    {{-- <a href="">تخفیف عمومی</a> --}}
+                </section>
+            </section>
+
         </section>
     </section>
 </aside>

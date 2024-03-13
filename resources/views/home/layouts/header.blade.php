@@ -188,26 +188,9 @@
                         </section>
                         <section class="sublist-wrapper position-absolute w-100">
                             <section class="position-relative sublist-area">
-                                @foreach ($categories as $category)
-                                    <section class="sublist-item">
-                                        <section class="sublist-item-toggle">{{ $category->name }}</section>
-                                        <section class="sublist-item-sublist">
-                                            <section
-                                                class="sublist-item-sublist-wrapper d-flex justify-content-around align-items-center">
-                                                @foreach ($category->children as $categoryChild)
-                                                    <section class="sublist-column col">
-                                                        <a href="#"
-                                                            class="sub-category">{{ $categoryChild->name }}</a>
-                                                        @foreach ($categoryChild->children as $child)
-                                                            <a href="#"
-                                                                class="sub-sub-category">{{ $child->name }}</a>
-                                                        @endforeach
-                                                    </section>
-                                                @endforeach
-                                            </section>
-                                        </section>
-                                    </section>
-                                @endforeach
+                                @include('home.components.show-categories-top', [
+                                    'categories' => $categories,
+                                ])
                             </section>
                         </section>
                     </section>

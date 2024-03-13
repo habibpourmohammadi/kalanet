@@ -6,6 +6,11 @@
     <!-- start cart -->
     <section class="mb-4">
         <section class="container-xxl">
+            @if (session()->has('success'))
+                <div class="alert alert-success text-center" role="alert">
+                    <strong>{{ session('success') }}</strong>
+                </div>
+            @endif
             <section class="row">
                 <section class="col">
                     @if (session()->has('error'))
@@ -28,39 +33,47 @@
                         @csrf
                         <section class="row mt-4">
                             <section class="col-md-9">
-                                {{-- <section class="content-wrapper bg-white p-3 rounded-2 mb-4">
+                                @if (!$order->coupon_id)
+                                    <section class="content-wrapper bg-white p-3 rounded-2 mb-4">
 
-                                <!-- start vontent header -->
-                                <section class="content-header mb-3">
-                                    <section class="d-flex justify-content-between align-items-center">
-                                        <h2 class="content-header-title content-header-title-small">
-                                            کد تخفیف
-                                        </h2>
-                                        <section class="content-header-link">
-                                            <!--<a href="#">مشاهده همه</a>-->
+                                        <!-- start vontent header -->
+                                        <section class="content-header mb-3">
+                                            <section class="d-flex justify-content-between align-items-center">
+                                                <h2 class="content-header-title content-header-title-small">
+                                                    کد تخفیف
+                                                </h2>
+                                                <section class="content-header-link">
+                                                    <!--<a href="#">مشاهده همه</a>-->
+                                                </section>
+                                            </section>
                                         </section>
-                                    </section>
-                                </section>
 
-                                <section class="payment-alert alert alert-primary d-flex align-items-center p-2"
-                                    role="alert">
-                                    <i class="fa fa-info-circle flex-shrink-0 me-2"></i>
-                                    <secrion>
-                                        کد تخفیف خود را در این بخش وارد کنید.
-                                    </secrion>
-                                </section>
-
-                                <section class="row">
-                                    <section class="col-md-5">
-                                        <section class="input-group input-group-sm">
-                                            <input type="text" class="form-control" placeholder="کد تخفیف را وارد کنید">
-                                            <button class="btn btn-primary" type="button">اعمال کد</button>
+                                        <section class="payment-alert alert alert-primary d-flex align-items-center p-2"
+                                            role="alert">
+                                            <i class="fa fa-info-circle flex-shrink-0 me-2"></i>
+                                            <secrion>
+                                                کد تخفیف خود را در این بخش وارد کنید.
+                                            </secrion>
                                         </section>
+
+                                        <section class="row">
+                                            <section class="col-md-5">
+                                                <section class="input-group input-group-sm">
+                                                    <input id="valuCoupon" type="text" class="form-control"
+                                                        placeholder="کد تخفیف را وارد کنید">
+                                                    <button class="btn btn-primary" id="btnCouponSubmit"
+                                                        type="button">اعمال
+                                                        کد</button>
+                                                </section>
+                                            </section>
+
+                                        </section>
+                                        @error('coupon')
+                                            <small class="text-danger"><strong>{{ $message }}</strong></small>
+                                        @enderror
+                                        <small class="text-danger"><strong id="couponError"></strong></small>
                                     </section>
-
-                                </section>
-                            </section> --}}
-
+                                @endif
 
                                 <section class="content-wrapper bg-white p-3 rounded-2 mb-4">
 
@@ -161,10 +174,12 @@
                                         <p class="text-warning">{{ priceFormat($order->delivery_obj['price']) }} تومان</p>
                                     </section>
 
-                                    {{-- <section class="d-flex justify-content-between align-items-center">
-                                        <p class="text-muted">تخفیف اعمال شده</p>
-                                        <p class="text-danger">100,000 تومان</p>
-                                    </section> --}}
+                                    @if ($order->coupon)
+                                        <section class="d-flex justify-content-between align-items-center">
+                                            <p class="text-muted">تخفیف اعمال شده</p>
+                                            <p class="text-danger">{{ priceFormat($order->coupon_discount) }} تومان</p>
+                                        </section>
+                                    @endif
 
                                     <p class="my-3">
                                         <i class="fa fa-info-circle me-1"></i> کاربر گرامی کالاها بر اساس نوع ارسالی که
@@ -176,7 +191,7 @@
 
                                     <section class="d-flex justify-content-between align-items-center">
                                         <p class="text-muted">مبلغ قابل پرداخت</p>
-                                        <p class="fw-bold">{{ priceFormat($order->total_price) }} تومان</p>
+                                        <p class="fw-bold">{{ priceFormat($order->total_price - $order->coupon_discount) }} تومان</p>
                                     </section>
 
                                     <section class="">
@@ -197,5 +212,27 @@
 
         </section>
     </section>
+
+    <form action="{{ route('home.salesProcess.checkCoupon') }}" method="POST" class="d-none" id="couponForm">
+        @csrf
+        <input id="coupon" name="coupon" type="text">
+    </form>
     <!-- end cart -->
+@endsection
+@section('script')
+    <script>
+        let couponElement = $("#coupon");
+        let valueCoupon = $("#valuCoupon");
+        let btnCouponSubmit = $("#btnCouponSubmit");
+
+        btnCouponSubmit.click(function(e) {
+            if (valueCoupon.val().length == 0) {
+                $("#couponError").html("لطفا کد تخفیف را وارد نمایید");
+            } else {
+                $("#couponError").html("");
+                couponElement.val(valueCoupon.val())
+                $("#couponForm").submit()
+            }
+        });
+    </script>
 @endsection

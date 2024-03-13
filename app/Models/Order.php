@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Coupon;
 use App\Models\Address;
 use App\Models\Product;
 use App\Models\Delivery;
@@ -16,7 +17,7 @@ class Order extends Model
 
     protected $guarded = ["id"];
 
-    protected $casts = ['user_obj' => 'array', "address_obj" => "array", "delivery_obj" => "array"];
+    protected $casts = ['user_obj' => 'array', "address_obj" => "array", "delivery_obj" => "array", "coupon_obj" => "array"];
 
     public function user()
     {
@@ -31,6 +32,11 @@ class Order extends Model
     public function delivery()
     {
         return $this->belongsTo(Delivery::class)->withTrashed();
+    }
+
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class)->withTrashed();
     }
 
     public function products()
@@ -86,6 +92,56 @@ class Order extends Model
             default:
                 return "نامعلوم";
                 break;
+        }
+    }
+
+    public function getCouponDiscountAttribute()
+    {
+        $coupon = $this->coupon;
+        if ($coupon != null && $coupon->start_date < now() && $coupon->end_date > now() && $coupon->status == "active") {
+            if ($coupon->type == "private" && $coupon->user_id != auth()->user()->id) {
+                return 0;
+            }
+            if ($coupon->unit == "percent") {
+                $discountAmount = $this->total_price * ($coupon->amount / 100);
+                if ($coupon->discount_limit != null) {
+                    if ($discountAmount >= $coupon->discount_limit) {
+                        return $coupon->discount_limit;
+                    } else {
+                        return $discountAmount;
+                    }
+                } else {
+                    return $discountAmount;
+                }
+            } else {
+                $discountAmount = $coupon->amount;
+                if ($discountAmount > $this->total_price) {
+                    $discountAmount = $this->total_price;
+                }
+                if ($coupon->discount_limit != null) {
+                    if ($discountAmount >= $coupon->discount_limit) {
+                        if ($coupon->discount_limit > $this->total_price) {
+                            return $this->total_price;
+                        } else {
+                            return $coupon->discount_limit;
+                        }
+                    } else {
+                        if ($discountAmount > $this->total_price) {
+                            return $this->total_price;
+                        } else {
+                            return $discountAmount;
+                        }
+                    }
+                } else {
+                    if ($discountAmount > $this->total_price) {
+                        return $this->total_price;
+                    } else {
+                        return $discountAmount;
+                    }
+                }
+            }
+        } else {
+            return 0;
         }
     }
 }

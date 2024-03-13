@@ -10,13 +10,16 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Home\Coupon\CouponRequest;
 use Illuminate\Support\Facades\Auth;
 use NasrinRezaei45\Shepacom\ShepaFacade;
 use App\Http\Requests\Home\Payment\PaymentRequest;
 use App\Http\Requests\Home\Order\SubmitOrderRequest;
+use App\Models\Coupon;
 
 class OrderController extends Controller
 {
+    private $result;
     public function submitOrder(SubmitOrderRequest $request)
     {
         $address = Address::find($request->address);
@@ -127,6 +130,23 @@ class OrderController extends Controller
         return view("home.salesProcess.payment.index", compact("order", "total_price", "total_discount"));
     }
 
+    public function checkCoupon(CouponRequest $request)
+    {
+        $coupon = Coupon::where("coupon", $request->coupon)->first();
+        $order = Auth::user()->orders->where("payment_status", "unpaid")->where("status", "not_confirmed")->where("delivery_status", "unpaid")->first();
+
+        if ($order->coupon_id != null) {
+            return back()->with("error", "برای این سفارش شما از قبل کد تخفیف ثبت شده است.");
+        }
+
+        $order->update([
+            "coupon_id" => $coupon->id,
+            "coupon_obj" => $coupon,
+        ]);
+
+        return back()->with("success", "کد تخفیف شما با موفقیت ثبت شد");
+    }
+
     // Payment func
     public function payment(PaymentRequest $request)
     {
@@ -158,6 +178,38 @@ class OrderController extends Controller
             $totalDiscount += $cartItem->product->discount * $cartItem->number;
         }
 
+        // check coupon discount
+        if ($order->coupon != null) {
+            $coupon = $order->coupon;
+            if (
+                $order->coupon_obj["amount"] != $coupon->amount ||
+                $order->coupon_obj["discount_limit"] != $coupon->discount_limit ||
+                $order->coupon_obj["start_date"] != $coupon->start_date ||
+                $order->coupon_obj["end_date"] != $coupon->end_date ||
+                $order->coupon_obj["unit"] != $coupon->unit ||
+                $order->coupon_obj["type"] != $coupon->type ||
+                $order->coupon_obj["status"] != $coupon->status ||
+                $coupon->start_date > now() ||
+                $coupon->end_date < now() ||
+                $coupon->status != "active"
+            ) {
+                $order->update([
+                    "coupon_id" => null,
+                    "coupon_obj" => null,
+                ]);
+                return back()->with("error", "برای کد تخفیف شما مشکلی پیش آمده است ، لطفا دوباره تلاش کنید");
+            } elseif ($coupon->type == "private") {
+                if ($coupon->user_id != Auth::user()->id) {
+                    $order->update([
+                        "coupon_id" => null,
+                        "coupon_obj" => null,
+                    ]);
+                    return back()->with("error", "برای کد تخفیف شما مشکلی پیش آمده است ، لطفا دوباره تلاش کنید");
+                }
+            }
+        }
+
+
         // check delivery price
         if ($order->delivery->price != $order->delivery_obj["price"]) {
             return to_route("home.salesProcess.myCart")->with("error", "قیمت روش ارسال مورد نظر تغییر کرده است، لطفا دوباره تلاش کنید");
@@ -182,16 +234,18 @@ class OrderController extends Controller
 
         if ($payment_type == 2) {
             DB::transaction(function () use ($order, $cartItems) {
+                // update order
+                $order->update([
+                    "total_price" => $order->total_price - $order->coupon_discount,
+                    "total_discount" => $order->total_discount + $order->coupon_discount,
+                    "delivery_status" => "processing"
+                ]);
+
                 Payment::create([
                     "order_id" => $order->id,
                     "amount" => $order->total_price,
                     "status" => "cash",
                     "payment_status" => "cash_payment"
-                ]);
-
-                // update order
-                $order->update([
-                    "delivery_status" => "processing"
                 ]);
 
                 // delete cartItems and update product
@@ -205,22 +259,33 @@ class OrderController extends Controller
 
             return to_route("home.profile.myOrders.index")->with("success", "سفارش شما با موفقیت ثبت شد");
         } elseif ($payment_type == 1) {
-            // unit = Toman
-            $amount = $order->total_price;
-            $result = ShepaFacade::send($amount, Auth::user()->email, null, null, route("home.salesProcess.callback"));
-            $token = Str::afterLast($result, '/');
 
-            Payment::updateOrCreate(
-                ["order_id" => $order->id],
-                [
-                    "token" => $token,
-                    "amount" => $amount,
-                    "status" => "online",
-                    "payment_status" => "unpaid"
-                ]
-            );
+            DB::transaction(function () use ($order) {
 
-            return redirect($result);
+                // update Order
+                $order->update([
+                    "total_price" => $order->total_price - $order->coupon_discount,
+                    "total_discount" => $order->total_discount + $order->coupon_discount,
+                ]);
+                // unit = Toman
+                $amount = $order->total_price;
+                $result = ShepaFacade::send($amount, Auth::user()->email, null, null, route("home.salesProcess.callback"));
+                $token = Str::afterLast($result, '/');
+
+                Payment::updateOrCreate(
+                    ["order_id" => $order->id],
+                    [
+                        "token" => $token,
+                        "amount" => $amount,
+                        "status" => "online",
+                        "payment_status" => "unpaid"
+                    ]
+                );
+
+                $this->result = $result;
+            });
+
+            return redirect($this->result);
         }
     }
 

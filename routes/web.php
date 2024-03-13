@@ -98,6 +98,7 @@ Route::middleware("checkActivation")->group(function () {
         Route::get("/delivery", [CartController::class, "delivery"])->name("home.salesProcess.delivery")->middleware(["auth", "cartitems"]);
         Route::post("/submit-order", [OrderController::class, "submitOrder"])->name("home.salesProcess.submitOrder")->middleware(["auth", "cartitems"]);
         Route::get("/payment", [OrderController::class, "paymentPage"])->name("home.salesProcess.payment.page")->middleware(["auth", "cartitems"]);
+        Route::post("/check-coupon", [OrderController::class, "checkCoupon"])->name("home.salesProcess.checkCoupon")->middleware(["auth", "cartitems"]);
         Route::post("/payment", [OrderController::class, "payment"])->name("home.salesProcess.payment")->middleware(["auth", "cartitems"]);
         Route::get("/callback", [OrderController::class, "callback"])->name("home.salesProcess.callback")->middleware(["auth", "cartitems"]);
     });

@@ -51,6 +51,10 @@
                     </section>
                 </section>
             @endcan
+            <a href="{{ route('admin.order.payment.index') }}" class="sidebar-link">
+                <i class="fas fa-bars"></i>
+                <span>پرداخت ها</span>
+            </a>
             @can('show_delivery')
                 <a href="{{ route('admin.order.delivery.index') }}" class="sidebar-link">
                     <i class="fas fa-bars"></i>

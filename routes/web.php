@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\Product\OptionProductController;
 use App\Http\Controllers\Admin\Product\ProductGuaranteeController;
 use App\Http\Controllers\Home\ProductController as HomeProductController;
 use App\Http\Controllers\Admin\Order\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\Order\PaymentController;
 use App\Http\Controllers\Admin\Ticket\TicketController;
 use App\Http\Controllers\Admin\User\PermissionController;
 use App\Http\Controllers\Admin\User\RoleController;
@@ -287,6 +288,12 @@ Route::middleware("checkActivation")->group(function () {
                 Route::get("/change-payment-status/{order}", "changePaymentStatus")->name("admin.order.changePaymentStatus");
                 Route::get("/change-delivery-status/{order}", "changeDeliveryStatus")->name("admin.order.changeDeliveryStatus");
                 Route::get("/change-status/{order}", "changeStatus")->name("admin.order.changeStatus");
+            });
+
+            // payments
+            Route::controller(PaymentController::class)->prefix("payment")->group(function () {
+                Route::get("/", "index")->name("admin.order.payment.index");
+                Route::get("/change-status/{payment}", "changeStatus")->name("admin.order.payment.changeStatus");
             });
 
             // Delivery

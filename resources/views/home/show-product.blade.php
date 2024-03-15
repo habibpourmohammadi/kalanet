@@ -202,7 +202,22 @@
                                         </p>
                                     </section>
                                 @endif
-                                <input type="number" id="discountPrice" value="{{ $product->discount }}" class="d-none">
+                                <input type="number" id="discountPrice" value="{{ $product->discount }}"
+                                    class="d-none">
+
+                                @if (isset($generalDiscount))
+                                    <section class="d-flex justify-content-between align-items-center">
+                                        <p class="text-muted">تخفیف وبسایت</p>
+                                        <p class="text-danger fw-bolder">
+                                            <span
+                                                id="finalGeneralDiscountPrice">{{ priceFormat($generalDiscount->generalDiscount($product->price, $product->discount)) }}</span>
+                                            <span class="small">تومان</span>
+                                        </p>
+                                    </section>
+                                    <input type="number" id="GeneralDiscountPrice"
+                                        value="{{ $generalDiscount->generalDiscount($product->price, $product->discount) }}"
+                                        class="d-none">
+                                @endif
 
 
                                 <section class="border-bottom mb-3"></section>

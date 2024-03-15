@@ -28,13 +28,7 @@
                     <section class="row mt-4">
                         <section class="col-md-9 mb-3">
                             <section class="content-wrapper bg-white p-3 rounded-2">
-                                @php
-                                    $totalPrice = 0;
-                                @endphp
                                 @forelse ($cartItems as $cartItem)
-                                    @php
-                                        $totalPrice += $cartItem->totalPrice();
-                                    @endphp
                                     <section class="cart-item d-md-flex py-3">
                                         <section class="cart-img align-self-start flex-shrink-1"><img
                                                 src="{{ asset($cartItem->product->images->first()->image_path ?? '') }}"
@@ -89,6 +83,15 @@
                                             </section>
                                         </section>
                                         <section class="align-self-end flex-shrink-1">
+                                            @if ($cartItem->product->discount > 0 || isset($generalDiscount))
+                                                <section class="cart-item-discount text-danger text-nowrap mb-1">تخفیف
+                                                    @if (isset($generalDiscount))
+                                                        {{ priceFormat($generalDiscount->generalDiscount($cartItem->product->price, $cartItem->product->discount) + $cartItem->product->discount) }}
+                                                    @else
+                                                        {{ priceFormat($cartItem->product->discount) }}
+                                                    @endif
+                                                </section>
+                                            @endif
                                             <section class="text-nowrap fw-bold">{{ priceFormat($cartItem->totalPrice()) }}
                                                 تومان</section>
                                         </section>
@@ -112,10 +115,18 @@
                                         <p class="text-danger fw-bolder">{{ priceFormat($discountPrice) }} تومان</p>
                                     </section>
                                 @endif
+
+                                @if ($generalDiscountPrice != 0)
+                                    <section class="d-flex justify-content-between align-items-center">
+                                        <p class="text-muted">تخفیف وبسایت</p>
+                                        <p class="text-danger fw-bolder">{{ priceFormat($generalDiscountPrice) }} تومان</p>
+                                    </section>
+                                @endif
                                 <section class="border-bottom mb-3"></section>
                                 <section class="d-flex justify-content-between align-items-center">
                                     <p class="text-muted">جمع سبد خرید</p>
-                                    <p class="fw-bolder">{{ priceFormat($totalPrice - $discountPrice) }} تومان</p>
+                                    <p class="fw-bolder">
+                                        {{ priceFormat($totalPrice - ($discountPrice + $generalDiscountPrice)) }} تومان</p>
                                 </section>
 
                                 <p class="my-3">

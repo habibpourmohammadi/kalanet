@@ -162,11 +162,21 @@
                                         </section>
                                     @endif
 
+                                    @if ($generalDiscountPrice != 0)
+                                        <section class="d-flex justify-content-between align-items-center">
+                                            <p class="text-muted">تخفیف وبسایت</p>
+                                            <p class="text-danger fw-bolder">{{ priceFormat($generalDiscountPrice) }} تومان
+                                            </p>
+                                        </section>
+                                    @endif
+
                                     <section class="border-bottom mb-3"></section>
 
                                     <section class="d-flex justify-content-between align-items-center">
                                         <p class="text-muted">جمع سبد خرید</p>
-                                        <p class="fw-bolder">{{ priceFormat($total_price - $total_discount) }} تومان</p>
+                                        <p class="fw-bolder">
+                                            {{ priceFormat($total_price - ($total_discount + $generalDiscountPrice)) }}
+                                            تومان</p>
                                     </section>
 
                                     <section class="d-flex justify-content-between align-items-center">
@@ -191,7 +201,9 @@
 
                                     <section class="d-flex justify-content-between align-items-center">
                                         <p class="text-muted">مبلغ قابل پرداخت</p>
-                                        <p class="fw-bold">{{ priceFormat($order->total_price - $order->coupon_discount) }} تومان</p>
+                                        <p class="fw-bold">
+                                            {{ priceFormat($order->total_price - $order->coupon_discount) }}
+                                            تومان</p>
                                     </section>
 
                                     <section class="">

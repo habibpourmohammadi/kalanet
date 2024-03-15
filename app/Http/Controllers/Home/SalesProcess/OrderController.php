@@ -3,19 +3,20 @@
 namespace App\Http\Controllers\Home\SalesProcess;
 
 use App\Models\Order;
+use App\Models\Coupon;
 use App\Models\Address;
 use App\Models\Payment;
 use App\Models\Delivery;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\GeneralDiscount;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Home\Coupon\CouponRequest;
 use Illuminate\Support\Facades\Auth;
 use NasrinRezaei45\Shepacom\ShepaFacade;
+use App\Http\Requests\Home\Coupon\CouponRequest;
 use App\Http\Requests\Home\Payment\PaymentRequest;
 use App\Http\Requests\Home\Order\SubmitOrderRequest;
-use App\Models\Coupon;
 
 class OrderController extends Controller
 {
@@ -26,6 +27,8 @@ class OrderController extends Controller
         $delivery = Delivery::find($request->delivery_type);
         $user = Auth::user();
         $user_obj = ["id" => $user->id, "name" =>  $user->name, "email" =>  $user->email];
+        $generalDiscount = GeneralDiscount::where("start_date", "<", now())->where("end_date", ">", now())->where("status", "active")->get()->last();
+
         // check values
         if ($address->user->id != $user->id) {
             return back();
@@ -36,6 +39,7 @@ class OrderController extends Controller
         // calc total price and total discount
         $total_price = 0;
         $total_discount = 0;
+        $total_general_discount = 0;
 
         // find products
         foreach ($user->cartItems as $cartItem) {
@@ -57,6 +61,9 @@ class OrderController extends Controller
             // calc total price and total discount
             $total_price += $cartItem->totalPrice();
             $total_discount += $cartItem->product->discount * $cartItem->number;
+            if (isset($generalDiscount)) {
+                $total_general_discount += $generalDiscount->generalDiscount($cartItem->product->price, $cartItem->product->discount) * $cartItem->number;
+            }
         }
 
         // find tracking_id
@@ -68,12 +75,13 @@ class OrderController extends Controller
             $tracking_id = rand(11111111, 99999999);
         }
 
-
-        DB::transaction(function () use ($user, $address, $delivery, $tracking_id, $total_price, $total_discount, $user_obj) {
+        DB::transaction(function () use ($user, $address, $delivery, $tracking_id, $total_price, $total_discount, $user_obj, $generalDiscount, $total_general_discount) {
             // find or create Order
             $order = Order::updateOrCreate(
                 ['user_id' => $user->id, "payment_status" => "unpaid", "status" => "not_confirmed", "delivery_status" => "unpaid", "tracking_id" => $tracking_id],
-                ['address_id' => $address->id, 'delivery_id' => $delivery->id, "total_price" => ($total_price + $delivery->price) - $total_discount, "total_discount" => $total_discount, "user_obj" => $user_obj, "address_obj" => $address, "delivery_obj" => $delivery]
+                [
+                    'address_id' => $address->id, 'delivery_id' => $delivery->id, 'general_discount_id' => $generalDiscount->id ?? null, "total_price" => ($total_price + $delivery->price) -  ($total_discount + $total_general_discount), "total_discount" => $total_discount, "user_obj" => $user_obj, "address_obj" => $address, "delivery_obj" => $delivery, "general_discount_obj" => $generalDiscount
+                ]
             );
 
             // detach old products
@@ -121,13 +129,20 @@ class OrderController extends Controller
             return to_route("home.salesProcess.myCart")->with("error", "لطفا مجدد تلاش کنید");
         }
 
+        $generalDiscount = GeneralDiscount::where("start_date", "<", now())->where("end_date", ">", now())->where("status", "active")->get()->last();
+
         $total_price = 0;
         $total_discount = 0;
+        $generalDiscountPrice = 0;
+
         foreach (Auth::user()->cartItems as $cartItem) {
             $total_price += $cartItem->totalPrice();
             $total_discount += $cartItem->product->discount * $cartItem->number;
+            if (isset($generalDiscount)) {
+                $generalDiscountPrice += $generalDiscount->generalDiscount($cartItem->product->price, $cartItem->product->discount) * $cartItem->number;
+            }
         }
-        return view("home.salesProcess.payment.index", compact("order", "total_price", "total_discount"));
+        return view("home.salesProcess.payment.index", compact("order", "total_price", "total_discount", "generalDiscountPrice"));
     }
 
     public function checkCoupon(CouponRequest $request)
@@ -153,10 +168,12 @@ class OrderController extends Controller
         $payment_type = $request->payment_type;
         $order = Auth::user()->orders->where("payment_status", "unpaid")->where("status", "not_confirmed")->where("delivery_status", "unpaid")->first();
         $cartItems = Auth::user()->cartItems;
+        $generalDiscount = GeneralDiscount::where("start_date", "<", now())->where("end_date", ">", now())->where("status", "active")->get()->last();
 
         // get totalPrice and total discount
         $totalPrice = 0;
         $totalDiscount = 0;
+        $generalDiscountPrice = 0;
 
         // last check for cartItems
         foreach ($cartItems as $cartItem) {
@@ -174,8 +191,41 @@ class OrderController extends Controller
                 return to_route("home.salesProcess.myCart")->with("error", "یکی از محصولات سبد خرید شما ناموجود است ,لطفا سبد خرید خود را بررسی نمایید");
             }
 
+            if (isset($generalDiscount)) {
+                $generalDiscountPrice += $generalDiscount->generalDiscount($cartItem->product->price, $cartItem->product->discount) * $cartItem->number;
+            }
             $totalPrice += $cartItem->totalPrice();
             $totalDiscount += $cartItem->product->discount * $cartItem->number;
+        }
+
+        // check general discount
+        if ($order->generalDiscount == null && $generalDiscount != null) {
+            $order->update([
+                "general_discount_id" => null,
+                "general_discount_obj" => null,
+            ]);
+            return to_route("home.salesProcess.myCart")->with("error", "لطفا روند ثبت سفارش خود را تکرار کنید");
+        }
+
+        if ($order->generalDiscount != null) {
+            $general_discount = $order->generalDiscount;
+            if (
+                $order->general_discount_obj["amount"] != $general_discount->amount ||
+                $order->general_discount_obj["discount_limit"] != $general_discount->discount_limit ||
+                $order->general_discount_obj["start_date"] != $general_discount->start_date ||
+                $order->general_discount_obj["end_date"] != $general_discount->end_date ||
+                $order->general_discount_obj["unit"] != $general_discount->unit ||
+                $order->general_discount_obj["status"] != $general_discount->status ||
+                $general_discount->start_date > now() ||
+                $general_discount->end_date < now() ||
+                $general_discount->status != "active"
+            ) {
+                $order->update([
+                    "general_discount_id" => null,
+                    "general_discount_obj" => null,
+                ]);
+                return to_route("home.salesProcess.myCart")->with("error", "لطفا روند ثبت سفارش خود را تکرار کنید");
+            }
         }
 
         // check coupon discount
@@ -228,16 +278,16 @@ class OrderController extends Controller
         }
 
         // check final price
-        if (($order->delivery->price + $totalPrice) - $totalDiscount != $order->total_price) {
+        if (($order->delivery->price + $totalPrice) - ($totalDiscount + $generalDiscountPrice) != $order->total_price) {
             return to_route("home.salesProcess.myCart")->with("error", "لطفا روند ثبت سفارش خود را تکرار کنید");
         }
 
         if ($payment_type == 2) {
-            DB::transaction(function () use ($order, $cartItems) {
+            DB::transaction(function () use ($order, $cartItems, $generalDiscountPrice) {
                 // update order
                 $order->update([
                     "total_price" => $order->total_price - $order->coupon_discount,
-                    "total_discount" => $order->total_discount + $order->coupon_discount,
+                    "total_discount" => $order->total_discount + $order->coupon_discount + $generalDiscountPrice,
                     "delivery_status" => "processing"
                 ]);
 
@@ -260,12 +310,12 @@ class OrderController extends Controller
             return to_route("home.profile.myOrders.index")->with("success", "سفارش شما با موفقیت ثبت شد");
         } elseif ($payment_type == 1) {
 
-            DB::transaction(function () use ($order) {
+            DB::transaction(function () use ($order, $generalDiscountPrice) {
 
                 // update Order
                 $order->update([
                     "total_price" => $order->total_price - $order->coupon_discount,
-                    "total_discount" => $order->total_discount + $order->coupon_discount,
+                    "total_discount" => $order->total_discount + $order->coupon_discount + $generalDiscountPrice,
                 ]);
                 // unit = Toman
                 $amount = $order->total_price;

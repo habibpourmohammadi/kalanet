@@ -11,6 +11,7 @@ use App\Http\Requests\Home\Product\CreateCommentRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Home\Product\SubmitCommentRequest;
 use App\Models\CartItem;
+use App\Models\GeneralDiscount;
 
 class ProductController extends Controller
 {
@@ -24,7 +25,8 @@ class ProductController extends Controller
             abort(404);
         }
         $categoryProducts = $product->category->products()->whereNotIn('id', [$product->id])->where('status', 'true')->has("images")->get();
-        return view("home.show-product", compact("product", "categoryProducts"));
+        $generalDiscount = GeneralDiscount::where("start_date", "<", now())->where("end_date", ">", now())->where("status", "active")->get()->last();
+        return view("home.show-product", compact("product", "categoryProducts", "generalDiscount"));
     }
 
     // submit comment answer

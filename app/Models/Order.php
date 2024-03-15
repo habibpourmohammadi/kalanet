@@ -17,7 +17,7 @@ class Order extends Model
 
     protected $guarded = ["id"];
 
-    protected $casts = ['user_obj' => 'array', "address_obj" => "array", "delivery_obj" => "array", "coupon_obj" => "array"];
+    protected $casts = ['user_obj' => 'array', "address_obj" => "array", "delivery_obj" => "array", "coupon_obj" => "array", "general_discount_obj" => "array"];
 
     public function user()
     {
@@ -37,6 +37,11 @@ class Order extends Model
     public function coupon()
     {
         return $this->belongsTo(Coupon::class)->withTrashed();
+    }
+
+    public function generalDiscount()
+    {
+        return $this->belongsTo(GeneralDiscount::class)->withTrashed();
     }
 
     public function products()

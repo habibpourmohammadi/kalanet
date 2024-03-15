@@ -220,11 +220,45 @@
                                                                 </section>
                                                             </section>
                                                         @else
-                                                            <section class="product-price-wrapper">
-                                                                <section class="product-price">
-                                                                    {{ priceFormat($relatedProduct->price) }} تومان
+                                                            @if ($relatedProduct->discount != 0 || isset($generalDiscount))
+                                                                <section class="product-discount">
+                                                                    @if (isset($generalDiscount))
+                                                                        <section class="product-discount">
+                                                                            <span
+                                                                                class="product-old-price">{{ priceFormat($relatedProduct->price) }}
+                                                                                تومان</span>
+                                                                        </section>
+                                                                        <section class="product-price-wrapper">
+                                                                            <section class="product-price">
+                                                                                {{ priceFormat($relatedProduct->price - $relatedProduct->discount - $generalDiscount->generalDiscount($relatedProduct->price, $relatedProduct->discount)) }}
+                                                                                تومان
+                                                                            </section>
+                                                                        </section>
+                                                                    @else
+                                                                        <section class="product-discount">
+                                                                            <span
+                                                                                class="product-old-price">{{ priceFormat($relatedProduct->price) }}
+                                                                                تومان</span>
+                                                                        </section>
+                                                                        <section class="product-price-wrapper">
+                                                                            <section class="product-price">
+                                                                                {{ priceFormat($relatedProduct->price - $relatedProduct->discount) }}
+                                                                                تومان
+                                                                            </section>
+                                                                        </section>
+                                                                    @endif
+                                                                    @if (isset($generalDiscount) && $generalDiscount->unit == 'percent')
+                                                                        <span
+                                                                            class="product-discount-amount">{{ $generalDiscount->amount }}%</span>
+                                                                    @endif
                                                                 </section>
-                                                            </section>
+                                                            @else
+                                                                <section class="product-price-wrapper">
+                                                                    <section class="product-price">
+                                                                        {{ priceFormat($relatedProduct->price) }} تومان
+                                                                    </section>
+                                                                </section>
+                                                            @endif
                                                         @endif
                                                         <section class="product-colors">
                                                             @foreach ($relatedProduct->colors as $color)

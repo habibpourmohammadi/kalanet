@@ -6,10 +6,11 @@ use App\Models\Brand;
 use App\Models\Banner;
 use App\Models\Slider;
 use App\Models\Product;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Bookmark;
 use App\Models\Category;
+use Illuminate\Http\Request;
+use App\Models\GeneralDiscount;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -31,7 +32,9 @@ class HomeController extends Controller
         // brands
         $brands = Brand::where("logo_path", '!=', null)->get();
 
-        return view("home.index", compact("sliders", "topLeftBanners", "bestSellingProducts", "middleBanners", "recommendedProducts", "bottomBanner", "brands"));
+        $generalDiscount = GeneralDiscount::where("start_date", "<", now())->where("end_date", ">", now())->where("status", "active")->get()->last();
+
+        return view("home.index", compact("sliders", "topLeftBanners", "bestSellingProducts", "middleBanners", "recommendedProducts", "bottomBanner", "brands", "generalDiscount"));
     }
 
     public function addToBookmark(Product $product)
@@ -52,6 +55,7 @@ class HomeController extends Controller
     // Search
     public function search(Request $request, Category $category = null)
     {
+        $generalDiscount = GeneralDiscount::where("start_date", "<", now())->where("end_date", ">", now())->where("status", "active")->get()->last();
         $brands = Brand::all();
 
         if ($category) {
@@ -108,6 +112,6 @@ class HomeController extends Controller
 
         $products = $products->has("images")->paginate(15);
         $products->appends($request->query());
-        return view("home.search", compact("categories", "brands", "products", "categoryFilter"));
+        return view("home.search", compact("categories", "brands", "products", "categoryFilter", "generalDiscount"));
     }
 }

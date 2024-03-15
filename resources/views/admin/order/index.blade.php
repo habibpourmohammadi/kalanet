@@ -58,9 +58,13 @@
                                         <td><strong class="text-success">{{ priceFormat($order->total_price) }}</strong>
                                             تومان
                                         </td>
-                                        <td>
-                                            <strong>{{ $order->payment->status == 'online' ? 'پرداخت آنلاین' : 'پرداخت در محل' }}</strong>
-                                        </td>
+                                        <th>
+                                            @if ($order->payment)
+                                                {{ $order->payment->status == 'online' ? 'پرداخت آنلاین' : 'پرداخت در محل' }}
+                                            @else
+                                                <span class="text-danger">روند پرداخت طی نشده</span>
+                                            @endif
+                                        </th>
                                         <td><span
                                                 @class([
                                                     'text-success' => $order->payment_status == 'paid',

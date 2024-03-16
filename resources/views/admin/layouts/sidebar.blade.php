@@ -51,10 +51,12 @@
                     </section>
                 </section>
             @endcan
-            <a href="{{ route('admin.order.payment.index') }}" class="sidebar-link">
-                <i class="fas fa-bars"></i>
-                <span>پرداخت ها</span>
-            </a>
+            @can('show_payment')
+                <a href="{{ route('admin.order.payment.index') }}" class="sidebar-link">
+                    <i class="fas fa-bars"></i>
+                    <span>پرداخت ها</span>
+                </a>
+            @endcan
             @can('show_delivery')
                 <a href="{{ route('admin.order.delivery.index') }}" class="sidebar-link">
                     <i class="fas fa-bars"></i>
@@ -134,26 +136,34 @@
                 </section>
             @endcan
 
-            <section class="sidebar-part-title">اطلاعیه ها</section>
+            @can('show_email')
+                <section class="sidebar-part-title">اطلاعیه ها</section>
 
-            <a href="{{ route('admin.notification.email.index') }}" class="sidebar-link">
-                <i class="fas fa-bars"></i>
-                <span>ایمیلی</span>
-            </a>
+                <a href="{{ route('admin.notification.email.index') }}" class="sidebar-link">
+                    <i class="fas fa-bars"></i>
+                    <span>ایمیلی</span>
+                </a>
+            @endcan
 
-            <section class="sidebar-part-title">تخفیف ها</section>
+            @canany(['show_coupon', 'show_general_discount'])
+                <section class="sidebar-part-title">تخفیف ها</section>
 
-            <section class="sidebar-group-link">
-                <section class="sidebar-dropdown-toggle">
-                    <i class="fas fa-chart-bar icon"></i>
-                    <span>تخفیف ها</span>
-                    <i class="fas fa-angle-left angle"></i>
+                <section class="sidebar-group-link">
+                    <section class="sidebar-dropdown-toggle">
+                        <i class="fas fa-chart-bar icon"></i>
+                        <span>تخفیف ها</span>
+                        <i class="fas fa-angle-left angle"></i>
+                    </section>
+                    <section class="sidebar-dropdown">
+                        @can('show_coupon')
+                            <a href="{{ route('admin.discount.coupon.index') }}">کوپن تخفیف</a>
+                        @endcan
+                        @can('show_general_discount')
+                            <a href="{{ route('admin.discount.general.index') }}">تخفیف عمومی</a>
+                        @endcan
+                    </section>
                 </section>
-                <section class="sidebar-dropdown">
-                    <a href="{{ route('admin.discount.coupon.index') }}">کوپن تخفیف</a>
-                    <a href="{{ route('admin.discount.general.index') }}">تخفیف عمومی</a>
-                </section>
-            </section>
+            @endcanany
 
         </section>
     </section>

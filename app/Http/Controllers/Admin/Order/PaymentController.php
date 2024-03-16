@@ -13,6 +13,8 @@ class PaymentController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Payment::class);
+
         $search = request()->search;
 
         $payments = Payment::query()->when($search, function ($payments) use ($search) {
@@ -29,6 +31,8 @@ class PaymentController extends Controller
     // change status
     public function changeStatus(Payment $payment)
     {
+        $this->authorize('changeStatus', [$payment]);
+
         if ($payment->payment_status == "paid") {
             if ($payment->status == "cash") {
                 $payment->update([

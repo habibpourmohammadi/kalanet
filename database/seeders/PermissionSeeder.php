@@ -95,5 +95,30 @@ class PermissionSeeder extends Seeder
         Permission::create(["name" => "send_message_ticket"]);
         Permission::create(["name" => "change_status_ticket"]);
         Permission::create(["name" => "delete_ticket"]);
+
+        // emails
+        Permission::create(["name" => "show_email"]);
+        Permission::create(["name" => "create_email"]);
+        Permission::create(["name" => "send_email"]);
+        Permission::create(["name" => "edit_email"]);
+        Permission::create(["name" => "delete_email"]);
+
+        // coupon discounts
+        Permission::create(["name" => "show_coupon"]);
+        Permission::create(["name" => "create_coupon"]);
+        Permission::create(["name" => "edit_coupon"]);
+        Permission::create(["name" => "change_status_coupon"]);
+        Permission::create(["name" => "delete_coupon"]);
+
+        // general discounts
+        Permission::create(["name" => "show_general_discount"]);
+        Permission::create(["name" => "create_general_discount"]);
+        Permission::create(["name" => "edit_general_discount"]);
+        Permission::create(["name" => "change_status_general_discount"]);
+        Permission::create(["name" => "delete_general_discount"]);
+
+        // payments
+        Permission::create(["name" => "show_payment"]);
+        Permission::create(["name" => "change_status_payment"]);
     }
 }

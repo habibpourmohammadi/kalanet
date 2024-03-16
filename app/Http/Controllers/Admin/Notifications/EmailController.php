@@ -16,6 +16,8 @@ class EmailController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', EmailNotification::class);
+
         $search = request()->search;
 
         $emailNotifications = EmailNotification::query()->when($search, function ($emailNotifications) use ($search) {
@@ -34,6 +36,8 @@ class EmailController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', EmailNotification::class);
+
         return view("admin.notifications.email.create");
     }
 
@@ -42,6 +46,8 @@ class EmailController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->authorize('create', EmailNotification::class);
+
         EmailNotification::create([
             "title" => $request->title,
             "description" => $request->description,
@@ -56,11 +62,15 @@ class EmailController extends Controller
      */
     public function show(EmailNotification $email)
     {
+        $this->authorize('view', [$email]);
+
         return view("admin.notifications.email.show", compact("email"));
     }
 
     public function send(EmailNotification $email)
     {
+        $this->authorize('send', [$email]);
+
         dispatch(new SendEmailNotifications($email));
 
         return back()->with("swal-success", "اطلاعیه ایمیلی مورد نظر با موفقیت ایجاد شد");
@@ -71,6 +81,8 @@ class EmailController extends Controller
      */
     public function edit(EmailNotification $email)
     {
+        $this->authorize('update', [$email]);
+
         return view("admin.notifications.email.edit", compact("email"));
     }
 
@@ -79,6 +91,8 @@ class EmailController extends Controller
      */
     public function update(StoreRequest $request, EmailNotification $email)
     {
+        $this->authorize('update', [$email]);
+
         $email->update([
             "title" => $request->title,
             "description" => $request->description,
@@ -92,6 +106,8 @@ class EmailController extends Controller
      */
     public function destroy(EmailNotification $email)
     {
+        $this->authorize('delete', [$email]);
+
         $email->delete();
 
         return back()->with("swal-success", "اطلاعیه ایمیلی مورد نظر با موفقیت حذف شد");

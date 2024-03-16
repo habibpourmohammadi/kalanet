@@ -15,6 +15,8 @@ class GeneralDiscountController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', GeneralDiscount::class);
+
         $search = request()->search;
 
         $generalDiscounts = GeneralDiscount::query()->when($search, function ($generalDiscounts) use ($search) {
@@ -31,6 +33,8 @@ class GeneralDiscountController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', GeneralDiscount::class);
+
         return view("admin.discount.general.create");
     }
 
@@ -39,6 +43,8 @@ class GeneralDiscountController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->authorize('create', GeneralDiscount::class);
+
         $inputs = $request->validated();
 
         $inputs["start_date"] = date("Y-m-d H:i:s", substr($request->start_date, 0, 10));
@@ -60,6 +66,8 @@ class GeneralDiscountController extends Controller
      */
     public function edit(GeneralDiscount $discount)
     {
+        $this->authorize('update', [$discount]);
+
         return view("admin.discount.general.edit", compact("discount"));
     }
 
@@ -68,6 +76,8 @@ class GeneralDiscountController extends Controller
      */
     public function update(StoreRequest $request, GeneralDiscount $discount)
     {
+        $this->authorize('update', [$discount]);
+
         $inputs = $request->validated();
 
         $inputs["start_date"] = date("Y-m-d H:i:s", substr($request->start_date, 0, 10));
@@ -89,6 +99,8 @@ class GeneralDiscountController extends Controller
      */
     public function destroy(GeneralDiscount $discount)
     {
+        $this->authorize('delete', [$discount]);
+
         $discount->delete();
 
         return to_route("admin.discount.general.index")->with("swal-success", "تخفیف عمومی مورد نظر با موفقیت حذف شد");
@@ -97,6 +109,8 @@ class GeneralDiscountController extends Controller
 
     public function changeStatus(GeneralDiscount $discount)
     {
+        $this->authorize('changeStatus', [$discount]);
+
         if ($discount->status == "deactive") {
             $discount->update([
                 "status" => "active"

@@ -17,6 +17,8 @@ class DiscountCouponController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Coupon::class);
+
         $search = request()->search;
 
         $coupons = Coupon::query()->when($search, function ($coupons) use ($search) {
@@ -35,6 +37,8 @@ class DiscountCouponController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Coupon::class);
+
         $users = User::all();
         return view("admin.discount.coupon.create", compact("users"));
     }
@@ -44,6 +48,8 @@ class DiscountCouponController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->authorize('create', Coupon::class);
+
         $inputs = $request->validated();
 
         if ($request->type == "public") {
@@ -73,6 +79,8 @@ class DiscountCouponController extends Controller
      */
     public function edit(Coupon $coupon)
     {
+        $this->authorize('update', [$coupon]);
+
         $users = User::all();
         return view("admin.discount.coupon.edit", compact("users", "coupon"));
     }
@@ -82,6 +90,8 @@ class DiscountCouponController extends Controller
      */
     public function update(UpdateRequest $request, Coupon $coupon)
     {
+        $this->authorize('update', [$coupon]);
+
         $inputs = $request->validated();
 
         if ($request->type == "public") {
@@ -110,6 +120,8 @@ class DiscountCouponController extends Controller
      */
     public function destroy(Coupon $coupon)
     {
+        $this->authorize('delete', [$coupon]);
+
         DB::transaction(function () use ($coupon) {
             $coupon->update([
                 "coupon" => $coupon->coupon . $coupon->id
@@ -124,6 +136,8 @@ class DiscountCouponController extends Controller
 
     public function changeStatus(Coupon $coupon)
     {
+        $this->authorize('changeStatus', [$coupon]);
+
         if ($coupon->status == "deactive") {
             $coupon->update([
                 "status" => "active"

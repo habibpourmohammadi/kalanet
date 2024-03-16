@@ -33,6 +33,8 @@
 
     @include('home.layouts.script-tag')
     @yield('script')
+    @include('admin.alerts.sweetalert.success')
+    @include('admin.alerts.sweetalert.error')
 </body>
 
 </html>

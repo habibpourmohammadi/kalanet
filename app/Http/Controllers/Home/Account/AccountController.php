@@ -52,7 +52,7 @@ class AccountController extends Controller
             "profile_path" => $profile_path,
         ]);
 
-        return back()->with("success", "اطلاعات حساب کاربری شما با موفقیت ویرایش شد");
+        return back()->with("swal-success", "اطلاعات حساب کاربری شما با موفقیت ویرایش شد");
     }
 
 
@@ -66,7 +66,7 @@ class AccountController extends Controller
     {
         $bookmark->delete();
 
-        return back()->with("success", "محصول مورد نظر با موفقیت از لیست علاقه مندی های شما حذف شد");
+        return back()->with("swal-success", "محصول مورد نظر با موفقیت از لیست علاقه مندی های شما حذف شد");
     }
 
     public function myAddresses()
@@ -88,7 +88,7 @@ class AccountController extends Controller
 
         if ($request->receiver == "true") {
             if ($inputs["recipient_first_name"] == null || $inputs["recipient_last_name"] == null || $inputs["recipient_mobile"] == null) {
-                return back()->with("error", "اطلاعات گیرنده را وارد نمایید");
+                return back()->with("swal-error", "اطلاعات گیرنده را وارد نمایید");
             }
         }
 
@@ -112,7 +112,7 @@ class AccountController extends Controller
             "recipient_mobile" => $inputs["recipient_mobile"],
         ]);
 
-        return back()->with("success", "آدرس جدید شما با موفقیت ثبت شد");
+        return back()->with("swal-success", "آدرس جدید شما با موفقیت ثبت شد");
     }
 
     public function editmyAddresses(Address $address)
@@ -136,7 +136,7 @@ class AccountController extends Controller
 
         if ($request->receiver == "true") {
             if ($inputs["recipient_first_name"] == null || $inputs["recipient_last_name"] == null || $inputs["recipient_mobile"] == null) {
-                return back()->with("error", "اطلاعات گیرنده را وارد نمایید");
+                return back()->with("swal-error", "اطلاعات گیرنده را وارد نمایید");
             }
         }
 
@@ -159,7 +159,7 @@ class AccountController extends Controller
             "recipient_mobile" => $inputs["recipient_mobile"],
         ]);
 
-        return to_route("home.profile.myAddresses.index")->with("success", "آدرس مورد نظر با موفقیت ویرایش شد");
+        return to_route("home.profile.myAddresses.index")->with("swal-success", "آدرس مورد نظر با موفقیت ویرایش شد");
     }
 
     // My Orders - Index page
@@ -223,7 +223,7 @@ class AccountController extends Controller
         }
 
         if (Auth::user()->name == null) {
-            return to_route("home.profile.myProfile.index")->with("error", "لطفا نام خود را وارد نمایید");
+            return to_route("home.profile.myProfile.index")->with("swal-error", "لطفا نام خود را وارد نمایید");
         }
 
         $ticket_id = rand(10000000, 99999999);
@@ -235,7 +235,7 @@ class AccountController extends Controller
             "priority_status" => $inputs["priority_status"],
         ]);
 
-        return to_route("home.profile.myTickets.messages.index", $ticket_id)->with("success", "تیکت شما با موفقیت ثبت شد. گفت و گوی خود را با ادمین وبسایت آغاز کنید");
+        return to_route("home.profile.myTickets.messages.index", $ticket_id)->with("swal-success", "تیکت شما با موفقیت ثبت شد. گفت و گوی خود را با ادمین وبسایت آغاز کنید");
     }
 
     public function myTicketMessages(Ticket $ticket)
@@ -253,7 +253,7 @@ class AccountController extends Controller
         $inputs = $request->validated();
 
         if ($ticket->status == "closed") {
-            return back()->with("error", "تیکت مورد نظر بسته است");
+            return back()->with("swal-error", "تیکت مورد نظر بسته است");
         }
 
         if ($request->hasFile("file_path")) {
@@ -279,6 +279,6 @@ class AccountController extends Controller
             "file_path" => $inputs["file_path"],
         ]);
 
-        return back()->with("success", "پیام شما با موفقیت ثبت شد");
+        return back()->with("swal-success", "پیام شما با موفقیت ثبت شد");
     }
 }

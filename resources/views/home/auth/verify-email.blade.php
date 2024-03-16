@@ -47,6 +47,8 @@
     @include('home.layouts.script-tag')
     <script src="{{ asset('home-assets/js/moment.min.js') }}"></script>
     <script src="{{ asset('home-assets/js/home/verify-email.js') }}"></script>
+    @include('admin.alerts.sweetalert.success')
+    @include('admin.alerts.sweetalert.error')
 </body>
 
 </html>

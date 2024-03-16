@@ -47,15 +47,15 @@ class OrderController extends Controller
             // check product
             if ($cartItem->product->status != 'true') {
                 $cartItem->delete();
-                return to_route("home.index")->with("error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
+                return to_route("home.index")->with("swal-error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
             } elseif ($cartItem->color_id != null && $cartItem->product->colors->where("id", $cartItem->color->id)->first() == null) {
                 $cartItem->delete();
-                return to_route("home.index")->with("error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
+                return to_route("home.index")->with("swal-error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
             } elseif ($cartItem->guarantee_id != null && $cartItem->product->guarantees->where("id", $cartItem->guarantee->id)->first() == null) {
                 $cartItem->delete();
-                return to_route("home.index")->with("error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
+                return to_route("home.index")->with("swal-error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
             } elseif ($cartItem->product->marketable != 'true' || $cartItem->product->marketable_number < $cartItem->number) {
-                return to_route("home.salesProcess.myCart")->with("error", "یکی از محصولات سبد خرید شما ناموجود است ,لطفا سبد خرید خود را بررسی نمایید");
+                return to_route("home.salesProcess.myCart")->with("swal-error", "یکی از محصولات سبد خرید شما ناموجود است ,لطفا سبد خرید خود را بررسی نمایید");
             }
 
             // calc total price and total discount
@@ -126,7 +126,7 @@ class OrderController extends Controller
     {
         $order = Auth::user()->orders->where("payment_status", "unpaid")->where("status", "not_confirmed")->where("delivery_status", "unpaid")->first();
         if ($order == null) {
-            return to_route("home.salesProcess.myCart")->with("error", "لطفا مجدد تلاش کنید");
+            return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا مجدد تلاش کنید");
         }
 
         $generalDiscount = GeneralDiscount::where("start_date", "<", now())->where("end_date", ">", now())->where("status", "active")->get()->last();
@@ -151,7 +151,7 @@ class OrderController extends Controller
         $order = Auth::user()->orders->where("payment_status", "unpaid")->where("status", "not_confirmed")->where("delivery_status", "unpaid")->first();
 
         if ($order->coupon_id != null) {
-            return back()->with("error", "برای این سفارش شما از قبل کد تخفیف ثبت شده است.");
+            return back()->with("swal-error", "برای این سفارش شما از قبل کد تخفیف ثبت شده است.");
         }
 
         $order->update([
@@ -159,7 +159,7 @@ class OrderController extends Controller
             "coupon_obj" => $coupon,
         ]);
 
-        return back()->with("success", "کد تخفیف شما با موفقیت ثبت شد");
+        return back()->with("swal-success", "کد تخفیف شما با موفقیت ثبت شد");
     }
 
     // Payment func
@@ -180,15 +180,15 @@ class OrderController extends Controller
             // check product
             if ($cartItem->product->status != 'true') {
                 $cartItem->delete();
-                return to_route("home.index")->with("error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
+                return to_route("home.index")->with("swal-error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
             } elseif ($cartItem->color_id != null && $cartItem->product->colors->where("id", $cartItem->color->id)->first() == null) {
                 $cartItem->delete();
-                return to_route("home.index")->with("error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
+                return to_route("home.index")->with("swal-error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
             } elseif ($cartItem->guarantee_id != null && $cartItem->product->guarantees->where("id", $cartItem->guarantee->id)->first() == null) {
                 $cartItem->delete();
-                return to_route("home.index")->with("error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
+                return to_route("home.index")->with("swal-error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
             } elseif ($cartItem->product->marketable != 'true' || $cartItem->product->marketable_number < $cartItem->number) {
-                return to_route("home.salesProcess.myCart")->with("error", "یکی از محصولات سبد خرید شما ناموجود است ,لطفا سبد خرید خود را بررسی نمایید");
+                return to_route("home.salesProcess.myCart")->with("swal-error", "یکی از محصولات سبد خرید شما ناموجود است ,لطفا سبد خرید خود را بررسی نمایید");
             }
 
             if (isset($generalDiscount)) {
@@ -204,7 +204,7 @@ class OrderController extends Controller
                 "general_discount_id" => null,
                 "general_discount_obj" => null,
             ]);
-            return to_route("home.salesProcess.myCart")->with("error", "لطفا روند ثبت سفارش خود را تکرار کنید");
+            return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا روند ثبت سفارش خود را تکرار کنید");
         }
 
         if ($order->generalDiscount != null) {
@@ -224,7 +224,7 @@ class OrderController extends Controller
                     "general_discount_id" => null,
                     "general_discount_obj" => null,
                 ]);
-                return to_route("home.salesProcess.myCart")->with("error", "لطفا روند ثبت سفارش خود را تکرار کنید");
+                return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا روند ثبت سفارش خود را تکرار کنید");
             }
         }
 
@@ -247,14 +247,14 @@ class OrderController extends Controller
                     "coupon_id" => null,
                     "coupon_obj" => null,
                 ]);
-                return back()->with("error", "برای کد تخفیف شما مشکلی پیش آمده است ، لطفا دوباره تلاش کنید");
+                return back()->with("swal-error", "برای کد تخفیف شما مشکلی پیش آمده است ، لطفا دوباره تلاش کنید");
             } elseif ($coupon->type == "private") {
                 if ($coupon->user_id != Auth::user()->id) {
                     $order->update([
                         "coupon_id" => null,
                         "coupon_obj" => null,
                     ]);
-                    return back()->with("error", "برای کد تخفیف شما مشکلی پیش آمده است ، لطفا دوباره تلاش کنید");
+                    return back()->with("swal-error", "برای کد تخفیف شما مشکلی پیش آمده است ، لطفا دوباره تلاش کنید");
                 }
             }
         }
@@ -262,24 +262,24 @@ class OrderController extends Controller
 
         // check delivery price
         if ($order->delivery->price != $order->delivery_obj["price"]) {
-            return to_route("home.salesProcess.myCart")->with("error", "قیمت روش ارسال مورد نظر تغییر کرده است، لطفا دوباره تلاش کنید");
+            return to_route("home.salesProcess.myCart")->with("swal-error", "قیمت روش ارسال مورد نظر تغییر کرده است، لطفا دوباره تلاش کنید");
         } elseif ($order->delivery->status != "active") {
-            return to_route("home.salesProcess.myCart")->with("error", "روش ارسال مورد نظر غیر فعال شده است، لطفا دوباره تلاش کنید");
+            return to_route("home.salesProcess.myCart")->with("swal-error", "روش ارسال مورد نظر غیر فعال شده است، لطفا دوباره تلاش کنید");
         }
 
         // check products number
         if ($cartItems->count() != $order->products->count()) {
-            return to_route("home.salesProcess.myCart")->with("error", "لطفا روند ثبت سفارش خود را تکرار کنید");
+            return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا روند ثبت سفارش خود را تکرار کنید");
         }
 
         // check product discount
         if ($totalDiscount != $order->total_discount) {
-            return to_route("home.salesProcess.myCart")->with("error", "لطفا روند ثبت سفارش خود را تکرار کنید");
+            return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا روند ثبت سفارش خود را تکرار کنید");
         }
 
         // check final price
         if (($order->delivery->price + $totalPrice) - ($totalDiscount + $generalDiscountPrice) != $order->total_price) {
-            return to_route("home.salesProcess.myCart")->with("error", "لطفا روند ثبت سفارش خود را تکرار کنید");
+            return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا روند ثبت سفارش خود را تکرار کنید");
         }
 
         if ($payment_type == 2) {
@@ -307,7 +307,7 @@ class OrderController extends Controller
                 }
             });
 
-            return to_route("home.profile.myOrders.index")->with("success", "سفارش شما با موفقیت ثبت شد");
+            return to_route("home.profile.myOrders.index")->with("swal-success", "سفارش شما با موفقیت ثبت شد");
         } elseif ($payment_type == 1) {
 
             DB::transaction(function () use ($order, $generalDiscountPrice) {
@@ -346,9 +346,9 @@ class OrderController extends Controller
 
         // check payment
         if (!$payment) {
-            return to_route("home.index")->with("error", "لطفا دوباره تلاش کنید");
+            return to_route("home.index")->with("swal-error", "لطفا دوباره تلاش کنید");
         } elseif ($payment->order->user->id != Auth::user()->id) {
-            return to_route("home.index")->with("error", "لطفا دوباره تلاش کنید");
+            return to_route("home.index")->with("swal-error", "لطفا دوباره تلاش کنید");
         }
 
         // set values
@@ -371,7 +371,7 @@ class OrderController extends Controller
                 $delivery_status = "processing";
             } elseif ($result["errorCode"] == 3) {
                 // If the token is checked again
-                return to_route("home.profile.myOrders.index")->with("error", "پرداخت شما نامشخص است ، لطفا وضعیت پرداخت سفارش خود و همچنین حساب بانکی خود را چک کنید");
+                return to_route("home.profile.myOrders.index")->with("swal-error", "پرداخت شما نامشخص است ، لطفا وضعیت پرداخت سفارش خود و همچنین حساب بانکی خود را چک کنید");
             } else {
                 // Other errors
                 $second_bank_response = $result;
@@ -412,6 +412,6 @@ class OrderController extends Controller
         });
 
         // redirect user to my orders page
-        return to_route("home.profile.myOrders.index")->with("success", "سفارش شما با موفقیت ثبت شده");
+        return to_route("home.profile.myOrders.index")->with("swal-success", "سفارش شما با موفقیت ثبت شده");
     }
 }

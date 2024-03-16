@@ -68,34 +68,34 @@ Route::middleware("checkActivation")->group(function () {
         Route::middleware("auth")->controller(AccountController::class)->prefix("profile")->group(function () {
             Route::get("/", "myProfile")->name("home.profile.myProfile.index");
             Route::put("/update-profile", "updateProfile")->name("home.profile.myProfile.updateProfile");
-            Route::get("/my-bookmarks", "myBookmarks")->name("home.profile.myBookmarks.index");
-            Route::post("/remove-bookmark/{bookmark}", "removeBookmark")->name("home.profile.myBookmarks.removeBookmark");
-            Route::get("my-addresses", "myAddresses")->name("home.profile.myAddresses.index");
+            Route::get("/my-bookmarks", "myBookmarks")->name("home.profile.myBookmarks.index")->middleware("CheckUserInformations");
+            Route::post("/remove-bookmark/{bookmark}", "removeBookmark")->name("home.profile.myBookmarks.removeBookmark")->middleware("CheckUserInformations");
+            Route::get("my-addresses", "myAddresses")->name("home.profile.myAddresses.index")->middleware("CheckUserInformations");
             Route::get('get-cities/{province?}', 'getCities')->name("home.profile.myAddresses.getCities");
-            Route::post("my-addresses", "storeMyAddress")->name("home.profile.myAddresses.store");
-            Route::get("my-addresses/edit/{address}", "editmyAddresses")->name("home.profile.myAddresses.edit");
-            Route::put("my-addresses/update/{address}", "updateMyAddress")->name("home.profile.myAddresses.update");
-            Route::get("my-orders/{sort?}", "myOrders")->name("home.profile.myOrders.index");
-            Route::get("my-order/{order:tracking_id}", "showMyOrder")->name("home.profile.myOrders.show");
-            Route::get("my-tickets", "myTickets")->name("home.profile.myTickets.index");
-            Route::post("my-tickets", "storeTicket")->name("home.profile.myTickets.storeTicket");
-            Route::get("my-tickets/messages/{ticket:ticket_id}", "myTicketMessages")->name("home.profile.myTickets.messages.index");
-            Route::post("my-tickets/messages/{ticket:ticket_id}", "myTicketMessagesStore")->name("home.profile.myTickets.messages.store");
+            Route::post("my-addresses", "storeMyAddress")->name("home.profile.myAddresses.store")->middleware("CheckUserInformations");
+            Route::get("my-addresses/edit/{address}", "editmyAddresses")->name("home.profile.myAddresses.edit")->middleware("CheckUserInformations");
+            Route::put("my-addresses/update/{address}", "updateMyAddress")->name("home.profile.myAddresses.update")->middleware("CheckUserInformations");
+            Route::get("my-orders/{sort?}", "myOrders")->name("home.profile.myOrders.index")->middleware("CheckUserInformations");
+            Route::get("my-order/{order:tracking_id}", "showMyOrder")->name("home.profile.myOrders.show")->middleware("CheckUserInformations");
+            Route::get("my-tickets", "myTickets")->name("home.profile.myTickets.index")->middleware("CheckUserInformations");
+            Route::post("my-tickets", "storeTicket")->name("home.profile.myTickets.storeTicket")->middleware("CheckUserInformations");
+            Route::get("my-tickets/messages/{ticket:ticket_id}", "myTicketMessages")->name("home.profile.myTickets.messages.index")->middleware("CheckUserInformations");
+            Route::post("my-tickets/messages/{ticket:ticket_id}", "myTicketMessagesStore")->name("home.profile.myTickets.messages.store")->middleware("CheckUserInformations");
         });
 
         // Product
         Route::get("/product/{product:slug}", [HomeProductController::class, "show"])->name("home.product.show");
 
         // add to cart
-        Route::post("/add-to-cart/{product:slug}", [HomeProductController::class, "addToCart"])->name("home.product.addToCart")->middleware("auth");
-        Route::delete("/delete-from-cart/{cartItem}", [HomeProductController::class, "deleteFromCart"])->name("home.product.deleteFromCart")->middleware("auth");
+        Route::post("/add-to-cart/{product:slug}", [HomeProductController::class, "addToCart"])->name("home.product.addToCart")->middleware("auth", "CheckUserInformations");
+        Route::delete("/delete-from-cart/{cartItem}", [HomeProductController::class, "deleteFromCart"])->name("home.product.deleteFromCart")->middleware("auth", "CheckUserInformations");
 
         // submit comment
-        Route::post("/product/comment/{product:slug}", [HomeProductController::class, "submitComment"])->name("home.product.submitComment")->middleware("auth");
-        Route::post("/product/create-comment/{product:slug}", [HomeProductController::class, "createComment"])->name("home.product.createComment")->middleware("auth");
+        Route::post("/product/comment/{product:slug}", [HomeProductController::class, "submitComment"])->name("home.product.submitComment")->middleware("auth", "CheckUserInformations");
+        Route::post("/product/create-comment/{product:slug}", [HomeProductController::class, "createComment"])->name("home.product.createComment")->middleware("auth", "CheckUserInformations");
 
         // Sales Process
-        Route::get("/my-cart", [CartController::class, "index"])->name("home.salesProcess.myCart")->middleware("auth");
+        Route::get("/my-cart", [CartController::class, "index"])->name("home.salesProcess.myCart")->middleware("auth", "CheckUserInformations");
         Route::get("/delivery", [CartController::class, "delivery"])->name("home.salesProcess.delivery")->middleware(["auth", "cartitems"]);
         Route::post("/submit-order", [OrderController::class, "submitOrder"])->name("home.salesProcess.submitOrder")->middleware(["auth", "cartitems"]);
         Route::get("/payment", [OrderController::class, "paymentPage"])->name("home.salesProcess.payment.page")->middleware(["auth", "cartitems"]);

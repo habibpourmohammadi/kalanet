@@ -36,9 +36,9 @@ class ProductController extends Controller
         $comment = $product->comments()->where("id", $inputs["parent_id"])->first();
 
         if ($comment == null) {
-            return back()->with("error", "لطفا دوباره تلاش کنید");
+            return back()->with("swal-error", "لطفا دوباره تلاش کنید");
         } elseif (Auth::user()->name == null) {
-            return to_route("home.profile.myProfile.index")->with("error", "لطفا نام و نام خانوادگی خود را وارد کنید");
+            return to_route("home.profile.myProfile.index")->with("swal-error", "لطفا نام و نام خانوادگی خود را وارد کنید");
         }
 
         Comment::create([
@@ -57,7 +57,7 @@ class ProductController extends Controller
         $inputs = $request->validated();
 
         if (Auth::user()->name == null) {
-            return to_route("home.profile.myProfile.index")->with("error", "لطفا نام و نام خانوادگی خود را وارد کنید");
+            return to_route("home.profile.myProfile.index")->with("swal-error", "لطفا نام و نام خانوادگی خود را وارد کنید");
         }
 
         Comment::create([
@@ -76,9 +76,9 @@ class ProductController extends Controller
         $inputs = $request->validated();
 
         if ($product->marketable_number <= 0 || $product->marketable != 'true') {
-            return back()->with("error", "محصول مورد نظر شما موجود نیست");
+            return back()->with("swal-error", "محصول مورد نظر شما موجود نیست");
         } elseif ($inputs["number"] > $product->marketable_number) {
-            return back()->with("error", "متاسفانه فقط " . $product->marketable_number . " عدد از این محصول موجود است");
+            return back()->with("swal-error", "متاسفانه فقط " . $product->marketable_number . " عدد از این محصول موجود است");
         } elseif ($product->status != "true") {
             return to_route("home.product.show", $product);
         }
@@ -91,9 +91,9 @@ class ProductController extends Controller
 
         if ($productGuarantees->count() > 0) {
             if (!isset($inputs["guarantee_id"])) {
-                return back()->with("error", "انتخاب کردن گارانتی برای محصول الزامی است");
+                return back()->with("swal-error", "انتخاب کردن گارانتی برای محصول الزامی است");
             } elseif ($productGuarantees->where("id", $inputs["guarantee_id"])->first() == null) {
-                return back()->with("error", "گارانتی انتخابی شما برای محصول مورد نظر یافت نشد");
+                return back()->with("swal-error", "گارانتی انتخابی شما برای محصول مورد نظر یافت نشد");
             } else {
                 $guarantee = $productGuarantees->where("id", $inputs["guarantee_id"])->first();
             }
@@ -101,9 +101,9 @@ class ProductController extends Controller
 
         if ($productColors->count() > 0) {
             if (!isset($inputs["color_id"])) {
-                return back()->with("error", "انتخاب کردن رنگ برای محصول الزامی است");
+                return back()->with("swal-error", "انتخاب کردن رنگ برای محصول الزامی است");
             } elseif ($productColors->where("id", $inputs["color_id"])->first() == null) {
-                return back()->with("error", "رنگ انتخابی شما برای محصول مورد نظر یافت نشد");
+                return back()->with("swal-error", "رنگ انتخابی شما برای محصول مورد نظر یافت نشد");
             } else {
                 $color = $productColors->where("id", $inputs["color_id"])->first();
             }
@@ -129,13 +129,13 @@ class ProductController extends Controller
                 "number" => $inputs["number"],
             ]);
 
-            return back()->with("success", "محصول مورد نظر با موفقیت به سبد خرید شما اضافه شد");
+            return back()->with("swal-success", "محصول مورد نظر با موفقیت به سبد خرید شما اضافه شد");
         } else {
             $cartItem->update([
                 "number" => ($cartItem->number + $inputs["number"])
             ]);
 
-            return back()->with("success", "تعداد محصول مورد نظر در سبد خرید شما ویرایش شد");
+            return back()->with("swal-success", "تعداد محصول مورد نظر در سبد خرید شما ویرایش شد");
         }
     }
 
@@ -144,7 +144,7 @@ class ProductController extends Controller
     {
         if (Auth::user()->id == $cartItem->user->id) {
             $cartItem->delete();
-            return back();
+            return back()->with("swal-success", "محصول مورد نظر با موفقیت از سبد خرید شما حذف شد!");
         } else {
             return back();
         }

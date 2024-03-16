@@ -29,6 +29,8 @@
         </section>
     </form>
     @include('home.layouts.script-tag')
+    @include('admin.alerts.sweetalert.success')
+    @include('admin.alerts.sweetalert.error')
 </body>
 
 </html>

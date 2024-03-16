@@ -4,19 +4,6 @@
 @endsection
 @section('content')
 
-    {{-- alerts start --}}
-    @if (session()->has('success'))
-        <div class="alert alert-success text-center mx-5 my-3" role="alert">
-            <strong>{{ session('success') }}</strong>
-        </div>
-    @endif
-    @if (session()->has('error'))
-        <div class="alert alert-danger text-center mx-5 my-3" role="alert">
-            <strong>{{ session('error') }}</strong>
-        </div>
-    @endif
-    {{-- alerts end --}}
-
     <!-- start cart -->
     <form class="mb-4" action="{{ route('home.product.addToCart', $product) }}" method="POST">
         @csrf

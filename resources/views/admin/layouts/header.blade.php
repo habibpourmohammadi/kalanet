@@ -4,7 +4,7 @@
             <span id="sidebar-toggle-show" class="d-inline d-md-none pointer"><i class="fas fa-toggle-off"></i></span>
             <span id="sidebar-toggle-hide" class="d-none d-md-inline pointer"><i class="fas fa-toggle-on"></i></span>
             <span><a href="{{ route('home.index') }}" target="_blank"><img class="logo"
-                        src="{{ asset('admin-assets/images/logo.png') }}" alt=""></a></span>
+                        src="{{ asset('admin-assets/images/kalanetlogo.png') }}" width="120" alt=""></a></span>
             <span class="d-md-none" id="menu-toggle"><i class="fas fa-ellipsis-h"></i></span>
         </section>
     </section>

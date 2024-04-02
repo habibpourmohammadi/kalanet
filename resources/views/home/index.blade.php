@@ -39,13 +39,14 @@
                 <section class="col">
                     <section class="content-wrapper bg-white p-3 rounded-2">
                         <!-- start vontent header -->
-                        <section class="content-header">
+                        <section class="content-header ">
                             <section class="d-flex justify-content-between align-items-center">
                                 <h2 class="content-header-title">
                                     <span>پرفروش ترین کالاها</span>
                                 </h2>
-                                <section class="content-header-link">
-                                    <a href="{{ route('home.search') }}">مشاهده همه</a>
+                                <section>
+                                    <a href="{{ route('home.search') }}"
+                                        class="font-bold transition-all hover:text-red-600">مشاهده همه</a>
                                 </section>
                             </section>
                         </section>
@@ -101,7 +102,8 @@
                                                     </section>
                                                     <section class="product-colors"></section>
                                                     <section class="product-name">
-                                                        <h3>{{ Str::limit($bestSellingProduct->name, 50, '...') }}</h3>
+                                                        <h3 class="">
+                                                            {{ Str::limit($bestSellingProduct->name, 50, '...') }}</h3>
                                                     </section>
                                                     @if ($bestSellingProduct->marketable_number <= 0 || $bestSellingProduct->marketable != 'true')
                                                         <section class="product-price-wrapper">
@@ -110,16 +112,20 @@
                                                             </section>
                                                         </section>
                                                     @else
+                                                        @if (isset($generalDiscount) && $generalDiscount->unit == 'percent')
+                                                            <span
+                                                                class="bg-red-700 text-white text-xs text-center font-medium me-2 px-1.5 py-0.5 rounded">{{ $generalDiscount->amount }}%</span>
+                                                        @endif
                                                         @if ($bestSellingProduct->discount != 0 || isset($generalDiscount))
                                                             <section class="product-discount">
                                                                 @if (isset($generalDiscount))
                                                                     <section class="product-discount">
                                                                         <span
-                                                                            class="product-old-price">{{ priceFormat($bestSellingProduct->price) }}
+                                                                            class="product-old-price text-red-700">{{ priceFormat($bestSellingProduct->price) }}
                                                                             تومان</span>
                                                                     </section>
                                                                     <section class="product-price-wrapper">
-                                                                        <section class="product-price">
+                                                                        <section class="product-price font-semibold">
                                                                             {{ priceFormat($bestSellingProduct->price - $bestSellingProduct->discount - $generalDiscount->generalDiscount($bestSellingProduct->price, $bestSellingProduct->discount)) }}
                                                                             تومان
                                                                         </section>
@@ -127,24 +133,21 @@
                                                                 @else
                                                                     <section class="product-discount">
                                                                         <span
-                                                                            class="product-old-price">{{ priceFormat($bestSellingProduct->price) }}
+                                                                            class="product-old-price text-red-700">{{ priceFormat($bestSellingProduct->price) }}
                                                                             تومان</span>
                                                                     </section>
                                                                     <section class="product-price-wrapper">
-                                                                        <section class="product-price">
+                                                                        <section class="product-price font-semibold">
                                                                             {{ priceFormat($bestSellingProduct->price - $bestSellingProduct->discount) }}
                                                                             تومان
                                                                         </section>
                                                                     </section>
                                                                 @endif
-                                                                @if (isset($generalDiscount) && $generalDiscount->unit == 'percent')
-                                                                    <span
-                                                                        class="product-discount-amount">{{ $generalDiscount->amount }}%</span>
-                                                                @endif
+
                                                             </section>
                                                         @else
                                                             <section class="product-price-wrapper">
-                                                                <section class="product-price">
+                                                                <section class="product-price font-semibold">
                                                                     {{ priceFormat($bestSellingProduct->price) }} تومان
                                                                 </section>
                                                             </section>
@@ -208,8 +211,8 @@
                                 <h2 class="content-header-title">
                                     <span>محصولات پیشنهاد شده</span>
                                 </h2>
-                                <section class="content-header-link">
-                                    <a href="{{ route('home.search') }}">مشاهده همه</a>
+                                <section class="">
+                                    <a href="{{ route('home.search') }}" class="font-bold transition-all hover:text-red-600">مشاهده همه</a>
                                 </section>
                             </section>
                         </section>
@@ -272,16 +275,20 @@
                                                             </section>
                                                         </section>
                                                     @else
+                                                        @if (isset($generalDiscount) && $generalDiscount->unit == 'percent')
+                                                            <span
+                                                                class="bg-red-700 text-white text-xs text-center font-medium me-2 px-1.5 py-0.5 rounded">{{ $generalDiscount->amount }}%</span>
+                                                        @endif
                                                         @if ($recommendedProduct->discount != 0 || isset($generalDiscount))
                                                             <section class="product-discount">
                                                                 @if (isset($generalDiscount))
                                                                     <section class="product-discount">
                                                                         <span
-                                                                            class="product-old-price">{{ priceFormat($recommendedProduct->price) }}
+                                                                            class="product-old-price text-red-700">{{ priceFormat($recommendedProduct->price) }}
                                                                             تومان</span>
                                                                     </section>
                                                                     <section class="product-price-wrapper">
-                                                                        <section class="product-price">
+                                                                        <section class="product-price font-semibold">
                                                                             {{ priceFormat($recommendedProduct->price - $recommendedProduct->discount - $generalDiscount->generalDiscount($recommendedProduct->price, $recommendedProduct->discount)) }}
                                                                             تومان
                                                                         </section>
@@ -289,24 +296,20 @@
                                                                 @else
                                                                     <section class="product-discount">
                                                                         <span
-                                                                            class="product-old-price">{{ priceFormat($recommendedProduct->price) }}
+                                                                            class="product-old-price text-red-700">{{ priceFormat($recommendedProduct->price) }}
                                                                             تومان</span>
                                                                     </section>
                                                                     <section class="product-price-wrapper">
-                                                                        <section class="product-price">
+                                                                        <section class="product-price font-semibold">
                                                                             {{ priceFormat($recommendedProduct->price - $recommendedProduct->discount) }}
                                                                             تومان
                                                                         </section>
                                                                     </section>
                                                                 @endif
-                                                                @if (isset($generalDiscount) && $generalDiscount->unit == 'percent')
-                                                                    <span
-                                                                        class="product-discount-amount">{{ $generalDiscount->amount }}%</span>
-                                                                @endif
                                                             </section>
                                                         @else
                                                             <section class="product-price-wrapper">
-                                                                <section class="product-price">
+                                                                <section class="product-price font-semibold">
                                                                     {{ priceFormat($recommendedProduct->price) }} تومان
                                                                 </section>
                                                             </section>
@@ -358,7 +361,7 @@
 
 
     <!-- start brand part-->
-    <section class="brand-part mb-4 py-4">
+    <section class="brand-part mb-4 py-4 ">
         <section class="container-xxl">
             <section class="row">
                 <section class="col">

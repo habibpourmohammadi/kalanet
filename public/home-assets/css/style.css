@@ -103,6 +103,7 @@ body {
 
 .search-textbox input:focus {
     outline: none;
+    transition-delay: 100000000000000000000000s;
 }
 
 

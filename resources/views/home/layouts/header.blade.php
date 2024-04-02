@@ -9,7 +9,8 @@
 
                 <section class="d-flex justify-content-between align-items-center d-md-block">
                     <a class="text-decoration-none" href="{{ route('home.index') }}"><img
-                            src="{{ asset('home-assets/images/logo/8.png') }}" alt="logo"></a>
+                            src="{{ asset('home-assets/images/logo/kalanetlogo-bg-white.png') }}" alt="logo"
+                            width="120"></a>
                     <button class="btn btn-link text-dark d-md-none" type="button" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
                         <i class="fa fa-bars me-1"></i>
@@ -68,13 +69,23 @@
 
                 <section class="mt-3 mt-md-auto text-end">
                     <section class="d-inline px-md-3">
-                        <button class="btn btn-link text-decoration-none text-dark dropdown-toggle profile-button"
+                        <button
+                            class="btn btn-link text-decoration-none
+                            @if (auth()->check() == false ||
+                                    !\File::exists(public_path(auth()->user()->profile_path)) ||
+                                    auth()->user()->profile_path == null) text-dark dropdown-toggle @endif
+                        profile-button"
                             type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             @guest
                                 <i class="fa fa-user-lock"></i>
                             @endguest
                             @auth
-                                <i class="fa fa-user"></i>
+                                @if (!\File::exists(public_path(auth()->user()->profile_path)) || auth()->user()->profile_path == null)
+                                    <i class="fa fa-user"></i>
+                                @else
+                                    <img src="{{ asset(auth()->user()->profile_path) }}" alt="" width="30"
+                                        class="rounded-full">
+                                @endif
                             @endauth
                         </button>
                         <section class="dropdown-menu dropdown-menu-end custom-drop-down"
@@ -158,12 +169,12 @@
                                             <section>مبلغ قابل پرداخت</section>
                                             <section> {{ priceFormat($totalPrice) }} تومان</section>
                                         </section>
+                                        <section class=""><a class="btn btn-danger btn-sm d-block" href="{{ route("home.salesProcess.myCart") }}">ثبت
+                                            سفارش</a></section>
                                     @else
                                         <section class="">
                                         </section>
                                     @endif
-                                    <section class=""><a class="btn btn-danger btn-sm d-block" href="">ثبت
-                                            سفارش</a></section>
                                 </section>
                             </section>
                         </section>
@@ -176,7 +187,7 @@
 
 
     <!-- start menu -->
-    <nav class="top-nav">
+    <nav class="top-nav bg-stone-100">
         <section class="container-xxl ">
             <nav class="">
                 <section class="d-none d-md-flex justify-content-md-start position-relative">
@@ -197,8 +208,6 @@
                     <section class="border-start my-2 mx-1"></section>
                     <section class="navbar-item"><a href="#">سوپرمارکت</a></section>
                     <section class="navbar-item"><a href="#">تخفیف ها و پیشنهادها</a></section>
-                    <section class="navbar-item"><a href="#">آمازون من</a></section>
-                    <section class="navbar-item"><a href="#">آمازون پلاس</a></section>
                     <section class="navbar-item"><a href="#">درباره ما</a></section>
                     <section class="navbar-item"><a href="#">فروشنده شوید</a></section>
                     <section class="navbar-item"><a href="#">فرصت های شغلی</a></section>
@@ -212,7 +221,8 @@
                     <section class="offcanvas-header">
                         <h5 class="offcanvas-title" id="offcanvasExampleLabel"><a class="text-decoration-none"
                                 href="{{ route('home.index') }}"><img
-                                    src="{{ asset('home-assets/images/logo/8.png') }}" alt="logo"></a></h5>
+                                    src="{{ asset('home-assets/images/logo/kalanetlogo-bg-white.png') }}"
+                                    width="120" alt="logo"></a></h5>
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                             aria-label="Close"></button>
                     </section>
@@ -220,8 +230,6 @@
 
                         <section class="navbar-item"><a href="#">سوپرمارکت</a></section>
                         <section class="navbar-item"><a href="#">تخفیف ها و پیشنهادها</a></section>
-                        <section class="navbar-item"><a href="#">آمازون من</a></section>
-                        <section class="navbar-item"><a href="#">آمازون پلاس</a></section>
                         <section class="navbar-item"><a href="#">درباره ما</a></section>
                         <section class="navbar-item"><a href="#">فروشنده شوید</a></section>
                         <section class="navbar-item"><a href="#">فرصت های شغلی</a></section>

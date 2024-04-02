@@ -1,6 +1,6 @@
 @extends('home.layouts.master')
 @section('title')
-    <title>فروشگاه - پیام های تیکت من</title>
+    <title>فروشگاه اینترنتی کالا نت - پیام های تیکت من</title>
     <link rel="stylesheet" href="{{ asset('admin-assets/css/show-messages.css') }}">
 @endsection
 @section('content')

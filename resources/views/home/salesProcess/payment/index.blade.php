@@ -1,6 +1,6 @@
 @extends('home.layouts.master')
 @section('title')
-    <title>فروشگاه - انتخاب نوع پرداخت</title>
+    <title>فروشگاه اینترنتی کالا نت - انتخاب نوع پرداخت</title>
 @endsection
 @section('content')
     <!-- start cart -->

@@ -114,4 +114,11 @@ class HomeController extends Controller
         $products->appends($request->query());
         return view("home.search", compact("categories", "brands", "products", "categoryFilter", "generalDiscount"));
     }
+
+    // Discounts and offers method
+    public function offers()
+    {
+        $name = "تخفیف ها و پیشنهادها";
+        return view("home.components.coming-soon", compact("name"));
+    }
 }

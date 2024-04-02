@@ -1,7 +1,7 @@
 @extends('home.layouts.master')
 
 @section('title')
-    <title>فروشگاه - لیست علاقه مندی ها</title>
+    <title>فروشگاه اینترنتی کالا نت - لیست علاقه مندی ها</title>
 @endsection
 @section('content')
     <!-- start body -->

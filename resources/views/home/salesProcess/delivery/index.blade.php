@@ -1,6 +1,6 @@
 @extends('home.layouts.master')
 @section('title')
-    <title>فروشگاه - تکمیل اطلاعات ارسال کالا </title>
+    <title>فروشگاه اینترنتی کالا نت - تکمیل اطلاعات ارسال کالا </title>
 @endsection
 @section('content')
     <!-- start cart -->

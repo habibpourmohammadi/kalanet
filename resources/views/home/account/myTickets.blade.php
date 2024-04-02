@@ -1,6 +1,6 @@
 @extends('home.layouts.master')
 @section('title')
-    <title>فروشگاه - تیکت ها من</title>
+    <title>فروشگاه اینترنتی کالا نت - تیکت ها من</title>
 @endsection
 @section('content')
     <!-- start body -->

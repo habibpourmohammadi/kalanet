@@ -1,6 +1,6 @@
 @extends('home.layouts.master')
 @section('title')
-    <title>فروشگاه - سبد خرید</title>
+    <title>فروشگاه اینترنتی کالا نت - سبد خرید</title>
 @endsection
 @section('content')
     <!-- start cart -->
@@ -288,7 +288,7 @@
             <div class="toast-header">
                 <img src="{{ asset('home-assets/images/logo/shopping-icon.png') }}" width="20" class="rounded me-2"
                     alt="">
-                <strong class="me-auto">فروشگاه</strong>
+                <strong class="me-auto">کالا نت</strong>
                 <small>همین الان</small>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>

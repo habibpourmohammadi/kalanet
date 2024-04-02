@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\Order\PaymentController;
 use App\Http\Controllers\Admin\Ticket\TicketController;
 use App\Http\Controllers\Admin\User\PermissionController;
 use App\Http\Controllers\Admin\User\RoleController;
+use App\Http\Controllers\Home\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,6 +104,11 @@ Route::middleware("checkActivation")->group(function () {
 
     // Discounts and offers
     Route::get("/offers", [HomeController::class, "offers"])->name("home.offers.index");
+
+    // contact us
+    Route::controller(ContactController::class)->prefix("contact-us")->group(function () {
+        Route::get("/", "create")->name("home.contactUs.index");
+    });
 
 
     // Admin routes

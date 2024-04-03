@@ -48,7 +48,7 @@ class ProductController extends Controller
             "comment" => $inputs["comment"],
         ]);
 
-        return back()->with("success", "پاسخ شما با موفقیت ثبت شد ، پس از تایید ادمین نمایش داده می شود");
+        return back()->with("swal-success", "پاسخ شما با موفقیت ثبت شد ، پس از تایید ادمین نمایش داده می شود");
     }
 
     // create comment for product
@@ -67,7 +67,7 @@ class ProductController extends Controller
             "comment" => $inputs["comment"],
         ]);
 
-        return back()->with("success", "دیدگاه شما با موفقیت ثبت شد ، پس از تایید ادمین نمایش داده می شود");
+        return back()->with("swal-success", "دیدگاه شما با موفقیت ثبت شد ، پس از تایید ادمین نمایش داده می شود");
     }
 
     // add order in customer cart

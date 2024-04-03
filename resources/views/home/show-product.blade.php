@@ -59,14 +59,14 @@
                                 </section>
                                 <section class="product-info">
                                     @if ($product->colors->count() > 0)
-                                        <p><span>رنگ : <span
+                                        <p class="mb-2"><span>رنگ : <span
                                                     id="colorName">{{ $product->colors->first()->name }}</span></span>
                                         </p>
                                         <p>
                                             @foreach ($product->colors as $color)
                                                 <label for="color-{{ $color->id }}"
                                                     style="background-color: {{ $color->hex_code }};"
-                                                    class="product-info-colors me-1" data-bs-toggle="tooltip"
+                                                    class="product-info-colors me-1 mb-2" data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom" title="{{ $color->name }}"></label>
                                                 <input class="productColorRadio d-none" @checked($color->id == $product->colors->first()->id)
                                                     type="radio" name="colors" id="color-{{ $color->id }}"
@@ -78,7 +78,7 @@
                                         </p>
                                     @endif
                                     @if ($product->guarantees->count() > 0)
-                                        <p><i class="fa fa-shield-alt cart-product-selected-warranty me-1"></i>
+                                        <p class="mb-3"><i class="fa fa-shield-alt cart-product-selected-warranty me-1"></i>
                                             <strong class="me-2">گارانتی </strong>
                                             <select name="guarantee_id" id="productGuarantee"
                                                 class="form-control form-control-sm w-25 d-inline">
@@ -92,19 +92,19 @@
                                         </p>
                                     @endif
                                     @if ($product->marketable == 'false' || $product->marketable_number <= 0)
-                                        <p>
+                                        <p class="mb-3">
                                             <i class="fa fa-store-alt cart-product-selected-store me-1"></i>
                                             <span>کالا ناموجود در انبار</span>
                                         </p>
                                     @else
-                                        <p>
+                                        <p class="mb-3">
                                             <i class="fa fa-store-alt cart-product-selected-store me-1"></i>
                                             <span>کالا موجود در انبار</span>
                                         </p>
                                     @endif
                                     @auth
                                         @if (auth()->user()->bookmarks()->where('product_id', $product->id)->first())
-                                            <p>
+                                            <p class="mb-3">
                                                 <a class="btn btn-light add-product-to-bookmark btn-sm text-decoration-none"
                                                     href="javascript:void(0)"
                                                     data-product-slug="{{ route('home.addToBookmark', $product->slug) }}">
@@ -113,7 +113,7 @@
                                                 </a>
                                             </p>
                                         @else
-                                            <p>
+                                            <p class="mb-3">
                                                 <a class="btn btn-light add-product-to-bookmark btn-sm text-decoration-none"
                                                     href="javascript:void(0)"
                                                     data-product-slug="{{ route('home.addToBookmark', $product->slug) }}">
@@ -156,13 +156,13 @@
 
                         <section class="col-md-3">
                             <section class="content-wrapper bg-white p-3 rounded-2 cart-total-price">
-                                <section class="d-flex justify-content-between align-items-center">
+                                <section class="d-flex justify-content-between align-items-center mb-2">
                                     <p class="text-muted">قیمت کالا</p>
                                     <p class="text-muted">{{ priceFormat($product->price) }}<span class="small">
                                             تومان</span></p>
                                 </section>
                                 @if ($product->colors->count() > 0)
-                                    <section class="d-flex justify-content-between align-items-center">
+                                    <section class="d-flex justify-content-between align-items-center mb-2">
                                         <p class="text-muted">قیمت رنگ کالا</p>
                                         <p class="text-muted">
                                             <span id="finalColorPrice"></span>
@@ -171,7 +171,7 @@
                                     </section>
                                 @endif
                                 @if ($product->guarantees->count() > 0)
-                                    <section class="d-flex justify-content-between align-items-center">
+                                    <section class="d-flex justify-content-between align-items-center mb-2">
                                         <p class="text-muted">قیمت گارانتی کالا</p>
                                         <p class="text-muted">
                                             <span id="finalGuaranteePrice"></span>
@@ -181,7 +181,7 @@
                                 @endif
 
                                 @if ($product->discount != 0)
-                                    <section class="d-flex justify-content-between align-items-center">
+                                    <section class="d-flex justify-content-between align-items-center mb-2">
                                         <p class="text-muted">تخفیف کالا</p>
                                         <p class="text-danger fw-bolder">
                                             <span id="finalDiscountPrice">{{ priceFormat($product->discount) }}</span>
@@ -193,7 +193,7 @@
                                     class="d-none">
 
                                 @if (isset($generalDiscount))
-                                    <section class="d-flex justify-content-between align-items-center">
+                                    <section class="d-flex justify-content-between align-items-center mb-2">
                                         <p class="text-muted">تخفیف وبسایت</p>
                                         <p class="text-danger fw-bolder">
                                             <span
@@ -209,7 +209,7 @@
 
                                 <section class="border-bottom mb-3"></section>
 
-                                <section class="d-flex justify-content-between align-items-center">
+                                <section class="d-flex justify-content-between align-items-center mb-2">
                                     <p class="text-muted">قیمت نهایی</p>
                                     <p class="fw-bolder"><span
                                             id="finalPrice">{{ priceFormat($product->price) }}</span><span
@@ -262,113 +262,115 @@
                             <!-- start vontent header -->
                             <section class="lazyload-wrapper">
                                 <section class="lazyload light-owl-nav owl-carousel owl-theme">
-
                                     @foreach ($categoryProducts as $categoryProduct)
-                                        <section class="item">
-                                            <section class="lazyload-item-wrapper">
-                                                <section class="product">
-                                                    <section class="product-add-to-cart"><a
-                                                            href="{{ route('home.product.show', $categoryProduct) }}"
-                                                            data-bs-toggle="tooltip" data-bs-placement="left"
-                                                            title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a>
-                                                    </section>
-                                                    @auth
-                                                        @if (auth()->user()->bookmarks()->where('product_id', $categoryProduct->id)->first())
-                                                            <section class="product-add-to-favorite">
-                                                                <a href="javascript:void(0)" data-bs-toggle="tooltip"
-                                                                    data-product-slug="{{ route('home.addToBookmark', $categoryProduct->slug) }}"
-                                                                    data-bs-placement="left" title="حذف از علاقه مندی"
-                                                                    class="add-to-bookmark">
-                                                                    <i class="fa fa-heart text-danger"></i></a>
-                                                            </section>
-                                                        @else
-                                                            <section class="product-add-to-favorite">
-                                                                <a href="javascript:void(0)" data-bs-toggle="tooltip"
-                                                                    data-product-slug="{{ route('home.addToBookmark', $categoryProduct->slug) }}"
-                                                                    data-bs-placement="left" title="افزودن به علاقه مندی"
-                                                                    class="add-to-bookmark">
-                                                                    <i class="fa fa-heart"></i></a>
-                                                            </section>
-                                                        @endif
-                                                    @endauth
-                                                    @guest
+                                    <section class="item">
+                                        <section class="lazyload-item-wrapper">
+                                            <section class="product">
+                                                <section class="product-add-to-cart"><a
+                                                        href="{{ route('home.product.show', $categoryProduct) }}"
+                                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                                        title="افزودن به سبد خرید"><i class="fa fa-cart-plus"></i></a>
+                                                </section>
+                                                @auth
+                                                    @if (auth()->user()->bookmarks()->where('product_id', $categoryProduct->id)->first())
                                                         <section class="product-add-to-favorite">
-                                                            <a href="{{ route('home.addToBookmark', $categoryProduct->slug) }}"
-                                                                data-bs-toggle="tooltip"
+                                                            <a href="javascript:void(0)" data-bs-toggle="tooltip"
+                                                                data-product-slug="{{ route('home.addToBookmark', $categoryProduct->slug) }}"
+                                                                data-bs-placement="left" title="حذف از علاقه مندی"
+                                                                class="add-to-bookmark">
+                                                                <i class="fa fa-heart text-danger"></i></a>
+                                                        </section>
+                                                    @else
+                                                        <section class="product-add-to-favorite">
+                                                            <a href="javascript:void(0)" data-bs-toggle="tooltip"
                                                                 data-product-slug="{{ route('home.addToBookmark', $categoryProduct->slug) }}"
                                                                 data-bs-placement="left" title="افزودن به علاقه مندی"
                                                                 class="add-to-bookmark">
                                                                 <i class="fa fa-heart"></i></a>
                                                         </section>
-                                                    @endguest
-                                                    <a class="product-link"
-                                                        href="{{ route('home.product.show', $categoryProduct) }}">
-                                                        <section class="product-image">
-                                                            <img class=""
-                                                                src="{{ asset($categoryProduct->images()->first()->image_path) }}"
-                                                                alt="">
+                                                    @endif
+                                                @endauth
+                                                @guest
+                                                    <section class="product-add-to-favorite">
+                                                        <a href="{{ route('home.addToBookmark', $categoryProduct->slug) }}"
+                                                            data-bs-toggle="tooltip"
+                                                            data-product-slug="{{ route('home.addToBookmark', $categoryProduct->slug) }}"
+                                                            data-bs-placement="left" title="افزودن به علاقه مندی"
+                                                            class="add-to-bookmark">
+                                                            <i class="fa fa-heart"></i></a>
+                                                    </section>
+                                                @endguest
+                                                <a class="product-link"
+                                                    href="{{ route('home.product.show', $categoryProduct->slug) }}">
+                                                    <section class="product-image">
+                                                        <img class=""
+                                                            src="{{ asset($categoryProduct->images->first()->image_path ?? '') }}"
+                                                            alt="">
+                                                    </section>
+                                                    <section class="product-colors"></section>
+                                                    <section class="product-name">
+                                                        <h3 class="">
+                                                            {{ Str::limit($categoryProduct->name, 50, '...') }}</h3>
+                                                    </section>
+                                                    @if ($categoryProduct->marketable_number <= 0 || $categoryProduct->marketable != 'true')
+                                                        <section class="product-price-wrapper">
+                                                            <section class="product-price text-danger">
+                                                                <strong>ناموجود</strong>
+                                                            </section>
                                                         </section>
-                                                        <section class="product-name">
-                                                            <h3>{{ Str::limit($categoryProduct->name, 45, '...') }}</h3>
-                                                        </section>
-                                                        @if ($categoryProduct->marketable_number <= 0 || $categoryProduct->marketable != 'true')
-                                                            <section class="product-price-wrapper">
-                                                                <section class="product-price text-danger">
-                                                                    <strong>ناموجود</strong>
-                                                                </section>
+                                                    @else
+                                                        @if (isset($generalDiscount) && $generalDiscount->unit == 'percent')
+                                                            <span
+                                                                class="bg-red-700 text-white text-xs text-center font-medium me-2 px-1.5 py-0.5 rounded">{{ $generalDiscount->amount }}%</span>
+                                                        @endif
+                                                        @if ($categoryProduct->discount != 0 || isset($generalDiscount))
+                                                            <section class="product-discount">
+                                                                @if (isset($generalDiscount))
+                                                                    <section class="product-discount">
+                                                                        <span
+                                                                            class="product-old-price text-red-700">{{ priceFormat($categoryProduct->price) }}
+                                                                            تومان</span>
+                                                                    </section>
+                                                                    <section class="product-price-wrapper">
+                                                                        <section class="product-price font-semibold">
+                                                                            {{ priceFormat($categoryProduct->price - $categoryProduct->discount - $generalDiscount->generalDiscount($categoryProduct->price, $categoryProduct->discount)) }}
+                                                                            تومان
+                                                                        </section>
+                                                                    </section>
+                                                                @else
+                                                                    <section class="product-discount">
+                                                                        <span
+                                                                            class="product-old-price text-red-700">{{ priceFormat($categoryProduct->price) }}
+                                                                            تومان</span>
+                                                                    </section>
+                                                                    <section class="product-price-wrapper">
+                                                                        <section class="product-price font-semibold">
+                                                                            {{ priceFormat($categoryProduct->price - $categoryProduct->discount) }}
+                                                                            تومان
+                                                                        </section>
+                                                                    </section>
+                                                                @endif
+
                                                             </section>
                                                         @else
-                                                            @if ($categoryProduct->discount != 0 || isset($generalDiscount))
-                                                                <section class="product-discount">
-                                                                    @if (isset($generalDiscount))
-                                                                        <section class="product-discount">
-                                                                            <span
-                                                                                class="product-old-price">{{ priceFormat($categoryProduct->price) }}
-                                                                                تومان</span>
-                                                                        </section>
-                                                                        <section class="product-price-wrapper">
-                                                                            <section class="product-price">
-                                                                                {{ priceFormat($categoryProduct->price - $categoryProduct->discount - $generalDiscount->generalDiscount($categoryProduct->price, $categoryProduct->discount)) }}
-                                                                                تومان
-                                                                            </section>
-                                                                        </section>
-                                                                    @else
-                                                                        <section class="product-discount">
-                                                                            <span
-                                                                                class="product-old-price">{{ priceFormat($categoryProduct->price) }}
-                                                                                تومان</span>
-                                                                        </section>
-                                                                        <section class="product-price-wrapper">
-                                                                            <section class="product-price">
-                                                                                {{ priceFormat($categoryProduct->price - $categoryProduct->discount) }}
-                                                                                تومان
-                                                                            </section>
-                                                                        </section>
-                                                                    @endif
-                                                                    @if (isset($generalDiscount) && $generalDiscount->unit == 'percent')
-                                                                        <span
-                                                                            class="product-discount-amount">{{ $generalDiscount->amount }}%</span>
-                                                                    @endif
+                                                            <section class="product-price-wrapper">
+                                                                <section class="product-price font-semibold">
+                                                                    {{ priceFormat($categoryProduct->price) }} تومان
                                                                 </section>
-                                                            @else
-                                                                <section class="product-price-wrapper">
-                                                                    <section class="product-price">
-                                                                        {{ priceFormat($categoryProduct->price) }} تومان
-                                                                    </section>
-                                                                </section>
-                                                            @endif
+                                                            </section>
                                                         @endif
-                                                        <section class="product-colors">
-                                                            @foreach ($categoryProduct->colors as $color)
-                                                                <section class="product-colors-item"
-                                                                    style="background-color: {{ $color->hex_code }};">
-                                                                </section>
-                                                            @endforeach
-                                                        </section>
-                                                    </a>
-                                                </section>
+                                                    @endif
+                                                    <section class="product-colors">
+                                                        @foreach ($categoryProduct->colors as $color)
+                                                            <section class="product-colors-item"
+                                                                style="background-color: {{ $color->hex_code }};">
+                                                            </section>
+                                                        @endforeach
+                                                    </section>
+                                                </a>
                                             </section>
                                         </section>
+                                    </section>
                                     @endforeach
                                 </section>
                             </section>

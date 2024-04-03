@@ -136,6 +136,13 @@
                 </section>
             @endcan
 
+            <section class="sidebar-part-title">ارتباط با ما</section>
+
+            <a href="{{ route('admin.contactUs.index') }}" class="sidebar-link">
+                <i class="fas fa-bars"></i>
+                <span>پیام های تماس با ما</span>
+            </a>
+
             @can('show_email')
                 <section class="sidebar-part-title">اطلاعیه ها</section>
 

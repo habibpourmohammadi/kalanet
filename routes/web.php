@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\Product\CategoryController;
 use App\Http\Controllers\Home\SalesProcess\CartController;
 use App\Http\Controllers\Admin\Appearance\BannerController;
 use App\Http\Controllers\Admin\Appearance\SliderController;
+use App\Http\Controllers\Admin\Contact\ContactController as AdminContactController;
 use App\Http\Controllers\Admin\Discount\DiscountCouponController;
 use App\Http\Controllers\Admin\Discount\GeneralDiscountController;
 use App\Http\Controllers\Admin\Notifications\EmailController;
@@ -356,6 +357,14 @@ Route::middleware("checkActivation")->group(function () {
                 Route::put("/update/{email}", "update")->name("admin.notification.email.update");
                 Route::delete("/delete/{email}", "destroy")->name("admin.notification.email.delete");
             });
+        });
+
+        // Contact Us
+        Route::controller(AdminContactController::class)->prefix("contact-us")->group(function () {
+            Route::get("/", "index")->name("admin.contactUs.index");
+            Route::get("/show/{contactMessage}", "show")->name("admin.contactUs.show");
+            Route::get("/change-status/{contactMessage}", "changeStatus")->name("admin.contactUs.changeStatus");
+            Route::delete("/delete/{contactMessage}", "destroy")->name("admin.contactUs.delete");
         });
 
         // discounts

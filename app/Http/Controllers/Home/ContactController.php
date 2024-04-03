@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Home;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Home\ContactUs\StoreRequest;
+use App\Models\ContactMessage;
+use Illuminate\Support\Facades\Auth;
 
 class ContactController extends Controller
 {
@@ -12,15 +15,20 @@ class ContactController extends Controller
      */
     public function create()
     {
-        $name = "تماس با ما";
-        return view("home.components.coming-soon", compact("name"));
+        return view("home.contact-us.create");
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        //
+        ContactMessage::create([
+            "user_id" => Auth::user()->id,
+            "title" => $request->title,
+            "message" => $request->message,
+        ]);
+
+        return to_route("home.index")->with("swal-success", "پیام شما با موفقیت ثبت شد ✔");
     }
 }

@@ -106,8 +106,9 @@ Route::middleware("checkActivation")->group(function () {
     Route::get("/offers", [HomeController::class, "offers"])->name("home.offers.index");
 
     // contact us
-    Route::controller(ContactController::class)->prefix("contact-us")->group(function () {
+    Route::middleware("auth")->controller(ContactController::class)->prefix("contact-us")->group(function () {
         Route::get("/", "create")->name("home.contactUs.index");
+        Route::post("/", "store")->name("home.contactUs.store");
     });
 
 

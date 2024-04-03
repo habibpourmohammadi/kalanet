@@ -11,6 +11,7 @@ use App\Models\Comment;
 use App\Models\Product;
 use App\Models\Bookmark;
 use App\Models\CartItem;
+use App\Models\ContactMessage;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -89,5 +90,10 @@ class User extends Authenticatable
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
+    }
+
+    public function contactMessages()
+    {
+        return $this->hasMany(ContactMessage::class);
     }
 }

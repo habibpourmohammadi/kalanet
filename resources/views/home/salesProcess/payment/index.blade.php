@@ -150,20 +150,20 @@
                             </section>
                             <section class="col-md-3">
                                 <section class="content-wrapper bg-white p-3 rounded-2 cart-total-price">
-                                    <section class="d-flex justify-content-between align-items-center">
+                                    <section class="d-flex justify-content-between align-items-center mb-2">
                                         <p class="text-muted">قیمت کالاها ({{ $order->products->count() }})</p>
                                         <p class="text-muted">{{ priceFormat($total_price) }} تومان</p>
                                     </section>
 
                                     @if ($total_discount != 0)
-                                        <section class="d-flex justify-content-between align-items-center">
+                                        <section class="d-flex justify-content-between align-items-center mb-2">
                                             <p class="text-muted">تخفیف کالاها</p>
                                             <p class="text-danger fw-bolder">{{ priceFormat($total_discount) }} تومان</p>
                                         </section>
                                     @endif
 
                                     @if ($generalDiscountPrice != 0)
-                                        <section class="d-flex justify-content-between align-items-center">
+                                        <section class="d-flex justify-content-between align-items-center mb-2">
                                             <p class="text-muted">تخفیف وبسایت</p>
                                             <p class="text-danger fw-bolder">{{ priceFormat($generalDiscountPrice) }} تومان
                                             </p>
@@ -172,20 +172,20 @@
 
                                     <section class="border-bottom mb-3"></section>
 
-                                    <section class="d-flex justify-content-between align-items-center">
+                                    <section class="d-flex justify-content-between align-items-center mb-2">
                                         <p class="text-muted">جمع سبد خرید</p>
                                         <p class="fw-bolder">
                                             {{ priceFormat($total_price - ($total_discount + $generalDiscountPrice)) }}
                                             تومان</p>
                                     </section>
 
-                                    <section class="d-flex justify-content-between align-items-center">
+                                    <section class="d-flex justify-content-between align-items-center mb-2">
                                         <p class="text-muted">هزینه ارسال</p>
                                         <p class="text-warning">{{ priceFormat($order->delivery_obj['price']) }} تومان</p>
                                     </section>
 
                                     @if ($order->coupon)
-                                        <section class="d-flex justify-content-between align-items-center">
+                                        <section class="d-flex justify-content-between align-items-center mb-2">
                                             <p class="text-muted">تخفیف اعمال شده</p>
                                             <p class="text-danger">{{ priceFormat($order->coupon_discount) }} تومان</p>
                                         </section>
@@ -199,7 +199,7 @@
 
                                     <section class="border-bottom mb-3"></section>
 
-                                    <section class="d-flex justify-content-between align-items-center">
+                                    <section class="d-flex justify-content-between align-items-center mb-3">
                                         <p class="text-muted">مبلغ قابل پرداخت</p>
                                         <p class="fw-bold">
                                             {{ priceFormat($order->total_price - $order->coupon_discount) }}

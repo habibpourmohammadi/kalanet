@@ -12,7 +12,7 @@
         @csrf
         <section class="login-wrapper mb-5">
             <section class="login-logo">
-                <img src="{{ asset('home-assets/images/logo/4.png') }}" alt="login">
+                <img src="{{ asset('home-assets/images/logo/kalanetlogo-bg-white.png') }}" alt="login">
             </section>
             <section class="login-title">ورود / ثبت نام</section>
             <section class="login-info">پست الکترونیک خود را وارد کنید</section>

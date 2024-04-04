@@ -13,7 +13,7 @@
         @if ($otp != null)
             <section class="login-wrapper mb-5">
                 <section class="login-logo">
-                    <img src="{{ asset('home-assets/images/logo/4.png') }}" alt="login">
+                    <img src="{{ asset('home-assets/images/logo/kalanetlogo-bg-white.png') }}" alt="login">
                 </section>
                 <section class="login-title">تایید ایمیل</section>
                 <section class="login-info">کد فعال سازی ارسال شده به ایمیل خود را وارد نمایید</section>

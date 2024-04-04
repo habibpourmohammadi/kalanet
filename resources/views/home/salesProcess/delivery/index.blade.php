@@ -168,21 +168,21 @@
                             </section>
                             <section class="col-md-3">
                                 <section class="content-wrapper bg-white p-3 rounded-2 cart-total-price">
-                                    <section class="d-flex justify-content-between align-items-center">
+                                    <section class="d-flex justify-content-between align-items-center mb-2">
                                         <p class="text-muted">قیمت کالاها ({{ $cartItems->count() }})</p>
                                         <p class="text-muted">{{ priceFormat($totalPrice) }} تومان</p>
                                         <span id="totalPrice" class="d-none">{{ $totalPrice - ($discountPrice + $generalDiscountPrice) }}</span>
                                     </section>
 
                                     @if ($discountPrice != 0)
-                                        <section class="d-flex justify-content-between align-items-center">
+                                        <section class="d-flex justify-content-between align-items-center mb-2">
                                             <p class="text-muted">تخفیف کالاها</p>
                                             <p class="text-danger fw-bolder">{{ priceFormat($discountPrice) }} تومان</p>
                                         </section>
                                     @endif
 
                                     @if ($generalDiscountPrice != 0)
-                                        <section class="d-flex justify-content-between align-items-center">
+                                        <section class="d-flex justify-content-between align-items-center mb-2">
                                             <p class="text-muted">تخفیف وبسایت</p>
                                             <p class="text-danger fw-bolder">{{ priceFormat($generalDiscountPrice) }} تومان
                                             </p>
@@ -191,14 +191,14 @@
 
                                     <section class="border-bottom mb-3"></section>
 
-                                    <section class="d-flex justify-content-between align-items-center">
+                                    <section class="d-flex justify-content-between align-items-center mb-2">
                                         <p class="text-muted">جمع سبد خرید</p>
                                         <p class="fw-bolder">
                                             {{ priceFormat($totalPrice - ($discountPrice + $generalDiscountPrice)) }} تومان
                                         </p>
                                     </section>
 
-                                    <section class="d-flex justify-content-between align-items-center">
+                                    <section class="d-flex justify-content-between align-items-center mb-2">
                                         <p class="text-muted">هزینه ارسال</p>
                                         <p class="text-warning"><span id="deliveryPrice">0</span> تومان</p>
                                     </section>
@@ -211,7 +211,7 @@
 
                                     <section class="border-bottom mb-3"></section>
 
-                                    <section class="d-flex justify-content-between align-items-center">
+                                    <section class="d-flex justify-content-between align-items-center mb-3">
                                         <p class="text-muted">مبلغ قابل پرداخت</p>
                                         <p class="fw-bold"><span
                                                 id="finalPrice">{{ priceFormat($totalPrice - ($discountPrice + $generalDiscountPrice)) }}</span>

@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\Appearance\SliderController;
 use App\Http\Controllers\Admin\Contact\ContactController as AdminContactController;
 use App\Http\Controllers\Admin\Discount\DiscountCouponController;
 use App\Http\Controllers\Admin\Discount\GeneralDiscountController;
+use App\Http\Controllers\Admin\faq\FaqController;
 use App\Http\Controllers\Admin\Notifications\EmailController;
 use App\Http\Controllers\Admin\Product\GuaranteeController;
 use App\Http\Controllers\Home\SalesProcess\OrderController;
@@ -370,6 +371,18 @@ Route::middleware("checkActivation")->group(function () {
             Route::get("/show/{contactMessage}", "show")->name("admin.contactUs.show");
             Route::get("/change-status/{contactMessage}", "changeStatus")->name("admin.contactUs.changeStatus");
             Route::delete("/delete/{contactMessage}", "destroy")->name("admin.contactUs.delete");
+        });
+
+        // Frequently Asked Questions (faq)
+        Route::controller(FaqController::class)->prefix("faq")->group(function () {
+            Route::get("/", "index")->name("admin.faq.index");
+            Route::get("/create", "create")->name("admin.faq.create");
+            Route::post("/store", "store")->name("admin.faq.store");
+            Route::get("/edit/{faq}", "edit")->name("admin.faq.edit");
+            Route::put("/update/{faq}", "update")->name("admin.faq.update");
+            Route::get("/show/{faq}", "show")->name("admin.faq.show");
+            Route::get("/change-status/{faq}", "changeStatus")->name("admin.faq.changeStatus");
+            Route::delete("/delete/{faq}", "destroy")->name("admin.faq.delete");
         });
 
         // discounts

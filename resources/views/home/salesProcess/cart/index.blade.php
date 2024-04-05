@@ -97,7 +97,9 @@
                                         </section>
                                     </section>
                                 @empty
-                                    <p class="h4 text-danger text-center"><strong>سبد خرید شما خالی است</strong></p>
+                                    <div class="min-h-60 d-flex align-items-center justify-center">
+                                        <p class="h4 text-white bg-rose-600 text-lg md:text-1xl rounded-lg py-3 px-4 text-center"><strong>سبد خرید شما خالی است ! <i class="fa fa-box-open ms-2 text-rose-100"></i></strong></p>
+                                    </div>
                                 @endforelse
 
                             </section>
@@ -135,13 +137,12 @@
                                     نحوه ارسال انتخابی شما محاسبه و به این مبلغ اضافه شده خواهد شد. و در نهایت پرداخت این
                                     سفارش صورت میگیرد.
                                 </p>
-
-
+                                @if ($cartItems->count() > 0)
                                 <section class="">
                                     <a href="{{ route('home.salesProcess.delivery') }}"
                                         class="btn btn-danger d-block">تکمیل فرآیند خرید</a>
                                 </section>
-
+                                @endif
                             </section>
                         </section>
                     </section>

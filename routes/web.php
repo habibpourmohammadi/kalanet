@@ -112,6 +112,8 @@ Route::middleware("checkActivation")->group(function () {
         Route::post("/", "store")->name("home.contactUs.store");
     });
 
+    // contact us
+    Route::get("/about-us", [HomeController::class, "showAboutUs"])->name("home.aboutUs.index");
 
     // Admin routes
     Route::middleware("auth", "checkRoles")->prefix("admin")->group(function () {

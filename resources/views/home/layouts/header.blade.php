@@ -208,7 +208,7 @@
                     <section class="border-start my-2 mx-1"></section>
                     <section class="navbar-item"><a href="{{ route("home.offers.index") }}">تخفیف ها و پیشنهادها</a></section>
                     <section class="navbar-item"><a href="{{ route("home.contactUs.index") }}">تماس با ما</a></section>
-                    <section class="navbar-item"><a href="#">درباره ما</a></section>
+                    <section class="navbar-item"><a href="{{ route("home.aboutUs.index") }}">درباره ما</a></section>
                     <section class="navbar-item"><a href="#">فروشنده شوید</a></section>
                     <section class="navbar-item"><a href="#">فرصت های شغلی</a></section>
 
@@ -230,7 +230,7 @@
 
                         <section class="navbar-item"><a href="{{ route("home.offers.index") }}">تخفیف ها و پیشنهادها</a></section>
                         <section class="navbar-item"><a href="{{ route("home.contactUs.index") }}">تماس با ما</a></section>
-                        <section class="navbar-item"><a href="#">درباره ما</a></section>
+                        <section class="navbar-item"><a href="{{ route("home.aboutUs.index") }}">درباره ما</a></section>
                         <section class="navbar-item"><a href="#">فروشنده شوید</a></section>
                         <section class="navbar-item"><a href="#">فرصت های شغلی</a></section>
 

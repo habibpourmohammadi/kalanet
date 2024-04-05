@@ -35,7 +35,7 @@
         </section>
         <section class="row">
             <section class="col-md">
-                <section><a class="text-decoration-none text-muted d-inline-block my-2" href="#">درباره ما</a>
+                <section><a class="text-decoration-none text-muted d-inline-block my-2" href="{{ route("home.aboutUs.index") }}">درباره ما</a>
                 </section>
                 <section><a class="text-decoration-none text-muted d-inline-block my-2" href="{{ route("home.contactUs.index") }}">تماس با ما</a>
                 </section>

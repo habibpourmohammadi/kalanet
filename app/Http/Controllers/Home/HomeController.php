@@ -121,4 +121,10 @@ class HomeController extends Controller
         $name = "تخفیف ها و پیشنهادها";
         return view("home.components.coming-soon", compact("name"));
     }
+
+    // show about us page
+    public function showAboutUs()
+    {
+        return view("home.about-us.index");
+    }
 }

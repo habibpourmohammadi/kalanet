@@ -43,7 +43,7 @@
             <section class="col-md">
                 <section><a class="text-decoration-none text-muted d-inline-block my-2" href="#">فرصت های شغلی</a>
                 </section>
-                <section><a class="text-decoration-none text-muted d-inline-block my-2" href="#">سوالات متداول</a>
+                <section><a class="text-decoration-none text-muted d-inline-block my-2" href="{{ route("home.faq.index") }}">سوالات متداول</a>
                 </section>
             </section>
             <section class="col-md-5">

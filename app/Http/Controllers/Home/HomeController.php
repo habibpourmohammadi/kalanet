@@ -11,6 +11,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\GeneralDiscount;
 use App\Http\Controllers\Controller;
+use App\Models\Faq;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -126,5 +127,12 @@ class HomeController extends Controller
     public function showAboutUs()
     {
         return view("home.about-us.index");
+    }
+
+    // show Frequently Asked Questions (faq) page
+    public function showFaq()
+    {
+        $faqItems = Faq::where("status", "active")->get();
+        return view("home.faq.index", compact("faqItems"));
     }
 }

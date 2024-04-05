@@ -1,4 +1,7 @@
 @extends('home.layouts.master')
+@section('title')
+    <title>فروشگاه اینترنتی کالا نت | درباره ما</title>
+@endsection
 @section('content')
     <div class="container m-auto min-h-96 d-flex justify-center align-items-center">
         <div>

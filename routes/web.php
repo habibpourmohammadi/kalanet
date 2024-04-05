@@ -115,6 +115,9 @@ Route::middleware("checkActivation")->group(function () {
     // contact us
     Route::get("/about-us", [HomeController::class, "showAboutUs"])->name("home.aboutUs.index");
 
+    // Frequently Asked Questions (faq)
+    Route::get("/faq", [HomeController::class, "showFaq"])->name("home.faq.index");
+
     // Admin routes
     Route::middleware("auth", "checkRoles")->prefix("admin")->group(function () {
         Route::get("/", [AdminController::class, "index"])->name("admin.index");

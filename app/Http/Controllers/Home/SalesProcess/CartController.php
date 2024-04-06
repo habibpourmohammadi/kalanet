@@ -13,29 +13,48 @@ class CartController extends Controller
 {
     public function index()
     {
-        $cartItems = Auth::user()->cartItems;
-        $cartItemProductIds = [];
+        // Eager loading cart items with product information
+        $cartItems = Auth::user()->cartItems()->with('product.category.products')->get();
+
+        // Extracting product IDs from cart items
+        $cartItemProductIds = $cartItems->pluck('product.id')->all();
+
+        // Fetching related products using eager loading
         $relatedProducts = collect();
-        $discountPrice = 0;
-        $generalDiscountPrice = 0;
-        $totalPrice = 0;
-
-        $generalDiscount = GeneralDiscount::where("start_date", "<", now())->where("end_date", ">", now())->where("status", "active")->get()->last();
-
         foreach ($cartItems as $cartItem) {
-            array_push($cartItemProductIds, $cartItem->product->id);
-            foreach ($cartItem->product->category->products as $product) {
-                $relatedProducts = $relatedProducts->concat([$product]);
-            }
-            $discountPrice += ($cartItem->product->discount * $cartItem->number);
-            if (isset($generalDiscount)) {
-                $generalDiscountPrice += $generalDiscount->generalDiscount($cartItem->product->price, $cartItem->product->discount) * $cartItem->number;
-            }
-            $totalPrice += $cartItem->totalPrice();
+            $relatedProducts = $relatedProducts->merge($cartItem->product->category->products);
         }
 
-        $relatedProducts = $relatedProducts->unique();
-        $relatedProducts = $relatedProducts->whereNotIn("id", $cartItemProductIds)->take(15);
+
+        // Calculating total discount and total price using aggregate queries
+        $discountPrice = $cartItems->sum(function ($item) {
+            return $item->product->discount * $item->number;
+        });
+
+
+        // Fetching general discount
+        $generalDiscount = GeneralDiscount::where("start_date", "<", now())
+            ->where("end_date", ">", now())
+            ->where("status", "active")
+            ->latest()
+            ->first();
+
+        // Calculating general discount price using total price of products
+        $generalDiscountPrice = $generalDiscount ? $cartItems->sum(function ($item) use ($generalDiscount) {
+            return $generalDiscount->generalDiscount($item->product->price, $item->product->discount) * $item->number;
+        }) : 0;
+
+
+        // Calculating total price using totalPrice() method
+        $totalPrice = $cartItems->sum(function ($item) {
+            return $item->totalPrice();
+        });
+
+
+        // Filtering unique related products and excluding those already in the cart
+        $relatedProducts = $relatedProducts->unique('id')->reject(function ($product) use ($cartItemProductIds) {
+            return in_array($product->id, $cartItemProductIds);
+        })->take(15);
 
         return view("home.salesProcess.cart.index", compact("cartItems", "relatedProducts", "discountPrice", "generalDiscount", "totalPrice", "generalDiscountPrice"));
     }

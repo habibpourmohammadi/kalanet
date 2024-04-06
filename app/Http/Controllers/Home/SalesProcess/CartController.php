@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
+    // show the shopping cart page
     public function index()
     {
         // Eager loading cart items with product information
@@ -59,27 +60,42 @@ class CartController extends Controller
         return view("home.salesProcess.cart.index", compact("cartItems", "relatedProducts", "discountPrice", "generalDiscount", "totalPrice", "generalDiscountPrice"));
     }
 
+    // Displaying the checkout information completion page
     public function delivery()
     {
-        $cartItems = Auth::user()->cartItems;
-        $totalPrice = 0;
-        $discountPrice = 0;
+        $user = Auth::user();
+
+        // Eager loading cart items with product information
+        $cartItems = $user->cartItems()->with('product')->get();
+
+        // Calculate total price
+        $totalPrice = $cartItems->sum(function ($cartItem) {
+            return $cartItem->totalPrice();
+        });
+
+        // Calculate discount price
+        $discountPrice = $cartItems->sum(function ($cartItem) {
+            return $cartItem->product->discount * $cartItem->number;
+        });
+
+        // Fetching general discount
         $generalDiscountPrice = 0;
+        $generalDiscount = GeneralDiscount::where("start_date", "<", now())->where("end_date", ">", now())->where("status", "active")->latest()->first();
 
-        $generalDiscount = GeneralDiscount::where("start_date", "<", now())->where("end_date", ">", now())->where("status", "active")->get()->last();
-
-        foreach ($cartItems as $cartItem) {
-            $totalPrice +=  $cartItem->totalPrice();
-            if (isset($generalDiscount)) {
-                $generalDiscountPrice += $generalDiscount->generalDiscount($cartItem->product->price, $cartItem->product->discount) * $cartItem->number;
-            }
-            $discountPrice += ($cartItem->product->discount * $cartItem->number);
+        // Calculating general discount price
+        if ($generalDiscount) {
+            $generalDiscountPrice = $cartItems->sum(function ($cartItem) use ($generalDiscount) {
+                return $generalDiscount->generalDiscount($cartItem->product->price, $cartItem->product->discount) * $cartItem->number;
+            });
         }
 
-        $addresses = Auth::user()->addresses;
-        $deliveries = Delivery::where("status", "active")->get();
+        // Eager loading user addresses
+        $addresses = $user->addresses;
 
+        // Fetching deliveries and provinces
+        $deliveries = Delivery::where("status", "active")->get();
         $provinces = Province::where("status", "active")->get();
+
         return view("home.salesProcess.delivery.index", compact("addresses", "deliveries", "provinces", "cartItems", "totalPrice", "discountPrice", "generalDiscountPrice"));
     }
 }

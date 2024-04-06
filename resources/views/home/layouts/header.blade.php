@@ -135,6 +135,7 @@
                                 <section class="header-cart-dropdown-body">
                                     @php
                                         $totalPrice = 0;
+                                        $totalDiscountPrice = 0;
                                     @endphp
                                     @forelse (auth()->user()->cartItems as $cartItem)
                                         <section
@@ -156,21 +157,22 @@
                                         </section>
                                         @php
                                             $totalPrice += $cartItem->totalPrice();
+                                            $totalDiscountPrice += $cartItem->product->discount * $cartItem->number;
                                         @endphp
                                     @empty
                                         <strong class="text-center d-block text-danger">سبد خرید شما خالی است</strong>
                                     @endforelse
-
                                 </section>
                                 <section
                                     class="header-cart-dropdown-footer border-top d-flex justify-content-between align-items-center p-2">
                                     @if (auth()->user()->cartItems->count() > 0)
                                         <section class="">
                                             <section>مبلغ قابل پرداخت</section>
-                                            <section> {{ priceFormat($totalPrice) }} تومان</section>
+                                            <section> {{ priceFormat($totalPrice - $totalDiscountPrice) }} تومان</section>
                                         </section>
-                                        <section class=""><a class="btn btn-danger btn-sm d-block" href="{{ route("home.salesProcess.myCart") }}">ثبت
-                                            سفارش</a></section>
+                                        <section class=""><a class="btn btn-danger btn-sm d-block"
+                                                href="{{ route('home.salesProcess.myCart') }}">ثبت
+                                                سفارش</a></section>
                                     @else
                                         <section class="">
                                         </section>
@@ -206,9 +208,11 @@
                         </section>
                     </section>
                     <section class="border-start my-2 mx-1"></section>
-                    <section class="navbar-item"><a href="{{ route("home.offers.index") }}">تخفیف ها و پیشنهادها</a></section>
-                    <section class="navbar-item"><a href="{{ route("home.contactUs.index") }}">تماس با ما</a></section>
-                    <section class="navbar-item"><a href="{{ route("home.aboutUs.index") }}">درباره ما</a></section>
+                    <section class="navbar-item"><a href="{{ route('home.offers.index') }}">تخفیف ها و پیشنهادها</a>
+                    </section>
+                    <section class="navbar-item"><a href="{{ route('home.contactUs.index') }}">تماس با ما</a>
+                    </section>
+                    <section class="navbar-item"><a href="{{ route('home.aboutUs.index') }}">درباره ما</a></section>
                     <section class="navbar-item"><a href="#">فروشنده شوید</a></section>
                     <section class="navbar-item"><a href="#">فرصت های شغلی</a></section>
 
@@ -228,9 +232,12 @@
                     </section>
                     <section class="offcanvas-body">
 
-                        <section class="navbar-item"><a href="{{ route("home.offers.index") }}">تخفیف ها و پیشنهادها</a></section>
-                        <section class="navbar-item"><a href="{{ route("home.contactUs.index") }}">تماس با ما</a></section>
-                        <section class="navbar-item"><a href="{{ route("home.aboutUs.index") }}">درباره ما</a></section>
+                        <section class="navbar-item"><a href="{{ route('home.offers.index') }}">تخفیف ها و
+                                پیشنهادها</a></section>
+                        <section class="navbar-item"><a href="{{ route('home.contactUs.index') }}">تماس با ما</a>
+                        </section>
+                        <section class="navbar-item"><a href="{{ route('home.aboutUs.index') }}">درباره ما</a>
+                        </section>
                         <section class="navbar-item"><a href="#">فروشنده شوید</a></section>
                         <section class="navbar-item"><a href="#">فرصت های شغلی</a></section>
 

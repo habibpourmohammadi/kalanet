@@ -21,105 +21,121 @@ use App\Http\Requests\Home\Order\SubmitOrderRequest;
 class OrderController extends Controller
 {
     private $result;
+
+    // Order registration
     public function submitOrder(SubmitOrderRequest $request)
     {
+        // Get authenticated user
+        $user = Auth::user();
+
+        // Find address and delivery
         $address = Address::find($request->address);
         $delivery = Delivery::find($request->delivery_type);
-        $user = Auth::user();
-        $user_obj = ["id" => $user->id, "name" =>  $user->name, "email" =>  $user->email];
-        $generalDiscount = GeneralDiscount::where("start_date", "<", now())->where("end_date", ">", now())->where("status", "active")->get()->last();
 
-        // check values
-        if ($address->user->id != $user->id) {
-            return back();
-        } elseif ($delivery->status != "active") {
-            return back();
+        // Check if the address belongs to the authenticated user and delivery status is active
+        if ($address->user_id != $user->id || $delivery->status != "active") {
+            // Redirect back with error message if invalid data is submitted
+            return redirect()->back()->with("swal-error", "اطلاعات ارسال شده نامعتبر است");
         }
 
-        // calc total price and total discount
+        // Initialize total price, total discount, and total general discount
         $total_price = 0;
         $total_discount = 0;
         $total_general_discount = 0;
 
-        // find products
-        foreach ($user->cartItems as $cartItem) {
+        // Find active general discount
+        $generalDiscount = GeneralDiscount::where("start_date", "<", now())
+            ->where("end_date", ">", now())
+            ->where("status", "active")
+            ->latest()
+            ->first();
 
-            // check product
-            if ($cartItem->product->status != 'true') {
+        // Calculate total price, total discount, and total general discount for each cart item
+        foreach ($user->cartItems as $cartItem) {
+            // Check if product is valid
+            if (
+                $cartItem->product->status != 'true' ||
+                ($cartItem->color_id && !$cartItem->product->colors->contains('id', $cartItem->color_id)) ||
+                ($cartItem->guarantee_id && !$cartItem->product->guarantees->contains('id', $cartItem->guarantee_id)) ||
+                $cartItem->product->marketable != 'true' ||
+                $cartItem->product->marketable_number < $cartItem->number
+            ) {
+                // Delete invalid cart item and redirect to home page with error message
                 $cartItem->delete();
-                return to_route("home.index")->with("swal-error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
-            } elseif ($cartItem->color_id != null && $cartItem->product->colors->where("id", $cartItem->color->id)->first() == null) {
-                $cartItem->delete();
-                return to_route("home.index")->with("swal-error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
-            } elseif ($cartItem->guarantee_id != null && $cartItem->product->guarantees->where("id", $cartItem->guarantee->id)->first() == null) {
-                $cartItem->delete();
-                return to_route("home.index")->with("swal-error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
-            } elseif ($cartItem->product->marketable != 'true' || $cartItem->product->marketable_number < $cartItem->number) {
-                return to_route("home.salesProcess.myCart")->with("swal-error", "یکی از محصولات سبد خرید شما ناموجود است ,لطفا سبد خرید خود را بررسی نمایید");
+                return redirect()->route("home.index")->with("swal-error", "یکی از محصولات سبد خرید شما مشکلی دارد. لطفاً سبد خرید خود را بررسی نمایید.");
             }
 
-            // calc total price and total discount
+            // Calculate total price and total discount
             $total_price += $cartItem->totalPrice();
             $total_discount += $cartItem->product->discount * $cartItem->number;
-            if (isset($generalDiscount)) {
+
+            // Calculate total general discount if applicable
+            if ($generalDiscount) {
                 $total_general_discount += $generalDiscount->generalDiscount($cartItem->product->price, $cartItem->product->discount) * $cartItem->number;
             }
         }
 
-        // find tracking_id
-        $user_order = $user->orders()->where("payment_status", "unpaid")->where("status", "not_confirmed")->where("delivery_status", "unpaid")->first();
+        // Start database transaction to create/update order and attach products
+        DB::transaction(function () use ($user, $address, $delivery, $total_price, $total_discount, $total_general_discount, $generalDiscount) {
+            // Generate tracking ID if not exists
+            $tracking_id = $user->orders()->where("payment_status", "unpaid")->where("status", "not_confirmed")->where("delivery_status", "unpaid")->value('tracking_id') ?? rand(11111111, 99999999);
 
-        if ($user_order != null) {
-            $tracking_id = $user_order->tracking_id;
-        } else {
-            $tracking_id = rand(11111111, 99999999);
-        }
-
-        DB::transaction(function () use ($user, $address, $delivery, $tracking_id, $total_price, $total_discount, $user_obj, $generalDiscount, $total_general_discount) {
-            // find or create Order
-            $order = Order::updateOrCreate(
-                ['user_id' => $user->id, "payment_status" => "unpaid", "status" => "not_confirmed", "delivery_status" => "unpaid", "tracking_id" => $tracking_id],
+            // Find or create order
+            $order = $user->orders()->updateOrCreate(
+                ['payment_status' => "unpaid", 'status' => "not_confirmed", 'delivery_status' => "unpaid", 'tracking_id' => $tracking_id],
                 [
-                    'address_id' => $address->id, 'delivery_id' => $delivery->id, 'general_discount_id' => $generalDiscount->id ?? null, "total_price" => ($total_price + $delivery->price) -  ($total_discount + $total_general_discount), "total_discount" => $total_discount, "user_obj" => $user_obj, "address_obj" => $address, "delivery_obj" => $delivery, "general_discount_obj" => $generalDiscount
+                    'address_id' => $address->id,
+                    'delivery_id' => $delivery->id,
+                    'general_discount_id' => $generalDiscount ? $generalDiscount->id : null,
+                    'delivery_price' => $delivery->price,
+                    'total_price' => $total_price,
+                    'total_discount' => $total_discount,
+                    'total_general_discount' => $total_general_discount,
+                    'final_price' => ($total_price + $delivery->price) - ($total_discount + $total_general_discount),
+                    'user_obj' => $user->only(['id', 'name', 'email']),
+                    'address_obj' => $address,
+                    'delivery_obj' => $delivery,
+                    'general_discount_obj' => $generalDiscount
                 ]
             );
 
-            // detach old products
+            // Detach existing products from order
             $order->products()->detach();
 
-            // find product and attach
+            // Attach products to order with relevant details
             foreach ($user->cartItems as $cartItem) {
-                if ($cartItem->color != null) {
-                    $color_price = $cartItem->product->colors->where("id", $cartItem->color_id)->first()->pivot->price;
-                } else {
-                    $color_price = null;
-                }
+                // Get color price if exists
+                $color_price = $cartItem->color ? $cartItem->product->colors->where("id", $cartItem->color_id)->first()->pivot->price : null;
 
-                if ($cartItem->guarantee != null) {
-                    $guarantee_price = $cartItem->product->guarantees->where("id", $cartItem->guarantee_id)->first()->pivot->price;
-                } else {
-                    $guarantee_price = null;
-                }
+                // Get guarantee price if exists
+                $guarantee_price = $cartItem->guarantee ? $cartItem->product->guarantees->where("id", $cartItem->guarantee_id)->first()->pivot->price : null;
 
+                // Calculate product total general discount
+                $product_total_general_discount = $generalDiscount ? $generalDiscount->generalDiscount($cartItem->product->price, $cartItem->product->discount) * $cartItem->number : 0;
+
+                // Attach product to order
                 $order->products()->attach($cartItem->product->id, [
                     'color_name' => $cartItem->color->name ?? null,
                     "color_hex_code" => $cartItem->color->hex_code ?? null,
                     "color_price" => $color_price,
                     "guarantee_persian_name" => $cartItem->guarantee->persian_name ?? null,
-                    "guarantee_price" => $guarantee_price ?? null,
+                    "guarantee_price" => $guarantee_price,
                     "product_price" => $cartItem->product->price,
                     "product_discount" => $cartItem->product->discount,
                     "number" => $cartItem->number,
                     "total_price" => $cartItem->totalPrice(),
                     "total_discount" => $cartItem->product->discount * $cartItem->number,
-                    "product_obj" => json_encode($cartItem->product->toArray()),
+                    "total_general_discount" => $product_total_general_discount,
+                    "final_price" => $cartItem->totalPrice() - ($product_total_general_discount + ($cartItem->product->discount * $cartItem->number)),
+                    "product_obj" => $cartItem->product->toJson()
                 ]);
             }
         });
 
-        // redirect to the payment page
-        return to_route("home.salesProcess.payment.page");
+        // Redirect to the payment page
+        return redirect()->route("home.salesProcess.payment.page");
     }
+
 
     // Payment Page
     public function paymentPage()

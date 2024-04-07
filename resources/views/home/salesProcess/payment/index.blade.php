@@ -180,7 +180,7 @@
                                     <section class="d-flex justify-content-between align-items-center mb-3">
                                         <p class="text-muted">مبلغ قابل پرداخت</p>
                                         <p class="fw-bold">
-                                            {{ priceFormat($order->final_price) }}
+                                            {{ priceFormat($order->final_price - $order->coupon_discount) }}
                                             تومان</p>
                                     </section>
 

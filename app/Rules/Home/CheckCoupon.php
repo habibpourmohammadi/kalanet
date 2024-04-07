@@ -16,11 +16,15 @@ class CheckCoupon implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
+        // Retrieve the coupon with the provided code
         $coupon = Coupon::where("coupon", $value)->first();
 
+        // Check if the coupon exists, is active, and is within its validity period
         if ($coupon == null || $coupon->status == "deactive" || $coupon->start_date > now() || $coupon->end_date < now()) {
             $fail("لطفا یک کد تخفیف متعبر وارد کنید.");
         }
+
+        // If the coupon exists, check if it is of type "private" and belongs to the authenticated user
         if ($coupon) {
             if ($coupon->type == "private") {
                 if ($coupon->user->id != Auth::user()->id) {

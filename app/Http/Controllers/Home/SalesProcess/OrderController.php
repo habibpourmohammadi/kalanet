@@ -147,7 +147,7 @@ class OrderController extends Controller
 
         // If no such order exists, redirect back with an error message.
         if ($order == null) {
-            return to_route("home.salesProcess.myCart")->with("swal-error", "Please try again.");
+            return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا دوباره تلاش کنید.");
         }
 
         // Fetching the currently active general discount, if any.
@@ -177,21 +177,30 @@ class OrderController extends Controller
         return view("home.salesProcess.payment.index", compact("order", "total_price", "total_discount", "generalDiscountPrice"));
     }
 
+    // Validates and applies a discount coupon to the current order.
     public function checkCoupon(CouponRequest $request)
     {
+        // Retrieve the coupon based on the provided code.
         $coupon = Coupon::where("coupon", $request->coupon)->first();
-        $order = Auth::user()->orders->where("payment_status", "unpaid")->where("status", "not_confirmed")->where("delivery_status", "unpaid")->first();
 
+        // Retrieve the unpaid and not confirmed order for the authenticated user.
+        $order = Auth::user()->orders->where("payment_status", "unpaid")
+            ->where("status", "not_confirmed")
+            ->where("delivery_status", "unpaid")
+            ->first();
+
+        // Check if the order already has a coupon applied.
         if ($order->coupon_id != null) {
-            return back()->with("swal-error", "برای این سفارش شما از قبل کد تخفیف ثبت شده است.");
+            return back()->with("swal-error", "کوپن تخفیف قبلاً برای این سفارش اعمال شده است.");
         }
 
+        // Update the order with the applied coupon details.
         $order->update([
             "coupon_id" => $coupon->id,
             "coupon_obj" => $coupon,
         ]);
 
-        return back()->with("swal-success", "کد تخفیف شما با موفقیت ثبت شد");
+        return back()->with("swal-success", "کوپن تخفیف شما با موفقیت اعمال شد.");
     }
 
     // Payment func

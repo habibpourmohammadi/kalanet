@@ -100,53 +100,37 @@ class Order extends Model
         }
     }
 
+    // Calculates and returns the discount amount based on applied coupon
     public function getCouponDiscountAttribute()
     {
+        // Retrieve the coupon associated with the order
         $coupon = $this->coupon;
+        $price = ($this->total_price + $this->delivery_price) - ($this->total_discount + $this->total_general_discount);
+
+        // Check if the coupon is valid and active
         if ($coupon != null && $coupon->start_date < now() && $coupon->end_date > now() && $coupon->status == "active") {
+
+            // Check if the coupon is of type "private" and belongs to the authenticated user
             if ($coupon->type == "private" && $coupon->user_id != auth()->user()->id) {
-                return 0;
+                return 0; // Return 0 discount if the coupon is private and does not belong to the user
             }
+
+            // Calculate discount based on the type of coupon
             if ($coupon->unit == "percent") {
-                $discountAmount = $this->total_price * ($coupon->amount / 100);
-                if ($coupon->discount_limit != null) {
-                    if ($discountAmount >= $coupon->discount_limit) {
-                        return $coupon->discount_limit;
-                    } else {
-                        return $discountAmount;
-                    }
-                } else {
-                    return $discountAmount;
-                }
+                $discountAmount = $price * ($coupon->amount / 100); // Calculate discount amount as percentage of total price
             } else {
-                $discountAmount = $coupon->amount;
-                if ($discountAmount > $this->total_price) {
-                    $discountAmount = $this->total_price;
-                }
-                if ($coupon->discount_limit != null) {
-                    if ($discountAmount >= $coupon->discount_limit) {
-                        if ($coupon->discount_limit > $this->total_price) {
-                            return $this->total_price;
-                        } else {
-                            return $coupon->discount_limit;
-                        }
-                    } else {
-                        if ($discountAmount > $this->total_price) {
-                            return $this->total_price;
-                        } else {
-                            return $discountAmount;
-                        }
-                    }
-                } else {
-                    if ($discountAmount > $this->total_price) {
-                        return $this->total_price;
-                    } else {
-                        return $discountAmount;
-                    }
-                }
+                $discountAmount = min($coupon->amount, $price); // Calculate discount amount as fixed amount
             }
+
+            // Apply discount limit if specified
+            if ($coupon->discount_limit != null) {
+                $discountAmount = min($discountAmount, $coupon->discount_limit); // Apply discount limit
+            }
+
+            return $discountAmount; // Return the calculated discount amount
+
         } else {
-            return 0;
+            return 0; // Return 0 discount if no valid coupon is applied
         }
     }
 }

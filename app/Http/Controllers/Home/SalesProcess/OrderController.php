@@ -203,52 +203,67 @@ class OrderController extends Controller
         return back()->with("swal-success", "کوپن تخفیف شما با موفقیت اعمال شد.");
     }
 
-    // Payment func
+    // Handles the payment process for placing an order
     public function payment(PaymentRequest $request)
     {
+        // Retrieve payment type from the request
         $payment_type = $request->payment_type;
-        $order = Auth::user()->orders->where("payment_status", "unpaid")->where("status", "not_confirmed")->where("delivery_status", "unpaid")->first();
-        $cartItems = Auth::user()->cartItems;
-        $generalDiscount = GeneralDiscount::where("start_date", "<", now())->where("end_date", ">", now())->where("status", "active")->get()->last();
 
-        // get totalPrice and total discount
+        // Retrieve the unpaid and not confirmed order for the authenticated user
+        $order = Auth::user()->orders->where("payment_status", "unpaid")
+            ->where("status", "not_confirmed")
+            ->where("delivery_status", "unpaid")
+            ->first();
+
+        // Retrieve cart items and general discount
+        $cartItems = Auth::user()->cartItems;
+        $generalDiscount = GeneralDiscount::where("start_date", "<", now())
+            ->where("end_date", ">", now())
+            ->where("status", "active")
+            ->latest()
+            ->first();
+
+        // Initialize variables for total price, total discount, and general discount price
         $totalPrice = 0;
         $totalDiscount = 0;
         $generalDiscountPrice = 0;
 
-        // last check for cartItems
+        // Check the validity of cart items and calculate prices and discounts
         foreach ($cartItems as $cartItem) {
-            // check product
-            if ($cartItem->product->status != 'true') {
+            // Validate product and related attributes
+            if (
+                $cartItem->product->status != 'true' ||
+                ($cartItem->color_id != null && $cartItem->product->colors->where("id", $cartItem->color->id)->first() == null) ||
+                ($cartItem->guarantee_id != null && $cartItem->product->guarantees->where("id", $cartItem->guarantee->id)->first() == null) ||
+                $cartItem->product->marketable != 'true' ||
+                $cartItem->product->marketable_number < $cartItem->number
+            ) {
                 $cartItem->delete();
-                return to_route("home.index")->with("swal-error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
-            } elseif ($cartItem->color_id != null && $cartItem->product->colors->where("id", $cartItem->color->id)->first() == null) {
-                $cartItem->delete();
-                return to_route("home.index")->with("swal-error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
-            } elseif ($cartItem->guarantee_id != null && $cartItem->product->guarantees->where("id", $cartItem->guarantee->id)->first() == null) {
-                $cartItem->delete();
-                return to_route("home.index")->with("swal-error", "یکی از محصولات سبد خرید شما مشکلی دارد ,لطفا سبد خرید خود را بررسی نمایید");
-            } elseif ($cartItem->product->marketable != 'true' || $cartItem->product->marketable_number < $cartItem->number) {
-                return to_route("home.salesProcess.myCart")->with("swal-error", "یکی از محصولات سبد خرید شما ناموجود است ,لطفا سبد خرید خود را بررسی نمایید");
+                return to_route("home.salesProcess.myCart")->with("swal-error", "یکی از محصولات موجود در سبد خرید شما مشکل دارد. لطفا سبد خرید خود را بررسی کنید.");
             }
 
-            if (isset($generalDiscount)) {
+            // Calculate general discount price.
+            if ($generalDiscount != null) {
                 $generalDiscountPrice += $generalDiscount->generalDiscount($cartItem->product->price, $cartItem->product->discount) * $cartItem->number;
             }
+
+            // Calculate total price and total discount.
             $totalPrice += $cartItem->totalPrice();
             $totalDiscount += $cartItem->product->discount * $cartItem->number;
         }
 
-        // check general discount
+        // Check if general discount is properly applied.
         if ($order->generalDiscount == null && $generalDiscount != null) {
             $order->update([
                 "general_discount_id" => null,
                 "general_discount_obj" => null,
             ]);
-            return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا روند ثبت سفارش خود را تکرار کنید");
+            return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا دوباره فرآیند ثبت سفارش را طی کنید.");
         }
 
+        // Validate applied general discount.
         if ($order->generalDiscount != null) {
+            // Ensure applied general discount matches the stored details and is still valid.
             $general_discount = $order->generalDiscount;
             if (
                 $order->general_discount_obj["amount"] != $general_discount->amount ||
@@ -265,11 +280,11 @@ class OrderController extends Controller
                     "general_discount_id" => null,
                     "general_discount_obj" => null,
                 ]);
-                return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا روند ثبت سفارش خود را تکرار کنید");
+                return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا دوباره فرآیند ثبت سفارش را طی کنید.");
             }
         }
 
-        // check coupon discount
+        // Validate and apply coupon discount.
         if ($order->coupon != null) {
             $coupon = $order->coupon;
             if (
@@ -288,58 +303,60 @@ class OrderController extends Controller
                     "coupon_id" => null,
                     "coupon_obj" => null,
                 ]);
-                return back()->with("swal-error", "برای کد تخفیف شما مشکلی پیش آمده است ، لطفا دوباره تلاش کنید");
+                return back()->with("swal-error", "کوپن تخفیف شما مشکل دارد. لطفا دوباره تلاش کنید.");
             } elseif ($coupon->type == "private") {
                 if ($coupon->user_id != Auth::user()->id) {
                     $order->update([
                         "coupon_id" => null,
                         "coupon_obj" => null,
                     ]);
-                    return back()->with("swal-error", "برای کد تخفیف شما مشکلی پیش آمده است ، لطفا دوباره تلاش کنید");
+                    return back()->with("swal-error", "کوپن تخفیف شما مشکل دارد. لطفا دوباره تلاش کنید.");
                 }
             }
         }
 
-
-        // check delivery price
-        if ($order->delivery->price != $order->delivery_obj["price"]) {
-            return to_route("home.salesProcess.myCart")->with("swal-error", "قیمت روش ارسال مورد نظر تغییر کرده است، لطفا دوباره تلاش کنید");
+        // Check delivery details
+        if ($order->delivery->price != $order->delivery_price) {
+            return to_route("home.salesProcess.myCart")->with("swal-error", "هزینه ارسال تغییر کرده است. لطفا سبد خرید خود را بررسی کنید.");
         } elseif ($order->delivery->status != "active") {
-            return to_route("home.salesProcess.myCart")->with("swal-error", "روش ارسال مورد نظر غیر فعال شده است، لطفا دوباره تلاش کنید");
+            return to_route("home.salesProcess.myCart")->with("swal-error", "روش ارسال انتخاب شده در دسترس نیست. لطفا سبد خرید خود را بررسی کنید.");
         }
 
-        // check products number
+        // Check number of products in the order.
         if ($cartItems->count() != $order->products->count()) {
-            return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا روند ثبت سفارش خود را تکرار کنید");
+            return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا دوباره فرآیند ثبت سفارش را طی کنید.");
         }
 
-        // check product discount
+        // Check product discounts.
         if ($totalDiscount != $order->total_discount) {
-            return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا روند ثبت سفارش خود را تکرار کنید");
+            return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا دوباره فرآیند ثبت سفارش را طی کنید.");
         }
 
-        // check final price
-        if (($order->delivery->price + $totalPrice) - ($totalDiscount + $generalDiscountPrice) != $order->total_price) {
-            return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا روند ثبت سفارش خود را تکرار کنید");
+        // Check final price.
+        if (($order->delivery_price + $totalPrice) - ($totalDiscount + $generalDiscountPrice) != $order->final_price) {
+            return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا دوباره فرآیند ثبت سفارش را طی کنید.");
         }
 
+        // Process payment based on payment type.
         if ($payment_type == 2) {
-            DB::transaction(function () use ($order, $cartItems, $generalDiscountPrice) {
-                // update order
+            // Cash payment
+            DB::transaction(function () use ($order, $cartItems) {
+                // Update order details
                 $order->update([
-                    "total_price" => $order->total_price - $order->coupon_discount,
-                    "total_discount" => $order->total_discount + $order->coupon_discount + $generalDiscountPrice,
-                    "delivery_status" => "processing"
+                    "final_price" => $order->final_price - $order->coupon_discount,
+                    "total_coupon_discount" => $order->coupon_discount,
+                    "delivery_status" => "processing",
                 ]);
 
+                // Create payment record for cash payment
                 Payment::create([
                     "order_id" => $order->id,
-                    "amount" => $order->total_price,
+                    "amount" => $order->final_price,
                     "status" => "cash",
                     "payment_status" => "cash_payment"
                 ]);
 
-                // delete cartItems and update product
+                // Update product and delete cart items
                 foreach ($cartItems as $cartItem) {
                     $product = $cartItem->product;
                     $product->increment('sold_number', $cartItem->number);
@@ -348,21 +365,22 @@ class OrderController extends Controller
                 }
             });
 
-            return to_route("home.profile.myOrders.index")->with("swal-success", "سفارش شما با موفقیت ثبت شد");
+            return to_route("home.profile.myOrders.index")->with("swal-success", "سفارش شما با موفقیت انجام شد.");
         } elseif ($payment_type == 1) {
-
-            DB::transaction(function () use ($order, $generalDiscountPrice) {
-
-                // update Order
+            // Online payment
+            DB::transaction(function () use ($order) {
+                // Update order details
                 $order->update([
-                    "total_price" => $order->total_price - $order->coupon_discount,
-                    "total_discount" => $order->total_discount + $order->coupon_discount + $generalDiscountPrice,
+                    "final_price" => $order->final_price - $order->coupon_discount,
+                    "total_coupon_discount" => $order->coupon_discount,
                 ]);
-                // unit = Toman
-                $amount = $order->total_price;
+
+                // Send payment request to the payment gateway
+                $amount = $order->final_price;
                 $result = ShepaFacade::send($amount, Auth::user()->email, null, null, route("home.salesProcess.callback"));
                 $token = Str::afterLast($result, '/');
 
+                // Create payment record for online payment
                 Payment::updateOrCreate(
                     ["order_id" => $order->id],
                     [
@@ -373,6 +391,7 @@ class OrderController extends Controller
                     ]
                 );
 
+                // Store payment result for redirection
                 $this->result = $result;
             });
 

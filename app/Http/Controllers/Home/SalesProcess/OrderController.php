@@ -136,28 +136,44 @@ class OrderController extends Controller
         return redirect()->route("home.salesProcess.payment.page");
     }
 
-
-    // Payment Page
+    // Displaying the payment method selection page.
     public function paymentPage()
     {
-        $order = Auth::user()->orders->where("payment_status", "unpaid")->where("status", "not_confirmed")->where("delivery_status", "unpaid")->first();
+        // Fetching the unpaid and not confirmed order for the authenticated user.
+        $order = Auth::user()->orders->where("payment_status", "unpaid")
+            ->where("status", "not_confirmed")
+            ->where("delivery_status", "unpaid")
+            ->first();
+
+        // If no such order exists, redirect back with an error message.
         if ($order == null) {
-            return to_route("home.salesProcess.myCart")->with("swal-error", "لطفا مجدد تلاش کنید");
+            return to_route("home.salesProcess.myCart")->with("swal-error", "Please try again.");
         }
 
-        $generalDiscount = GeneralDiscount::where("start_date", "<", now())->where("end_date", ">", now())->where("status", "active")->get()->last();
+        // Fetching the currently active general discount, if any.
+        $generalDiscount = GeneralDiscount::where("start_date", "<", now())
+            ->where("end_date", ">", now())
+            ->where("status", "active")
+            ->latest()
+            ->first();
 
+        // Initializing variables for calculating total price, total discount, and general discount price.
         $total_price = 0;
         $total_discount = 0;
         $generalDiscountPrice = 0;
 
+        // Calculating total price, total discount, and general discount price for each item in the user's cart.
         foreach (Auth::user()->cartItems as $cartItem) {
             $total_price += $cartItem->totalPrice();
             $total_discount += $cartItem->product->discount * $cartItem->number;
-            if (isset($generalDiscount)) {
+
+            // Applying the general discount if it exists.
+            if ($generalDiscount !== null) {
                 $generalDiscountPrice += $generalDiscount->generalDiscount($cartItem->product->price, $cartItem->product->discount) * $cartItem->number;
             }
         }
+
+        // Rendering the payment page view with necessary data.
         return view("home.salesProcess.payment.index", compact("order", "total_price", "total_discount", "generalDiscountPrice"));
     }
 

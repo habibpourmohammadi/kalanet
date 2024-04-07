@@ -114,20 +114,6 @@
 
                                         <section class="mb-2"></section>
 
-                                        {{-- <input type="radio" name="payment_type" value="2" id="d2" />
-                                    <label for="d2" class="col-12 col-md-4 payment-wrapper mb-2 pt-2">
-                                        <section class="mb-2">
-                                            <i class="fa fa-id-card-alt mx-1"></i>
-                                            پرداخت آفلاین
-                                        </section>
-                                        <section class="mb-2">
-                                            <i class="fa fa-calendar-alt mx-1"></i>
-                                            حداکثر در 2 روز کاری بررسی می شود
-                                        </section>
-                                    </label> --}}
-
-                                        <section class="mb-2"></section>
-
                                         <input type="radio" name="payment_type" value="2" id="d2" />
                                         <label for="d2" class="col-12 col-md-4 payment-wrapper mb-2 pt-2">
                                             <section class="mb-2">
@@ -139,14 +125,8 @@
                                                 پرداخت به پیک هنگام دریافت کالا
                                             </section>
                                         </label>
-
-
                                     </section>
                                 </section>
-
-
-
-
                             </section>
                             <section class="col-md-3">
                                 <section class="content-wrapper bg-white p-3 rounded-2 cart-total-price">
@@ -190,19 +170,17 @@
                                             <p class="text-danger">{{ priceFormat($order->coupon_discount) }} تومان</p>
                                         </section>
                                     @endif
-
                                     <p class="my-3">
                                         <i class="fa fa-info-circle me-1"></i> کاربر گرامی کالاها بر اساس نوع ارسالی که
                                         انتخاب
                                         می کنید در مدت زمان ذکر شده ارسال می شود.
                                     </p>
-
                                     <section class="border-bottom mb-3"></section>
 
                                     <section class="d-flex justify-content-between align-items-center mb-3">
                                         <p class="text-muted">مبلغ قابل پرداخت</p>
                                         <p class="fw-bold">
-                                            {{ priceFormat($order->total_price - $order->coupon_discount) }}
+                                            {{ priceFormat($order->final_price) }}
                                             تومان</p>
                                     </section>
 

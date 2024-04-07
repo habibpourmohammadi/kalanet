@@ -399,19 +399,21 @@ class OrderController extends Controller
         }
     }
 
+    // Handles the callback from the payment gateway to validate the payment.
     public function callback(Request $request)
     {
+        // Retrieve the token from the request.
         $token = $request->token;
+
+        // Find the payment record associated with the token.
         $payment = Payment::where("token", $token)->first();
 
-        // check payment
-        if (!$payment) {
-            return to_route("home.index")->with("swal-error", "لطفا دوباره تلاش کنید");
-        } elseif ($payment->order->user->id != Auth::user()->id) {
-            return to_route("home.index")->with("swal-error", "لطفا دوباره تلاش کنید");
+        // Check if payment record exists and belongs to the authenticated user.
+        if (!$payment || $payment->order->user->id != Auth::user()->id) {
+            return to_route("home.index")->with("swal-error", "لطفا دوباره تلاش کنید.");
         }
 
-        // set values
+        // Initialize variables with initial values from payment record.
         $first_bank_response = $request->all();
         $second_bank_response = $payment->second_bank_response ?? null;
         $transaction_id = $payment->transaction_id ?? null;
@@ -419,11 +421,11 @@ class OrderController extends Controller
         $delivery_status = $payment->order->delivery_status;
         $payment_status_for_payment = $payment->payment_status;
 
-        // check token and status
+        // Check token and payment status from the payment gateway.
         if ($request->token && $request->status == 'success') {
             $result = ShepaFacade::verify($token, $payment->amount);
             if (isset($result["transaction_id"])) {
-                // Payment was successful
+                // Payment was successful, update payment and order statuses.
                 $transaction_id = $result["transaction_id"];
                 $second_bank_response = $result;
                 $payment_status = "paid";
@@ -431,21 +433,21 @@ class OrderController extends Controller
                 $delivery_status = "processing";
             } elseif ($result["errorCode"] == 3) {
                 // If the token is checked again
-                return to_route("home.profile.myOrders.index")->with("swal-error", "پرداخت شما نامشخص است ، لطفا وضعیت پرداخت سفارش خود و همچنین حساب بانکی خود را چک کنید");
+                return to_route("home.profile.myOrders.index")->with("swal-error", "وضعیت پرداخت شما نامشخص است. لطفا وضعیت پرداخت سفارش و حساب بانکی خود را بررسی کنید.");
             } else {
                 // Other errors
                 $second_bank_response = $result;
             }
         } else {
-            // Payment canceled
+            // Payment canceled, update statuses accordingly.
             $payment_status = "canceled";
             $delivery_status = "unpaid";
             $payment_status_for_payment = "unpaid";
         }
 
-        // update values
+        // Update payment and order details within a transaction.
         DB::transaction(function () use ($payment, $first_bank_response, $second_bank_response, $transaction_id, $payment_status_for_payment, $delivery_status, $payment_status) {
-            // update payment fields
+            // Update payment fields
             $payment->update([
                 "first_bank_response" => $first_bank_response,
                 "second_bank_response" => $second_bank_response,
@@ -453,15 +455,14 @@ class OrderController extends Controller
                 "payment_status" => $payment_status_for_payment
             ]);
 
-            // update order status
+            // Update order status
             $payment->order->update([
                 "payment_status" => $payment_status,
                 "delivery_status" => $delivery_status,
-
             ]);
 
+            // If payment is successful and order is being processed, update product and delete cart items.
             if ($payment_status == "paid" && $delivery_status == "processing" && $payment_status_for_payment == "paid") {
-                // delete cartItems and update product
                 foreach (Auth::user()->cartItems as $cartItem) {
                     $product = $cartItem->product;
                     $product->increment('sold_number', $cartItem->number);
@@ -471,7 +472,7 @@ class OrderController extends Controller
             }
         });
 
-        // redirect user to my orders page
-        return to_route("home.profile.myOrders.index")->with("swal-success", "سفارش شما با موفقیت ثبت شده");
+        // Redirect user to my orders page with success message.
+        return to_route("home.profile.myOrders.index")->with("swal-success", "سفارش شما با موفقیت ثبت شد.");
     }
 }

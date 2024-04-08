@@ -23,6 +23,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             "name" => ["required", "unique:roles,name," . $this->role->id, "max:255"],
+            "description" => ["required"],
         ];
     }
 }

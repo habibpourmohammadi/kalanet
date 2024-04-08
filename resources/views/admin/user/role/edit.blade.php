@@ -46,6 +46,20 @@
                                     </span>
                                 @enderror
                             </section>
+                            <section class="col-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="description">توضیحات نقش</label>
+                                    <textarea name="description" id="description" cols="30" rows="5" class="form-control form-control-sm"
+                                        placeholder="لطفا توضیحات نقش را به صورت کامل وارد کنید">{{ old('description', $role->description) }}</textarea>
+                                </div>
+                                @error('description')
+                                    <span class="alert-danger" role="alert">
+                                        <strong>
+                                            {{ $message }}
+                                        </strong>
+                                    </span>
+                                @enderror
+                            </section>
                             <section class="col-12 mt-3">
                                 <button class="btn btn-primary btn-sm">ویرایش</button>
                             </section>

@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Admin\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\User\Role\StoreRequest;
-use App\Http\Requests\Admin\User\Role\Permissions\StoreRequets as StorePermissionsRequest;
-use App\Http\Requests\Admin\User\Role\UpdateRequest;
 use Spatie\Permission\Models\Permission;
+use App\Http\Requests\Admin\User\Role\StoreRequest;
+use App\Http\Requests\Admin\User\Role\UpdateRequest;
+use App\Http\Requests\Admin\User\Role\Permissions\StoreRequets as StorePermissionsRequest;
 
 class RoleController extends Controller
 {
@@ -22,7 +22,7 @@ class RoleController extends Controller
         $search = request()->search;
 
         $roles = Role::query()->when($search, function ($roles) use ($search) {
-            return $roles->where("name", "like", "%$search%")->get();
+            return $roles->where("name", "like", "%$search%")->orWhere("description", "like", "%$search%")->get();
         }, function ($roles) {
             return $roles->get();
         });
@@ -51,6 +51,7 @@ class RoleController extends Controller
 
         Role::create([
             "name" => $inputs["name"],
+            "description" => $inputs["description"],
         ]);
 
         return to_route("admin.accessManagement.role.index")->with("swal-success", "نقش جدید شما با موفقیت ایجاد شد");
@@ -86,6 +87,7 @@ class RoleController extends Controller
 
         $role->update([
             "name" => $inputs["name"],
+            "description" => $inputs["description"],
         ]);
 
         return to_route("admin.accessManagement.role.index")->with("swal-success", "نقش مورد نظر با موفقیت ویرایش شد");

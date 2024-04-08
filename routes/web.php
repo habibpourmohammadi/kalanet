@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\Order\PaymentController;
 use App\Http\Controllers\Admin\Ticket\TicketController;
 use App\Http\Controllers\Admin\User\PermissionController;
 use App\Http\Controllers\Admin\User\RoleController;
+use App\Http\Controllers\Home\BecomeSellerController;
 use App\Http\Controllers\Home\ContactController;
 
 /*
@@ -118,6 +119,12 @@ Route::middleware("checkActivation")->group(function () {
 
     // Frequently Asked Questions (faq)
     Route::get("/faq", [HomeController::class, "showFaq"])->name("home.faq.index");
+
+    // Frequently Asked Questions (faq)
+    Route::middleware("auth", "CheckUserInformations")->controller(BecomeSellerController::class)->prefix("become-seller")->group(function () {
+        Route::get("/", "index")->name("home.become-seller.index");
+        Route::post("/", "store")->name("home.become-seller.store");
+    });
 
     // Admin routes
     Route::middleware("auth", "checkRoles")->prefix("admin")->group(function () {

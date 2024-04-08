@@ -18,7 +18,7 @@ class PermissionController extends Controller
         $search = request()->search;
 
         $permissions = Permission::query()->when($search, function ($permissions) use ($search) {
-            return $permissions->where("name", "like", "%$search%")->get();
+            return $permissions->where("name", "like", "%$search%")->orWhere("description", "like", "%$search%")->get();
         }, function ($permissions) {
             return $permissions->get();
         });

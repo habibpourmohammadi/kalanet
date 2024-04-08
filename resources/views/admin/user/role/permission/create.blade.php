@@ -30,11 +30,16 @@
                     <form action="{{ route('admin.accessManagement.role.permissions.store', $role) }}" method="POST"
                         id="form">
                         @csrf
-                        <section class="row">
+                        <section class="row justify-content-center">
                             @foreach ($permissions as $permission)
-                                <section class="col-12 col-md-3">
-                                    <div class="form-group">
-                                        <label for="{{ $permission->id }}">{{ $permission->name }}</label>
+                                <section class="col-12 col-md-4 border border-primary rounded mx-2 my-2 pt-2">
+                                    <div class="form-group d-flex justify-content-between">
+                                        <label for="{{ $permission->id }}">
+                                            نام مجوز : {{ $permission->name }}
+                                            <br>
+                                            <br>
+                                            توضیحات مجوز : {{ $permission->description }}
+                                        </label>
                                         <input @checked($role->permissions()->where('id', $permission->id)->first()) type="checkbox" id="{{ $permission->id }}"
                                             name="permissions[]" value="{{ $permission->name }}">
                                     </div>

@@ -35,6 +35,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>نام مجوز</th>
+                                <th>توضیحات مجوز</th>
                                 <th>تاریخ ایجاد مجوز</th>
                             </tr>
                         </thead>
@@ -43,6 +44,7 @@
                                 <tr>
                                     <th>{{ $loop->iteration }}</th>
                                     <td>{{ $permission->name }}</td>
+                                    <td>{{ $permission->description }}</td>
                                     <td>{{ jalaliDate($permission->created_at) }}</td>
                                 </tr>
                             @empty

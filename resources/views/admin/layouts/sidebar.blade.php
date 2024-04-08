@@ -143,6 +143,11 @@
                 <span>پیام های تماس با ما</span>
             </a>
 
+            <a href="{{ route('admin.seller-requests.index') }}" class="sidebar-link">
+                <i class="fas fa-bars"></i>
+                <span>پیام های فروشنده شوید</span>
+            </a>
+
             <a href="{{ route('admin.faq.index') }}" class="sidebar-link">
                 <i class="fas fa-bars"></i>
                 <span>سوالات متداول</span>

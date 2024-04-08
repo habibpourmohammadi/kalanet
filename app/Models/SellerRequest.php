@@ -19,4 +19,25 @@ class SellerRequest extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getApprovalAttribute()
+    {
+        switch ($this->approval_status) {
+            case 'pending':
+                return "در حال انتظار";
+                break;
+
+            case 'approved':
+                return "تایید شده";
+                break;
+
+            case 'rejected':
+                return "رد شده";
+                break;
+
+            default:
+                return "نامعلوم";
+                break;
+        }
+    }
 }

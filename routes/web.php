@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\Product\CategoryController;
 use App\Http\Controllers\Home\SalesProcess\CartController;
 use App\Http\Controllers\Admin\Appearance\BannerController;
 use App\Http\Controllers\Admin\Appearance\SliderController;
+use App\Http\Controllers\Admin\BecomeSeller\SellerRequestsController;
 use App\Http\Controllers\Admin\Contact\ContactController as AdminContactController;
 use App\Http\Controllers\Admin\Discount\DiscountCouponController;
 use App\Http\Controllers\Admin\Discount\GeneralDiscountController;
@@ -378,6 +379,15 @@ Route::middleware("checkActivation")->group(function () {
             Route::get("/show/{contactMessage}", "show")->name("admin.contactUs.show");
             Route::get("/change-status/{contactMessage}", "changeStatus")->name("admin.contactUs.changeStatus");
             Route::delete("/delete/{contactMessage}", "destroy")->name("admin.contactUs.delete");
+        });
+
+        // become seller requests
+        Route::controller(SellerRequestsController::class)->prefix("seller-requests")->group(function () {
+            Route::get("/", "index")->name("admin.seller-requests.index");
+            Route::get("/show/{seller}", "show")->name("admin.seller-requests.show");
+            Route::get("/change-seen-status/{seller}", "changeSeenStatus")->name("admin.seller-requests.changeSeenStatus");
+            Route::get("/change-approval-status/{seller}", "changeApprovalStatus")->name("admin.seller-requests.changeApprovalStatus");
+            Route::delete("/delete/{seller}", "destroy")->name("admin.seller-requests.delete");
         });
 
         // Frequently Asked Questions (faq)

@@ -119,8 +119,10 @@ class HomeController extends Controller
     // Discounts and offers method
     public function offers()
     {
-        $name = "تخفیف ها و پیشنهادها";
-        return view("home.components.coming-soon", compact("name"));
+        $generalDiscount = GeneralDiscount::where("start_date", "<", now())->where("end_date", ">", now())->where("status", "active")->get()->last();
+        $products = Product::where("discount", ">", "0")->paginate(15);
+
+        return view("home.offers.index", compact("products", "generalDiscount"));
     }
 
     // show about us page

@@ -215,7 +215,7 @@
                     <section class="navbar-item"><a href="{{ route('home.aboutUs.index') }}">درباره ما</a></section>
                     <section class="navbar-item"><a href="{{ route('home.become-seller.index') }}">فروشنده شوید</a>
                     </section>
-                    <section class="navbar-item"><a href="#">فرصت های شغلی</a></section>
+                    <section class="navbar-item"><a href="{{ route("home.job-opportunities.index") }}">فرصت های شغلی</a></section>
 
                 </section>
 
@@ -240,7 +240,7 @@
                         <section class="navbar-item"><a href="{{ route('home.aboutUs.index') }}">درباره ما</a>
                         </section>
                         <section class="navbar-item"><a href="{{ route('home.become-seller.index') }}">فروشنده شوید</a></section>
-                        <section class="navbar-item"><a href="#">فرصت های شغلی</a></section>
+                        <section class="navbar-item"><a href="{{ route("home.job-opportunities.index") }}">فرصت های شغلی</a></section>
 
 
                         <hr class="border-bottom">

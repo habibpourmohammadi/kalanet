@@ -37,6 +37,7 @@ use App\Http\Controllers\Admin\User\PermissionController;
 use App\Http\Controllers\Admin\User\RoleController;
 use App\Http\Controllers\Home\BecomeSellerController;
 use App\Http\Controllers\Home\ContactController;
+use App\Http\Controllers\Home\JobOpportunitiesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -125,6 +126,13 @@ Route::middleware("checkActivation")->group(function () {
     Route::middleware("auth", "CheckUserInformations")->controller(BecomeSellerController::class)->prefix("become-seller")->group(function () {
         Route::get("/", "index")->name("home.become-seller.index");
         Route::post("/", "store")->name("home.become-seller.store");
+    });
+
+    // Frequently Asked Questions (faq)
+    Route::middleware("auth")->controller(JobOpportunitiesController::class)->prefix("job-opportunities")->group(function () {
+        Route::get("/", "index")->name("home.job-opportunities.index");
+        Route::get("/{job:slug}", "show")->name("home.job-opportunities.show");
+        Route::post("/{job:slug}", "submitJobRequest")->name("home.job-opportunities.submitJobRequest");
     });
 
     // Admin routes

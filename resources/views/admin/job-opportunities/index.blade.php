@@ -33,6 +33,10 @@
                             <i class="fa fa-check"></i>
                             تغییر وضعیت
                         </a>
+                        <a href="" class="btn btn-sm btn-secondary disabled" id="jobRequestsBtn">
+                            <i class="fa fa-mail-bulk"></i>
+                            نمایش درخواست ها
+                        </a>
                         <form class="d-inline" action="" method="POST" id="deleteForm">
                             @csrf
                             @method('DELETE')
@@ -129,6 +133,7 @@
             let editUrl = "job-opportunities/edit/";
             let deleteUrl = "job-opportunities/delete/";
             let changeStatusUrl = "job-opportunities/change-status/";
+            let jobRequestsUrl = "job-opportunities/job-requests/";
 
             $("#deleteForm").submit(function(e) {
                 e.preventDefault();
@@ -142,6 +147,9 @@
 
                 $("#changeStatusBtn").attr("href", changeStatusUrl + job_id);
                 $("#changeStatusBtn").removeClass("disabled");
+
+                $("#jobRequestsBtn").attr("href", jobRequestsUrl + job_id);
+                $("#jobRequestsBtn").removeClass("disabled");
 
                 $("#deleteForm").attr("action", deleteUrl + job_id);
                 $("#deleteBtn").removeClass("disabled");

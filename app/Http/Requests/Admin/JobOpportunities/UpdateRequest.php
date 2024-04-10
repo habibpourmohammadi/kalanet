@@ -23,7 +23,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             "title" => ["required", "max:255"],
-            "image_path" => ["required", "file", "mimes:png,jpg,jpeg", "max:1500"],
+            "image_path" => ["nullable", "file", "mimes:png,jpg,jpeg", "max:1500"],
             "description" => ["required"],
         ];
     }

@@ -153,6 +153,11 @@
                 <span>سوالات متداول</span>
             </a>
 
+            <a href="{{ route('admin.job-opportunities.index') }}" class="sidebar-link">
+                <i class="fas fa-bars"></i>
+                <span>فرصت های شغلی</span>
+            </a>
+
             @can('show_email')
                 <section class="sidebar-part-title">اطلاعیه ها</section>
 

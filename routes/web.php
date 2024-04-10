@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\Contact\ContactController as AdminContactControll
 use App\Http\Controllers\Admin\Discount\DiscountCouponController;
 use App\Http\Controllers\Admin\Discount\GeneralDiscountController;
 use App\Http\Controllers\Admin\faq\FaqController;
+use App\Http\Controllers\Admin\JobOpportunities\JobOpportunitiesController as AdminJobOpportunitiesController;
 use App\Http\Controllers\Admin\Notifications\EmailController;
 use App\Http\Controllers\Admin\Product\GuaranteeController;
 use App\Http\Controllers\Home\SalesProcess\OrderController;
@@ -396,6 +397,17 @@ Route::middleware("checkActivation")->group(function () {
             Route::get("/change-seen-status/{seller}", "changeSeenStatus")->name("admin.seller-requests.changeSeenStatus");
             Route::get("/change-approval-status/{seller}", "changeApprovalStatus")->name("admin.seller-requests.changeApprovalStatus");
             Route::delete("/delete/{seller}", "destroy")->name("admin.seller-requests.delete");
+        });
+
+        // Job Opportunities
+        Route::controller(AdminJobOpportunitiesController::class)->prefix("job-opportunities")->group(function () {
+            Route::get("/", "index")->name("admin.job-opportunities.index");
+            Route::get("/create", "create")->name("admin.job-opportunities.create");
+            Route::post("/store", "store")->name("admin.job-opportunities.store");
+            Route::get("/edit/{job}", "edit")->name("admin.job-opportunities.edit");
+            Route::put("/update/{job}", "update")->name("admin.job-opportunities.update");
+            Route::get("/change-status/{job}", "changeStatus")->name("admin.job-opportunities.change-status");
+            Route::delete("/delete/{job}", "destroy")->name("admin.job-opportunities.delete");
         });
 
         // Frequently Asked Questions (faq)

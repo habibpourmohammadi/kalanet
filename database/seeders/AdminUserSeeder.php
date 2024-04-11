@@ -17,8 +17,8 @@ class AdminUserSeeder extends Seeder
         // Get the admin email address from the environment variables or use a default one.
         $adminEmail = env("ADMIN_EMAIL_ADDRESS", "habibpourmohammady@gmail.com");
 
-        // Create the admin user.
-        $admin = User::create([
+        // Create the admin user if it doesn't already exist, based on the provided email
+        $admin = User::firstOrCreate([
             "email" => $adminEmail,
         ]);
 

@@ -35,7 +35,7 @@
                         <h5 class="card-title">نام درخواست کننده :
                             <a href="{{ route('admin.user.index', ['search' => $request->user->email]) }}" target="_blank"
                                 class="text-decoration-none">
-                                {{ $jobRequest->user->name ?? $jobRequest->user->email }}
+                                {{ $request->user->name ?? $request->user->email }}
                             </a>
                         </h5>
                         <p class="card-text">توضیحات درخواست :

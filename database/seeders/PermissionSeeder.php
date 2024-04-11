@@ -174,6 +174,10 @@ class PermissionSeeder extends Seeder
                 "name" => "cahange_status_user",
                 "description" => "توانایی تغییر وضعیت کاربر",
             ],
+            [
+                "name" => "set_roles_user",
+                "description" => "توانایی تعیین نقش کاربر",
+            ],
 
             // Roles Permissions
             [
@@ -187,6 +191,10 @@ class PermissionSeeder extends Seeder
             [
                 "name" => "edit_role",
                 "description" => "توانایی ویرایش نقش",
+            ],
+            [
+                "name" => "set_permissions_role",
+                "description" => "توانایی تعیین مجوز برای نقش",
             ],
             [
                 "name" => "delete_role",
@@ -332,9 +340,89 @@ class PermissionSeeder extends Seeder
                 "name" => "change_status_payment",
                 "description" => "توانایی تغییر وضعیت پرداخت",
             ],
+
+            // Contact us messages Permissions
+            [
+                "name" => "show_contact_us_messages",
+                "description" => "توانایی دیدن پیام های تماس با ما",
+            ],
+            [
+                "name" => "delete_contact_us_messages",
+                "description" => "توانایی حذف پیام تماس با ما",
+            ],
+            [
+                "name" => "change_status_contact_us_messages",
+                "description" => "توانایی تغییر وضعیت پیام تماس با ما",
+            ],
+
+            // Become a seller's messages Permissions
+            [
+                "name" => "show_become_a_seller_messages",
+                "description" => "توانایی دیدن پیام های فروشنده شوید",
+            ],
+            [
+                "name" => "change_approval_status_become_a_seller_messages",
+                "description" => "توانایی تغییر وضعیت تایید پیام فروشنده شوید",
+            ],
+            [
+                "name" => "change_seen_status_become_a_seller_messages",
+                "description" => "توانایی تغییر وضعیت دیده شدن پیام فروشنده شوید",
+            ],
+            [
+                "name" => "delete_become_a_seller_messages",
+                "description" => "توانایی حذف پیام فروشنده شوید",
+            ],
+
+            // Frequently Asked Questions (FAQ) Permissions
+            [
+                "name" => "show_faq",
+                "description" => "توانایی دیدن سوالات متداول",
+            ],
+            [
+                "name" => "create_faq",
+                "description" => "توانایی ایجاد سوال متداول",
+            ],
+            [
+                "name" => "edit_faq",
+                "description" => "توانایی ویرایش سوال متداول",
+            ],
+            [
+                "name" => "delete_faq",
+                "description" => "توانایی حذف سوال متداول",
+            ],
+            [
+                "name" => "change_status_faq",
+                "description" => "توانایی تغییر وضعیت سوال متداول",
+            ],
+
+            // Job Opportunities Permissions
+            [
+                "name" => "show_job_opportunities",
+                "description" => "توانایی دیدن فرصت های شغلی",
+            ],
+            [
+                "name" => "create_job_opportunities",
+                "description" => "توانایی ایجاد فرصت شغلی",
+            ],
+            [
+                "name" => "edit_job_opportunities",
+                "description" => "توانایی ویرایش فرصت شغلی",
+            ],
+            [
+                "name" => "change_status_job_opportunities",
+                "description" => "توانایی تغییر وضعیت فرصت شغلی",
+            ],
+            [
+                "name" => "delete_job_opportunities",
+                "description" => "توانایی حذف فرصت شغلی",
+            ],
+            [
+                "name" => "actions_job_requests_job_opportunities",
+                "description" => "توانایی (دیدن ، تغییر وضعیت دیده شدن ، تغییر وضعیت تایید ، حذف) درخواست های فرصت شغلی",
+            ],
         ];
 
-        foreach($permissions as $permission){
+        foreach ($permissions as $permission) {
             Permission::create($permission);
         }
     }

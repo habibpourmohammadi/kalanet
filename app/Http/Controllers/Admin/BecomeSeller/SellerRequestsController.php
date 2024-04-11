@@ -13,6 +13,8 @@ class SellerRequestsController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', SellerRequest::class);
+
         $search = request()->search;
 
         $sort = request()->sort;
@@ -37,6 +39,8 @@ class SellerRequestsController extends Controller
      */
     public function show(SellerRequest $seller)
     {
+        $this->authorize('view', [$seller]);
+
         return view("admin.become-seller.show", compact("seller"));
     }
 
@@ -45,6 +49,8 @@ class SellerRequestsController extends Controller
      */
     public function destroy(SellerRequest $seller)
     {
+        $this->authorize('delete', [$seller]);
+
         $seller->delete();
 
         return back()->with("swal-success", "پیام مورد نظر با موفقیت حذف شد");
@@ -53,6 +59,8 @@ class SellerRequestsController extends Controller
     // change seen status
     public function changeSeenStatus(SellerRequest $seller)
     {
+        $this->authorize('changeSeenStatus', [$seller]);
+
         if ($seller->seen_status == "unviewed") {
             $seller->update([
                 "seen_status" => "viewed"
@@ -69,6 +77,8 @@ class SellerRequestsController extends Controller
     // change approval status
     public function changeApprovalStatus(SellerRequest $seller)
     {
+        $this->authorize('changeApprovalStatus', [$seller]);
+
         $approval_status = '';
 
         switch ($seller->approval_status) {

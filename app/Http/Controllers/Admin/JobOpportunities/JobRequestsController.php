@@ -15,6 +15,8 @@ class JobRequestsController extends Controller
      */
     public function index(JobOpportunity $job)
     {
+        $this->authorize('actions', [$job]);
+
         $search = request()->search;
         $sort = request()->sort;
         $column = request()->column;
@@ -40,6 +42,8 @@ class JobRequestsController extends Controller
      */
     public function show(JobOpportunity $job, JobRequest $request)
     {
+        $this->authorize('actions', [$job]);
+
         return view("admin.job-opportunities.job-requests.show", compact("job", "request"));
     }
 
@@ -48,6 +52,8 @@ class JobRequestsController extends Controller
      */
     public function destroy(JobOpportunity $job, JobRequest $request)
     {
+        $this->authorize('actions', [$job]);
+
         if (File::exists(public_path($request->file_path))) {
             File::delete(public_path($request->file_path));
         }
@@ -60,6 +66,8 @@ class JobRequestsController extends Controller
     // Changes the seen status of a job request between viewed and unviewed.
     public function changeSeenStatus(JobOpportunity $job, JobRequest $request)
     {
+        $this->authorize('actions', [$job]);
+
         // Toggle the seen status between viewed and unviewed.
         $newStatus = $request->seen_status === "unviewed" ? "viewed" : "unviewed";
 
@@ -79,6 +87,8 @@ class JobRequestsController extends Controller
     // Changes the approval status of a job request between pending, approved, and rejected.
     public function changeApprovalStatus(JobOpportunity $job, JobRequest $request)
     {
+        $this->authorize('actions', [$job]);
+
         $approval_status = '';
 
         // Determine the new approval status based on the current status.

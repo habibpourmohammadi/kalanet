@@ -136,27 +136,37 @@
                 </section>
             @endcan
 
-            <section class="sidebar-part-title">ارتباط با ما</section>
+            @canany(['show_contact_us_messages', 'show_become_a_seller_messages', 'show_faq', 'show_job_opportunities'])
+                <section class="sidebar-part-title">ارتباط با ما</section>
 
-            <a href="{{ route('admin.contactUs.index') }}" class="sidebar-link">
-                <i class="fas fa-bars"></i>
-                <span>پیام های تماس با ما</span>
-            </a>
+                @can('show_contact_us_messages')
+                    <a href="{{ route('admin.contactUs.index') }}" class="sidebar-link">
+                        <i class="fas fa-bars"></i>
+                        <span>پیام های تماس با ما</span>
+                    </a>
+                @endcan
 
-            <a href="{{ route('admin.seller-requests.index') }}" class="sidebar-link">
-                <i class="fas fa-bars"></i>
-                <span>پیام های فروشنده شوید</span>
-            </a>
+                @can('show_become_a_seller_messages')
+                    <a href="{{ route('admin.seller-requests.index') }}" class="sidebar-link">
+                        <i class="fas fa-bars"></i>
+                        <span>پیام های فروشنده شوید</span>
+                    </a>
+                @endcan
 
-            <a href="{{ route('admin.faq.index') }}" class="sidebar-link">
-                <i class="fas fa-bars"></i>
-                <span>سوالات متداول</span>
-            </a>
+                @can('show_faq')
+                    <a href="{{ route('admin.faq.index') }}" class="sidebar-link">
+                        <i class="fas fa-bars"></i>
+                        <span>سوالات متداول</span>
+                    </a>
+                @endcan
 
-            <a href="{{ route('admin.job-opportunities.index') }}" class="sidebar-link">
-                <i class="fas fa-bars"></i>
-                <span>فرصت های شغلی</span>
-            </a>
+                @can('show_job_opportunities')
+                    <a href="{{ route('admin.job-opportunities.index') }}" class="sidebar-link">
+                        <i class="fas fa-bars"></i>
+                        <span>فرصت های شغلی</span>
+                    </a>
+                @endcan
+            @endcanany
 
             @can('show_email')
                 <section class="sidebar-part-title">اطلاعیه ها</section>

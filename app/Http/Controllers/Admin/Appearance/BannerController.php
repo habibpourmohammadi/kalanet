@@ -196,7 +196,7 @@ class BannerController extends Controller
      */
     public function destroy(Banner $banner)
     {
-        $this->delete('update', [$banner]);
+        $this->authorize('delete', [$banner]);
 
         if (File::exists(public_path($banner->banner_path)))
             File::delete(public_path($banner->banner_path));

@@ -13,6 +13,8 @@ class ContactController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', ContactMessage::class);
+
         $search = request()->search;
         $sort = request()->sort;
         $column = "seen";
@@ -37,12 +39,16 @@ class ContactController extends Controller
      */
     public function show(ContactMessage $contactMessage)
     {
+        $this->authorize('view', [$contactMessage]);
+
         return view("admin.contact-us.show", compact("contactMessage"));
     }
 
     // change status
     public function changeStatus(ContactMessage $contactMessage)
     {
+        $this->authorize('changeStatus', [$contactMessage]);
+
         if ($contactMessage->seen == "false") {
             $contactMessage->update([
                 "seen" => "true"
@@ -60,6 +66,8 @@ class ContactController extends Controller
      */
     public function destroy(ContactMessage $contactMessage)
     {
+        $this->authorize('delete', [$contactMessage]);
+
         $contactMessage->delete();
 
         return back()->with("swal-success", "پیام مورد نظر با موفقیت حذف شد");

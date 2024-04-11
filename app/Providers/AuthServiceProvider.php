@@ -22,9 +22,11 @@ use App\Models\Guarantee;
 use App\Policies\CityPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
+use App\Models\SellerRequest;
 use App\Policies\BrandPolicy;
 use App\Policies\ColorPolicy;
 use App\Policies\OrderPolicy;
+use App\Models\ContactMessage;
 use App\Policies\BannerPolicy;
 use App\Policies\CouponPolicy;
 use App\Policies\SliderPolicy;
@@ -36,12 +38,18 @@ use App\Policies\CategoryPolicy;
 use App\Policies\DeliveryPolicy;
 use App\Policies\ProvincePolicy;
 use App\Models\EmailNotification;
+use App\Models\Faq;
+use App\Models\JobOpportunity;
+use App\Policies\ContactUsPolicy;
 use App\Policies\GuaranteePolicy;
 use App\Policies\PermissionPolicy;
 use Spatie\Permission\Models\Role;
+use App\Policies\BecomeSellerPolicy;
 use App\Policies\GeneralDiscountPolicy;
 use Spatie\Permission\Models\Permission;
 use App\Policies\EmailNotificationPolicy;
+use App\Policies\FaqPolicy;
+use App\Policies\JobOpportunitiesPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -71,6 +79,10 @@ class AuthServiceProvider extends ServiceProvider
         EmailNotification::class => EmailNotificationPolicy::class,
         Coupon::class => CouponPolicy::class,
         GeneralDiscount::class => GeneralDiscountPolicy::class,
+        ContactMessage::class => ContactUsPolicy::class,
+        SellerRequest::class => BecomeSellerPolicy::class,
+        Faq::class => FaqPolicy::class,
+        JobOpportunity::class => JobOpportunitiesPolicy::class,
     ];
 
     /**

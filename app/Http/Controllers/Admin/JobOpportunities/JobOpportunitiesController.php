@@ -20,6 +20,8 @@ class JobOpportunitiesController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', JobOpportunity::class);
+
         $search = request()->search;
 
         $jobOpportunities = JobOpportunity::query()->when($search, function ($query) use ($search) {
@@ -34,6 +36,8 @@ class JobOpportunitiesController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', JobOpportunity::class);
+
         return view("admin.job-opportunities.create");
     }
 
@@ -42,6 +46,8 @@ class JobOpportunitiesController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->authorize('create', JobOpportunity::class);
+
         // Process the uploaded image
         $image_path = null;
         if ($request->hasFile("image_path")) {
@@ -71,6 +77,8 @@ class JobOpportunitiesController extends Controller
      */
     public function edit(JobOpportunity $job)
     {
+        $this->authorize('update', [$job]);
+
         return view("admin.job-opportunities.edit", compact("job"));
     }
 
@@ -79,6 +87,8 @@ class JobOpportunitiesController extends Controller
      */
     public function update(UpdateRequest $request, JobOpportunity $job)
     {
+        $this->authorize('update', [$job]);
+
         // Process the uploaded image
         $image_path = $job->image_path;
         if ($request->hasFile("image_path")) {
@@ -115,6 +125,8 @@ class JobOpportunitiesController extends Controller
      */
     public function destroy(JobOpportunity $job)
     {
+        $this->authorize('delete', [$job]);
+
         // Delete the associated image if it exists
         if ($job->image_path != null && File::exists(public_path($job->image_path)))
             File::delete(public_path($job->image_path));
@@ -137,6 +149,8 @@ class JobOpportunitiesController extends Controller
     // Changes the status of a job opportunity between active and inactive
     public function changeStatus(JobOpportunity $job)
     {
+        $this->authorize('changeStatus', [$job]);
+
         // Toggle the status between active and inactive
         $newStatus = $job->status === "inactive" ? "active" : "inactive";
 

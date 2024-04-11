@@ -16,6 +16,8 @@ class FaqController extends Controller
      */
     public function index()
     {
+        $this->authorize("viewAny", Faq::class);
+
         $search = request()->search;
 
         $faqItems = Faq::query()->when($search, function ($query) use ($search) {
@@ -30,6 +32,8 @@ class FaqController extends Controller
      */
     public function create()
     {
+        $this->authorize("create", Faq::class);
+
         return view("admin.faq.create");
     }
 
@@ -38,6 +42,8 @@ class FaqController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->authorize("create", Faq::class);
+
         Faq::create([
             "question" => $request->question,
             "answer" => $request->answer,
@@ -51,6 +57,8 @@ class FaqController extends Controller
      */
     public function show(Faq $faq)
     {
+        $this->authorize("view", [$faq]);
+
         return view("admin.faq.show", compact("faq"));
     }
 
@@ -59,6 +67,8 @@ class FaqController extends Controller
      */
     public function edit(Faq $faq)
     {
+        $this->authorize("update", [$faq]);
+
         return view("admin.faq.edit", compact("faq"));
     }
 
@@ -67,6 +77,8 @@ class FaqController extends Controller
      */
     public function update(UpdateRequest $request, Faq $faq)
     {
+        $this->authorize("update", [$faq]);
+
         $faq->update([
             "question" => $request->question,
             "answer" => $request->answer,
@@ -80,6 +92,8 @@ class FaqController extends Controller
      */
     public function destroy(Faq $faq)
     {
+        $this->authorize("delete", [$faq]);
+
         DB::transaction(function () use ($faq) {
             $faq->update([
                 "question" => $faq->question . " " . time()
@@ -94,6 +108,8 @@ class FaqController extends Controller
     // change status
     public function changeStatus(Faq $faq)
     {
+        $this->authorize("changeStatus", [$faq]);
+
         if ($faq->status == "inactive") {
             $faq->update([
                 "status" => "active"

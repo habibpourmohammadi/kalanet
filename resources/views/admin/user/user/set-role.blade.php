@@ -26,17 +26,28 @@
                 <section>
                     <form action="{{ route('admin.user.setRole', $user) }}" method="POST" id="form">
                         @csrf
-                        <section class="row">
+                        <section class="row justify-content-center">
                             @foreach ($roles as $role)
-                                <section class="col-12 col-md-3">
-                                    <div class="form-group">
-                                        <label for="{{ $role->id }}">{{ $role->name }}</label>
-                                        <input @checked($user->roles()->where('id', $role->id)->first()) type="checkbox" id="{{ $role->id }}"
+                                <section class="col-12 col-md-4 border border-secondary rounded mx-2 my-2 pt-2">
+                                    <div class="form-group d-flex justify-content-between">
+                                        <label for="{{ $role->name == 'admin' ? '' : $role->id }}">
+                                            نام نقش : <strong>{{ $role->name }}</strong>
+                                            <span class="d-block mt-2 mx-3">
+                                                توضیحات نقش : <strong>
+                                                    {{ $role->description }}
+                                                </strong>
+                                            </span>
+                                        </label>
+                                        <input @checked($user->roles()->where('id', $role->id)->first()) type="checkbox"
+                                            class="{{ $role->name == 'admin' ? 'd-none' : '' }}" id="{{ $role->id }}"
                                             name="roles[]" value="{{ $role->name }}">
                                     </div>
+                                    @if ($role->name == 'admin')
+                                        <q class="border-danger border-bottom">نقش <strong>Admin</strong> تنها فقط برای
+                                            ادمین اصلی فروشگاه میباشد</q>
+                                    @endif
                                 </section>
                             @endforeach
-                            <br>
                             @error('roles')
                                 <span class="alert-danger" role="alert">
                                     <strong>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\SetRoleRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -53,14 +54,27 @@ class UserController extends Controller
         return view("admin.user.user.set-role", compact("user", "roles"));
     }
 
+    // Set roles for a user
     public function setRole(SetRoleRequest $request, User $user)
     {
         $this->authorize('update', [$user]);
 
+        // Retrieve roles from the request
         $roles = $request->roles;
 
+        // Check if user has admin role and the admin role is being removed
+        if ($user->hasRole("admin") && !in_array("admin", $roles ?? [])) {
+            return back()->with("swal-error", "لطفا دوباره تلاش کنید !");
+        }
+        // Check if user doesn't have admin role and admin role is being added
+        elseif (!$user->hasRole("admin") && in_array("admin", $roles ?? [])) {
+            return back()->with("swal-error", "لطفا دوباره تلاش کنید !");
+        }
+
+        // Sync the roles for the user
         $user->syncRoles($roles);
 
+        // Redirect back with success message
         return to_route("admin.user.index")->with("swal-success", "نقش های کاربر مورد نظر با موفقیت ویرایش شد");
     }
 }

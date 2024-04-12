@@ -88,65 +88,95 @@
                                                 <section class="order-item-date"><i class="fa fa-calendar-alt"></i>
                                                     تاریخ ثبت سفارش : {{ jalaliDate($order->created_at) }}
                                                 </section>
-                                                <section class="order-item-id"><i class="fa fa-id-card-alt"></i>کد سفارش
-                                                    :
+                                                <section class="order-item-id"><i class="fa fa-id-card-alt"></i>
+                                                    کد سفارش :
                                                     {{ $order->tracking_id }}
                                                 </section>
                                                 @if ($order->total_discount != 0)
-                                                    <section class="order-item-id"><i class="fa fa-money-bill"></i>مجموع
-                                                        تخفیف
-                                                        سفارش
-                                                        :
-                                                        <span
-                                                            class="text-danger">{{ priceFormat($order->total_discount) }}</span>
+                                                    <section class="order-item-id"><i class="fa fa-money-bill"></i>
+                                                        تخفیف محصول :
+                                                        <span class="text-danger">
+                                                            {{ priceFormat($order->total_discount) }} تومان
+                                                        </span>
                                                     </section>
                                                 @endif
-                                                <section class="order-item-id"><i class="fa fa-money-bill"></i>مجموع هزینه
-                                                    سفارش
-                                                    :
-                                                    <span class="text-success">{{ priceFormat($order->total_price) }}</span>
+                                                @if ($order->total_general_discount != 0)
+                                                    <section class="order-item-id"><i class="fa fa-money-bill"></i>
+                                                        تخفیف وبسایت :
+                                                        <span class="text-danger">
+                                                            {{ priceFormat($order->total_general_discount) }} تومان
+                                                        </span>
+                                                    </section>
+                                                @endif
+                                                @if ($order->total_coupon_discount != 0)
+                                                    <section class="order-item-id"><i class="fa fa-money-bill"></i>
+                                                        تخفیف کوپن :
+                                                        <span class="text-danger">
+                                                            {{ priceFormat($order->total_coupon_discount) }} تومان
+                                                        </span>
+                                                    </section>
+                                                @endif
+                                                <section class="order-item-id"><i class="fa fa-money-bill"></i>
+                                                    مجموع تخفیف ها :
+                                                    <span class="text-danger">
+                                                        {{ priceFormat($order->total_discount + $order->total_general_discount + $order->total_coupon_discount) }}
+                                                        تومان
+                                                    </span>
                                                 </section>
-                                                <section class="order-item-id"><i class="fa fa-box-open"></i>هزینه ارسال
-                                                    :
-                                                    <span
-                                                        class="text-success">{{ priceFormat($order->delivery_obj['price']) }}</span>
+                                                <section class="order-item-id"><i class="fa fa-box-open"></i>
+                                                    هزینه ارسال :
+                                                    <span class="text-success">
+                                                        {{ priceFormat($order->delivery_price) }}
+                                                    </span>
+                                                </section>
+                                                <section class="order-item-id"><i class="fa fa-money-bill"></i>
+                                                    جمع سفارش :
+                                                    <span class="text-success">
+                                                        {{ priceFormat($order->final_price) }}
+                                                    </span>
                                                 </section>
                                                 @if ($order->payment)
-                                                    <section class="order-item-id"><i class="fa fa-box-open"></i>روش پرداخت
-                                                        :
+                                                    <section class="order-item-id"><i class="fa fa-box-open"></i>
+                                                        روش پرداخت :
                                                         {{ $order->payment->status == 'cash' ? 'پرداخت در محل' : 'پرداخت آنلاین' }}
                                                     </section>
                                                 @endif
-                                                <section class="order-item-id"><i class="fa fa-box-open"></i>آدرس
-                                                    :
+                                                <section class="order-item-id"><i class="fa fa-box-open"></i>
+                                                    آدرس :
                                                     <span class="text-dark">{{ $order->address_obj['address'] }}</span>
                                                 </section>
                                                 <section class="order-item-status">
-                                                    <i class="fa fa-clock"></i>وضعیت پرداخت :
-                                                    <strong
-                                                        @class([
-                                                            'text-success' => $order->payment_status == 'paid',
-                                                            'text-danger' => $order->payment_status == 'unpaid',
-                                                            'text-dark' => $order->payment_status == 'returned',
-                                                            'text-secondary' => $order->payment_status == 'canceled',
-                                                        ])>{{ $order->paymentStatus() }}</strong>
+                                                    <i class="fa fa-clock"></i>
+                                                    وضعیت پرداخت :
+                                                    <strong @class([
+                                                        'text-success' => $order->payment_status == 'paid',
+                                                        'text-danger' => $order->payment_status == 'unpaid',
+                                                        'text-dark' => $order->payment_status == 'returned',
+                                                        'text-secondary' => $order->payment_status == 'canceled',
+                                                    ])>
+                                                        {{ $order->paymentStatus() }}
+                                                    </strong>
                                                 </section>
                                                 <section class="order-item-status">
-                                                    <i class="fa fa-box-tissue"></i>وضعیت ارسال :
-                                                    <strong
-                                                        @class([
-                                                            'text-danger' => $order->delivery_status == 'unpaid',
-                                                            'text-warning' => $order->delivery_status == 'processing',
-                                                            'text-success' => $order->delivery_status == 'delivered',
-                                                        ])>{{ $order->deliveryStatus() }}</strong>
+                                                    <i class="fa fa-box-tissue"></i>
+                                                    وضعیت ارسال :
+                                                    <strong @class([
+                                                        'text-danger' => $order->delivery_status == 'unpaid',
+                                                        'text-warning' => $order->delivery_status == 'processing',
+                                                        'text-success' => $order->delivery_status == 'delivered',
+                                                    ])>
+                                                        {{ $order->deliveryStatus() }}
+                                                    </strong>
                                                 </section>
                                                 <section class="order-item-status">
-                                                    <i class="fa fa-check-circle"></i>وضعیت تایید پشتیبان وب سایت :
-                                                    <strong
-                                                        @class([
-                                                            'text-danger' => $order->status == 'not_confirmed',
-                                                            'text-success' => $order->status == 'confirmed',
-                                                        ])>{{ $order->status == 'not_confirmed' ? 'تایید نشده' : 'تایید شده' }}</strong>
+                                                    <i class="fa fa-check-circle"></i>
+                                                    وضعیت تایید پشتیبان وب سایت :
+                                                    <strong @class([
+                                                        'text-danger' => $order->status == 'not_confirmed',
+                                                        'text-success' => $order->status == 'confirmed',
+                                                    ])>
+                                                        {{ $order->status == 'not_confirmed' ? 'تایید نشده' : 'تایید شده' }}
+                                                    </strong>
                                                 </section>
                                                 <section class="order-item-products my-3">
                                                     @foreach ($order->products as $product)

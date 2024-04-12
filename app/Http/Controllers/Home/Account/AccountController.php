@@ -162,13 +162,16 @@ class AccountController extends Controller
         return to_route("home.profile.myAddresses.index")->with("swal-success", "آدرس مورد نظر با موفقیت ویرایش شد");
     }
 
-    // My Orders - Index page
+    // Display the user's orders
     public function myOrders()
     {
+        // Get the sort parameter from the request
         $sort = request()->sort;
+
+        // Default column for sorting
         $column = "payment_status";
 
-
+        // Determine the column to sort and the corresponding value
         switch ($sort) {
             case '1':
                 $sort = "paid";
@@ -187,21 +190,28 @@ class AccountController extends Controller
                 break;
 
             default:
+                // Default sort by user ID
                 $sort = Auth::user()->id;
                 $column = "user_id";
                 break;
         }
 
-        $orders = Auth::user()->orders()->where($column, $sort)->get();
+        // Retrieve orders based on sorting criteria
+        $orders = Auth::user()->orders()->where($column, $sort)->with("products", "payment")->get();
+
+        // Return the view with orders data
         return view("home.account.myOrders", compact("orders"));
     }
 
+    // Display the details of a user's order
     public function showMyOrder(Order $order)
     {
+        // Check if the authenticated user is the owner of the order
         if (Auth::user()->id != $order->user_id) {
             abort(404);
         }
 
+        // Return the view with order details
         return view("home.account.showMyOrder", compact("order"));
     }
 

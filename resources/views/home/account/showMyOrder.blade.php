@@ -33,7 +33,7 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">نام</th>
+                                            <th scope="col">نام محصول</th>
                                             <th scope="col">عکس</th>
                                             <th scope="col">تعداد</th>
                                             <th scope="col">تخفیف</th>
@@ -62,15 +62,17 @@
                                                 </td>
                                                 <td>
                                                     <small>
-                                                        <span
-                                                            class="text-danger">{{ priceFormat($product->pivot->total_discount) }}</span>
+                                                        <span class="text-danger">
+                                                            {{ priceFormat($product->pivot->total_discount + $product->pivot->total_general_discount) }}
+                                                        </span>
                                                         تومان
                                                     </small>
                                                 </td>
                                                 <td>
                                                     <small>
-                                                        <span
-                                                            class="text-success">{{ priceFormat($product->pivot->total_price - $product->pivot->total_discount) }}</span>
+                                                        <span class="text-success">
+                                                            {{ priceFormat($product->pivot->final_price) }}
+                                                        </span>
                                                         تومان
                                                     </small>
                                                 </td>

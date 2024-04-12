@@ -1,66 +1,111 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# KalaNet
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+پروژه فروشگاهی (آموزشی) ایجاد شده با استفاده از فریمورک Laravel و استفاده از تکنولوژی‌های Tailwind CSS و Bootstrap
 
-## About Laravel
+## ویژگی‌ها
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### مدیریت محصولات:
+- ایجاد، ویرایش، نمایش، حذف محصولات
+- دسته بندی محصولات
+- برندهای محصولات
+- تعداد موجودی قابل فروش محصولات
+- مدیریت وضعیت فروش و موجودی محصولات
+- اضافه کردن کامنت‌ها و ویژگی‌های اضافی محصولات
+- بارگذاری ویدیو و عکس برای محصولات
+- مدیریت گارانتی، رنگ، و تخفیف محصولات
+- اختصاص اسلاگ به محصولات
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### مدیریت دسته بندی، برندها، و رنگ‌ها:
+- ایجاد، ویرایش، حذف دسته بندی، برندها، و رنگ‌ها
+- اختصاص اسلاگ به دسته بندی، برندها، و رنگ‌ها
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### مدیریت سفارشات:
+- نمایش، مدیریت وضعیت، و جزئیات سفارشات
+- امکان چاپ فاکتور
 
-## Learning Laravel
+### مدیریت روش‌های حمل و نقل:
+- ایجاد، ویرایش، حذف روش‌های حمل و نقل
+- تنظیم نام روش، زمان تحویل، و قیمت
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### مدیریت استان‌ها و شهرها:
+- ایجاد، ویرایش، حذف استان‌ها و شهرها
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### مدیریت کاربران و دسترسی‌ها:
+- تغییر وضعیت کاربران
+- اختصاص نقش‌ها و مجوزها به کاربران
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### مدیریت اسلایدر و بنر:
+- ایجاد، ویرایش، حذف بنرها و اسلایدرها
+- لینک‌گذاری به وب‌سایت‌های دیگر در اسلایدرها و بنرها
 
-## Laravel Sponsors
+### مدیریت تیکت‌ها:
+- چت برای تیکت‌ها با امکان ارسال فایل
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### ارتباط با مشتری:
+- فرم تماس با ما
+- امکان تبدیل به فروشنده
+- پاسخگویی به سوالات متداول
+- ارائه فرصت‌های شغلی
 
-### Premium Partners
+### ارسال اطلاعیه:
+- ارسال اطلاعیه‌های ایمیلی با استفاده از job و queue
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### مدیریت تخفیف‌ها:
+- ایجاد کوپن تخفیف و تخفیف عمومی
 
-## Contributing
+### دسترسی کاربران :
+- لیست علاقه‌مندی‌ها
+- لیست سفارشات
+- لیست تیکت‌ها
+- ویرایش پروفایل کاربر
+- مدیریت آدرس‌ها
+- انتخاب تحویل‌گیرنده سفارش در هنگام تحویل سفارش
+- تماس با پشتیبانی
+- ثبت رزومه در قسمت فرصت‌های شغلی
+- ثبت درخواست در بخش فروشنده شوید
+- قابلیت جستجو و فیلتر محصولات بر اساس برند ، دسته بندی ، محدودیت قیمت و...
+- افزودن نظر بر روی محصولات
+- افزودن به سبد خرید
+- ثبت کوپن تخفیف
+- ثبت سفارش به صورت پرداخت حضوری و درگاه پرداخت
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Installation and Setup
 
-## Code of Conduct
+1. Clone the repository:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```
+git clone https://github.com/habibpourmohammadi/shop
+```
 
-## Security Vulnerabilities
+2. Install dependencies:
+```
+composer install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+3. Configure environment variables:
+- Copy `.env.example` file to `.env`:
+```
+cp .env.example .env
+```
+- Generate application key:
+```
+php artisan key:generate
+```
+- Set the `ADMIN_EMAIL_ADDRESS` variable in the `.env` file.
+- Configure email settings in the `.env` file.
 
-## License
+4. Run migrations and seeders:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+php artisan migrate --seed
+```
+
+5. Log in with the admin account:
+- Log in using the email set in `ADMIN_EMAIL_ADDRESS`.
+
+## Contact Me
+
+Feel free to reach out with any questions or concerns:
+
+ - habibpourmohammady@gmail.com
+ - https://www.linkedin.com/in/habibpourmohammadi/

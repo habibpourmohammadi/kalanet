@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('head-tag')
-    <title>سفارش ها</title>
+    <title>همه سفارشات</title>
 @endsection
 
 @section('content')
@@ -35,7 +35,7 @@
                                 <th>کد سفارش</th>
                                 <th>نام و نام خانوادگی مشتری</th>
                                 <th>تخفیف سفارش</th>
-                                <th>هزینه پایانی سفارش</th>
+                                <th>هزینه نهایی سفارش</th>
                                 <th>روش پرداخت</th>
                                 <th>وضعیت پرداخت</th>
                                 <th>وضعیت ارسال</th>
@@ -52,10 +52,16 @@
                                         <th>{{ $loop->iteration }}</th>
                                         <td>{{ $order->tracking_id }}</td>
                                         <td>{{ $order->user->name ?? '-' }}</td>
-                                        <td><strong class="text-danger">{{ priceFormat($order->total_discount) }}</strong>
+                                        <td>
+                                            <strong class="text-danger">
+                                                {{ priceFormat($order->total_discount + $order->total_general_discount + $order->total_coupon_discount) }}
+                                            </strong>
                                             تومان
                                         </td>
-                                        <td><strong class="text-success">{{ priceFormat($order->total_price) }}</strong>
+                                        <td>
+                                            <strong class="text-success">
+                                                {{ priceFormat($order->final_price) }}
+                                            </strong>
                                             تومان
                                         </td>
                                         <th>

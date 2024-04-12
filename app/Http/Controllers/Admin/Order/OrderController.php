@@ -9,13 +9,17 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of orders for admin.
      */
     public function index()
     {
+        // Authorize the user to view any order
         $this->authorize('viewAny', Order::class);
 
+        // Search functionality
         $search = request()->search;
+
+        // Query orders based on search criteria
         $orders = Order::query()->when($search, function ($orders) use ($search) {
             return $orders->where("tracking_id", "like", "%$search%")->orWhere("total_price", "like", "%$search%")->orWhereHas("user", function ($users) use ($search) {
                 $users->where("name", "like", "%$search%")->orWhere("email", "like", "%$search%");
@@ -34,6 +38,7 @@ class OrderController extends Controller
             return $orders->with("user", "address", "delivery", "payment")->get();
         });
 
+        // Return the view with orders data
         return view("admin.order.index", compact("orders"));
     }
 

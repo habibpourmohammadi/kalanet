@@ -124,26 +124,19 @@
                             <tr class="border-bottom">
                                 <th>وضعیت پرداخت : </th>
                                 <td class="text-left font-weight-bolder">
-                                    {{ $order->paymentStatus() ?? '-' }}
+                                    <span @class([
+                                        'text-danger' => $order->payment_status == 'unpaid',
+                                        'text-warning' => $order->payment_status == 'canceled',
+                                        'text-secondary' => $order->payment_status == 'returned',
+                                        'text-success' => $order->payment_status == 'paid',
+                                    ])>
+                                        {{ $order->paymentStatus() ?? '-' }}
+                                    </span>
                                 </td>
                             </tr>
 
                             <tr class="border-bottom">
-                                <th>تخفیف سفارش : </th>
-                                <td class="text-left font-weight-bolder text-danger">
-                                    {{ priceFormat($order->total_discount) }} تومان
-                                </td>
-                            </tr>
-
-                            <tr class="border-bottom">
-                                <th>هزینه پایانی سفارش : </th>
-                                <td class="text-left font-weight-bolder text-success">
-                                    {{ priceFormat($order->total_price) }} تومان
-                                </td>
-                            </tr>
-
-                            <tr class="border-bottom">
-                                <th>نحوه ارسال : </th>
+                                <th>روش ارسال : </th>
                                 <td class="text-left font-weight-bolder">
                                     {{ $order->delivery_obj['name'] }}
                                 </td>
@@ -151,7 +144,22 @@
                             <tr class="border-bottom">
                                 <th>هزینه ارسال : </th>
                                 <td class="text-left font-weight-bolder">
-                                    {{ priceFormat($order->delivery_obj['price']) }} تومان
+                                    {{ priceFormat($order->delivery_price) }} تومان
+                                </td>
+                            </tr>
+
+                            <tr class="border-bottom">
+                                <th>تخفیف سفارش : </th>
+                                <td class="text-left font-weight-bolder text-danger">
+                                    {{ priceFormat($order->total_discount + $order->total_general_discount + $order->total_coupon_discount) }}
+                                    تومان
+                                </td>
+                            </tr>
+
+                            <tr class="border-bottom">
+                                <th>هزینه نهایی سفارش : </th>
+                                <td class="text-left font-weight-bolder text-success">
+                                    {{ priceFormat($order->final_price) }} تومان
                                 </td>
                             </tr>
 
@@ -161,7 +169,6 @@
                                     {{ $order->deliveryStatus() ?? '-' }}
                                 </td>
                             </tr>
-
                             @if ($order->payment->status == 'online')
                                 <tr class="border-bottom">
                                     <th>بانک : </th>
@@ -180,7 +187,9 @@
                             <tr class="border-bottom">
                                 <th>وضعیت سفارش : </th>
                                 <td class="text-left font-weight-bolder">
-                                    {{ $order->status == 'confirmed' ? 'تایید شده' : 'تایید نشده' }}
+                                    <span class="text-{{ $order->status == 'confirmed' ? 'success' : 'danger' }}">
+                                        {{ $order->status == 'confirmed' ? 'تایید شده' : 'تایید نشده' }}
+                                    </span>
                                 </td>
                             </tr>
 

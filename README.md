@@ -74,7 +74,7 @@
 1. Clone the repository:
 
 ```
-git clone https://github.com/habibpourmohammadi/shop
+git clone https://github.com/habibpourmohammadi/kalanet
 ```
 
 2. Install dependencies:
